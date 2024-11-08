@@ -27,7 +27,7 @@ export default function Home() {
           </div>
 
           {/* Search Section */}
-          <div className="w-full max-w-[1200px] mx-auto backdrop-blur-sm bg-white/30 p-1 rounded-2xl">
+          <div className="w-full max-w-[1200px] mx-auto backdrop-blur-sm rounded-2xl">
             <SearchForm />
           </div>
 
