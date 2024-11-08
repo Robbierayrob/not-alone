@@ -17,7 +17,7 @@ export default function Home() {
         <p className="text-xl text-gray-600 mb-8 max-w-2xl relative z-10">
           Discover the next generation of dairy products powered by artificial intelligence
         </p>
-        <div className="relative z-10">
+        <div className="relative z-10 w-full max-w-[1200px]">
           <SearchForm />
         </div>
       </section>
