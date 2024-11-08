@@ -20,9 +20,14 @@ export default function DairyPage() {
       </div>
 
       {/* Main chat area */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col relative">
+        {/* Pulsating Circle */}
+        <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+          <div className="pulsating-circle"></div>
+        </div>
+
         {/* Chat messages */}
-        <div className="flex-1 overflow-y-auto p-4">
+        <div className="flex-1 overflow-y-auto p-4 relative z-10">
           {messages.map((message, index) => (
             <div key={index} className={`mb-4 ${message.role === 'user' ? 'text-right' : ''}`}>
               <div className={`inline-block p-4 rounded-lg ${
@@ -37,7 +42,7 @@ export default function DairyPage() {
         </div>
 
         {/* Input area */}
-        <div className="border-t border-gray-200 p-4">
+        <div className="border-t border-gray-200 p-4 relative z-10">
           <form className="max-w-4xl mx-auto relative">
             <input
               type="text"

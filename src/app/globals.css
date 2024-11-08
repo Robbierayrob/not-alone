@@ -15,6 +15,88 @@ body {
   background: var(--background);
 }
 
+.pulsating-circle {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  width: 400px;
+  height: 400px;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 209, 233, 0.8),    /* Soft pastel pink */
+    rgba(255, 182, 223, 0.7),    /* Medium pastel pink */
+    rgba(190, 178, 255, 0.6),    /* Soft pastel purple */
+    rgba(173, 216, 255, 0.5),    /* Soft pastel blue */
+    rgba(255, 209, 233, 0.8),    /* Soft pastel pink */
+    rgba(255, 182, 223, 0.7),    /* Medium pastel pink */
+    rgba(190, 178, 255, 0.6),    /* Soft pastel purple */
+    rgba(173, 216, 255, 0.5)     /* Soft pastel blue */
+  );
+  background-size: 400% 400%;
+  border-radius: 50%;
+  filter: blur(20px);
+  opacity: 0.8;
+  z-index: -1;
+  animation: 
+    morphCircle 12s ease-in-out infinite,
+    gradientFloat 25s linear infinite;
+  box-shadow:
+    0 0 150px rgba(255, 209, 233, 0.3),
+    0 0 300px rgba(190, 178, 255, 0.2);
+}
+
+@keyframes morphCircle {
+  0% {
+    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+    transform: translate(-50%, -50%) rotate(0deg) scale(0.95);
+  }
+  20% {
+    border-radius: 50% 50% 40% 60% / 40% 50% 50% 60%;
+    transform: translate(-50%, -50%) rotate(72deg) scale(1);
+  }
+  40% {
+    border-radius: 40% 60% 60% 40% / 60% 40% 40% 60%;
+    transform: translate(-50%, -50%) rotate(144deg) scale(1.05);
+  }
+  60% {
+    border-radius: 30% 70% 70% 30% / 50% 50% 50% 50%;
+    transform: translate(-50%, -50%) rotate(216deg) scale(1);
+  }
+  80% {
+    border-radius: 40% 60% 50% 50% / 60% 40% 60% 40%;
+    transform: translate(-50%, -50%) rotate(288deg) scale(0.95);
+  }
+  100% {
+    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+    transform: translate(-50%, -50%) rotate(360deg) scale(0.95);
+  }
+}
+
+@keyframes gradientFloat {
+  0% { 
+    background-position: 0% 50%;
+  }
+  25% {
+    background-position: 50% 100%;
+  }
+  50% { 
+    background-position: 100% 150%;
+  }
+  75% {
+    background-position: 50% 0%;
+  }
+  100% { 
+    background-position: 0% 50%;
+  }
+}
+
+
+
+
+
+
+
+
 /* Enhanced Morphing Background */
 .morphing-background {
   position: absolute;
@@ -30,23 +112,28 @@ body {
 
 .morphing-shape {
   position: absolute;
-  top: 50%;
+  top: 45%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 500px;
-  height: 500px;
+  width: 600px;
+  height: 600px;
   background: linear-gradient(
     135deg,
-    rgba(255, 20, 147, 0.7),    /* Deep pink */
-    rgba(255, 105, 180, 0.7),   /* Hot pink */
-    rgba(255, 192, 203, 0.7),   /* Light pink */
-    rgba(255, 240, 245, 0.7),   /* Lavender blush */
-    rgba(218, 112, 214, 0.7)    /* Orchid */
+    rgba(246, 173, 198, 0.7),    /* Pastel pink */
+  rgba(249, 186, 206, 0.7),    /* Soft rose */
+  rgba(251, 197, 216, 0.7),    /* Light pastel pink */
+  rgba(203, 166, 247, 0.7),    /* Soft lavender */
+  rgba(186, 187, 241, 0.7),    /* Pastel periwinkle */
+  rgba(246, 173, 198, 0.7),    /* Pastel pink */
+  rgba(249, 186, 206, 0.7),    /* Soft rose */
+  rgba(251, 197, 216, 0.7),    /* Light pastel pink */
+  rgba(203, 166, 247, 0.7),    /* Soft lavender */
+  rgba(186, 187, 241, 0.7)     /* Pastel periwinkle */
   );
   background-size: 400% 400%;
   border-radius: 50%;
   animation: 
-    morphing 20s ease-in-out infinite,
+    morphing 10s ease-in-out infinite,
     gradientShift 25s linear infinite;
   box-shadow: 
     0 0 150px rgba(255, 20, 147, 0.3),
