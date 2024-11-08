@@ -5,9 +5,9 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  --primary: #ec4899;
-  --secondary: #fdf2f8;
-  --accent: #fbcfe8;
+  --primary: #FF1493;    /* Deep pink */
+  --secondary: #FFF0F5;  /* Lavender blush */
+  --accent: #FF69B4;     /* Hot pink */
 }
 
 body {
@@ -15,30 +15,17 @@ body {
   background: var(--background);
 }
 
-@layer components {
-  .hero-search {
-    @apply w-full max-w-[1200px] px-6 py-4 text-lg border rounded-full
-           border-gray-200 focus:border-pink-500 focus:ring-2 
-           focus:ring-pink-200 outline-none transition-all
-           shadow-sm hover:shadow-md;
-  }
-  
-  .section-container {
-    @apply max-w-7xl mx-auto px-4 py-16;
-  }
-}
-
+/* Enhanced Morphing Background */
 .morphing-background {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  filter: blur(15px);
-  opacity: 0.7;
+  filter: blur(20px);
+  opacity: 0.8;
   z-index: -1;
   overflow: hidden;
-  background-color: rgba(255, 255, 255, 0.8);
 }
 
 .morphing-shape {
@@ -46,22 +33,24 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 600px;
-  height: 600px;
+  width: 1000px;
+  height: 1000px;
   background: linear-gradient(
     135deg,
-    #ff1493,    /* Deep pink */
-    #ff69b4,    /* Hot pink */
-    #ffc0cb,    /* Light pink */
-    #fff0f5,    /* Lavender blush */
-    #ff69b4     /* Hot pink */
+    rgba(255, 20, 147, 0.7),    /* Deep pink */
+    rgba(255, 105, 180, 0.7),   /* Hot pink */
+    rgba(255, 192, 203, 0.7),   /* Light pink */
+    rgba(255, 240, 245, 0.7),   /* Lavender blush */
+    rgba(218, 112, 214, 0.7)    /* Orchid */
   );
   background-size: 400% 400%;
   border-radius: 50%;
   animation: 
-    morphing 12s ease-in-out infinite,
-    gradientShift 15s linear infinite;
-  box-shadow: 0 0 100px rgba(255, 105, 180, 0.3);
+    morphing 20s ease-in-out infinite,
+    gradientShift 25s linear infinite;
+  box-shadow: 
+    0 0 150px rgba(255, 20, 147, 0.3),
+    0 0 300px rgba(255, 105, 180, 0.2);
 }
 
 @keyframes morphing {
@@ -71,7 +60,7 @@ body {
   }
   25% {
     border-radius: 70% 30% 50% 50% / 30% 60% 40% 70%;
-    transform: translate(-50%, -50%) rotate(90deg) scale(0.9);
+    transform: translate(-50%, -50%) rotate(90deg) scale(0.95);
   }
   50% {
     border-radius: 30% 70% 70% 30% / 50% 50% 30% 60%;
@@ -79,7 +68,7 @@ body {
   }
   75% {
     border-radius: 40% 60% 30% 70% / 70% 30% 60% 40%;
-    transform: translate(-50%, -50%) rotate(270deg) scale(0.9);
+    transform: translate(-50%, -50%) rotate(270deg) scale(0.95);
   }
   100% {
     border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
@@ -88,13 +77,37 @@ body {
 }
 
 @keyframes gradientShift {
-  0% {
-    background-position: 0% 50%;
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 150%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* Component Styles */
+@layer components {
+  .feature-card {
+    @apply bg-white/80 backdrop-blur-sm p-8 rounded-2xl shadow-lg
+           hover:shadow-xl transition-all duration-300 hover:-translate-y-1
+           border border-transparent hover:border-primary/20;
   }
-  50% {
-    background-position: 100% 150%;
+
+  .feature-icon-wrapper {
+    @apply w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center
+           text-primary mb-6 group-hover:bg-primary group-hover:text-white
+           transition-all duration-300;
   }
-  100% {
-    background-position: 0% 50%;
+
+  .feature-title {
+    @apply text-xl font-semibold mb-4 group-hover:text-primary transition-colors;
+  }
+
+  .feature-description {
+    @apply text-gray-600 leading-relaxed;
+  }
+
+  .hero-search {
+    @apply w-full max-w-[1200px] px-6 py-4 text-lg border rounded-full
+           bg-white/90 border-gray-200 focus:border-primary focus:ring-2 
+           focus:ring-primary/20 outline-none transition-all
+           shadow-sm hover:shadow-md;
   }
 }
