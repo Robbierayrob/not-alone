@@ -11,8 +11,8 @@ export default function Navigation() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16">
           <div className="flex items-center">
-            <Link href="/" className="text-xl font-semibold">
-              OpenAI Style
+            <Link href="/" className="text-2xl font-bold text-foreground">
+              DairyAI
             </Link>
           </div>
           <div className="flex items-center space-x-8">
@@ -20,9 +20,9 @@ export default function Navigation() {
               href="/dairy"
               className={`${
                 pathname === "/dairy" 
-                  ? "text-pink-600" 
+                  ? "text-primary" 
                   : "text-gray-600 hover:text-gray-900"
-              }`}
+              } transition-colors`}
             >
               Dairy
             </Link>
@@ -30,34 +30,13 @@ export default function Navigation() {
               href="/about"
               className={`${
                 pathname === "/about" 
-                  ? "text-pink-600" 
+                  ? "text-primary" 
                   : "text-gray-600 hover:text-gray-900"
-              }`}
+              } transition-colors`}
             >
               About
             </Link>
           </div>
-        </div>
-      </div>
-    </nav>
-  );
-}
-import Link from 'next/link';
-
-export default function Navigation() {
-  return (
-    <nav className="fixed w-full bg-white/80 backdrop-blur-sm z-50 border-b border-gray-100">
-      <div className="max-w-7xl mx-auto px-4 h-16 flex items-center justify-between">
-        <Link href="/" className="text-2xl font-bold text-foreground">
-          DairyAI
-        </Link>
-        <div className="flex gap-8">
-          <Link href="/dairy" className="hover:text-primary transition-colors">
-            Dairy
-          </Link>
-          <Link href="/about" className="hover:text-primary transition-colors">
-            About
-          </Link>
         </div>
       </div>
     </nav>
