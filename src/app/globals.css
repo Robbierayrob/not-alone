@@ -17,7 +17,7 @@ body {
 
 @layer components {
   .hero-search {
-    @apply w-full max-w-3xl px-6 py-4 text-lg border rounded-full
+    @apply w-full max-w-4xl px-6 py-4 text-lg border rounded-full
            border-gray-200 focus:border-pink-500 focus:ring-2 
            focus:ring-pink-200 outline-none transition-all
            shadow-sm hover:shadow-md;
@@ -34,7 +34,7 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  filter: blur(80px); /* Increased blur for softer edges */
+  filter: blur(10px); /* Increased blur for softer edges */
   opacity: 0.8; /* Slightly increased opacity */
   z-index: -1;
   overflow: hidden;
@@ -45,14 +45,14 @@ body {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 800px; /* Increased size */
-  height: 800px;
+  width: 600px; /* Increased size */
+  height: 600px;
   background: linear-gradient(
     135deg,
     #ff69b4,    /* Hot pink */
     #fff1f6,    /* Soft white-pink */
     #ffb6c1,    /* Light pink */
-    #fff,       /* Pure white */
+    #fff1f6,       /* Pure white */
     #ffc0cb     /* Pink */
   );
   background-size: 400% 400%;
