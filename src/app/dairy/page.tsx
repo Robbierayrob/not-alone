@@ -46,7 +46,7 @@ export default function DairyPage() {
           <form className="max-w-4xl mx-auto relative">
             <input
               type="text"
-              placeholder="Ask about dairy products..."
+              placeholder="Start your dairy..."
               className="w-full p-4 pr-12 rounded-lg border border-gray-200 focus:border-primary focus:ring-2 focus:ring-pink-200 outline-none"
             />
             <button

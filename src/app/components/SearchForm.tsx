@@ -15,7 +15,7 @@ export default function SearchForm() {
     >
       <input
         type="text"
-        placeholder="Search dairy products..."
+        placeholder="Start Your Diary..."
         className="hero-search"
       />
     </form>
