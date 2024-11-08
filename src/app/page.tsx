@@ -11,8 +11,8 @@ export default function Home() {
           <div className="morphing-shape"></div>
         </div>
         <h1 className="text-6xl font-bold mb-6 relative z-10">
-          Revolutionizing the Future of
-          <span className="text-primary"> Dairy</span>
+          Helping Women agaisnt
+          <span className="text-primary"> Violence</span>
         </h1>
         <p className="text-xl text-gray-600 mb-8 max-w-2xl relative z-10">
           Discover the next generation of dairy products powered by artificial intelligence
