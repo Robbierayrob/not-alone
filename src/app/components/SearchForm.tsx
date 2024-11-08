@@ -11,7 +11,7 @@ export default function SearchForm() {
         e.preventDefault();
         router.push('/dairy');
       }}
-      className="w-full max-w-2xl"
+      className="w-full max-w-5xl mx-auto"
     >
       <input
         type="text"
