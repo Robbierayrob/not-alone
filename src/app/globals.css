@@ -6,9 +6,23 @@
   --background: #ffffff;
   --foreground: #171717;
   --primary: #ec4899;
+  --secondary: #fdf2f8;
+  --accent: #fbcfe8;
 }
 
 body {
   color: var(--foreground);
   background: var(--background);
+}
+
+@layer components {
+  .hero-search {
+    @apply w-full max-w-2xl px-4 py-3 text-lg border rounded-xl 
+           border-gray-200 focus:border-pink-500 focus:ring-2 
+           focus:ring-pink-200 outline-none transition-all;
+  }
+  
+  .section-container {
+    @apply max-w-7xl mx-auto px-4 py-16;
+  }
 }
