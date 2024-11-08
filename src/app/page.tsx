@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import SearchForm from './components/SearchForm';
 
 export default function Home() {
   return (
@@ -13,19 +14,7 @@ export default function Home() {
         <p className="text-xl text-gray-600 mb-8 max-w-2xl">
           Discover the next generation of dairy products powered by artificial intelligence
         </p>
-        <form 
-          onSubmit={(e) => {
-            e.preventDefault();
-            window.location.href = '/dairy';
-          }}
-          className="w-full max-w-2xl"
-        >
-          <input
-            type="text"
-            placeholder="Search dairy products..."
-            className="hero-search"
-          />
-        </form>
+        <SearchForm />
       </section>
 
       {/* Features Section */}
