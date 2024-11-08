@@ -6,15 +6,20 @@ export default function Home() {
   return (
     <main>
       {/* Hero Section */}
-      <section className="min-h-[90vh] flex flex-col items-center justify-center text-center px-4">
-        <h1 className="text-6xl font-bold mb-6">
+      <section className="min-h-[90vh] flex flex-col items-center justify-center text-center px-4 relative overflow-hidden">
+        <div className="morphing-background">
+          <div className="morphing-shape"></div>
+        </div>
+        <h1 className="text-6xl font-bold mb-6 relative z-10">
           Revolutionizing the Future of
           <span className="text-primary"> Dairy</span>
         </h1>
-        <p className="text-xl text-gray-600 mb-8 max-w-2xl">
+        <p className="text-xl text-gray-600 mb-8 max-w-2xl relative z-10">
           Discover the next generation of dairy products powered by artificial intelligence
         </p>
-        <SearchForm />
+        <div className="relative z-10">
+          <SearchForm />
+        </div>
       </section>
 
       {/* Features Section */}
