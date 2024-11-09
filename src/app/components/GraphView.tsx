@@ -30,32 +30,24 @@ export default function GraphView({ graphData }: GraphViewProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const resizeGraph = () => {
+    const updateDimensions = () => {
       if (containerRef.current) {
         const { width, height } = containerRef.current.getBoundingClientRect();
-        containerRef.current.style.width = `${width}px`;
-        containerRef.current.style.height = `${height}px`;
+        setDimensions({ width, height });
       }
     };
 
-    // Create a ResizeObserver to watch for container size changes
-    const resizeObserver = new ResizeObserver(() => {
-      // Add a small delay to ensure proper rendering
-      setTimeout(resizeGraph, 100);
-    });
-
+    const resizeObserver = new ResizeObserver(updateDimensions);
+    
     if (containerRef.current) {
       resizeObserver.observe(containerRef.current);
+      updateDimensions(); // Initial measurement
     }
 
-    window.addEventListener('resize', resizeGraph);
-    resizeGraph();
-
-    return () => {
-      resizeObserver.disconnect();
-      window.removeEventListener('resize', resizeGraph);
-    };
+    return () => resizeObserver.disconnect();
   }, []);
+
+  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
 
   const [mounted, setMounted] = useState(false);
 
@@ -67,10 +59,11 @@ export default function GraphView({ graphData }: GraphViewProps) {
 
   return (
     <div ref={containerRef} className="w-full h-full bg-white relative">
-      {typeof window !== 'undefined' && <ForceGraph2D
+      {typeof window !== 'undefined' && dimensions.width > 0 && <ForceGraph2D
+        key={`${dimensions.width}-${dimensions.height}`}
         graphData={graphData}
-        width={containerRef.current?.clientWidth || 600}
-        height={containerRef.current?.clientHeight || 800}
+        width={dimensions.width}
+        height={dimensions.height}
         backgroundColor="#ffffff"
         nodeAutoColorBy="group"
         nodeLabel="name"

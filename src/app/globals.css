@@ -185,22 +185,32 @@ body {
 }
 
 .typing-animation {
+  opacity: 0;
+  animation: fadeIn 0.5s ease forwards;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.typewriter {
   display: inline-block;
   overflow: hidden;
-  animation: typing 2s steps(40, end);
+  border-right: 2px solid transparent;
   white-space: pre-wrap;
   word-break: break-word;
+  animation: typing 3s steps(40, end), blink 0.75s step-end infinite;
 }
 
 @keyframes typing {
-  from { 
-    max-width: 0;
-    opacity: 0;
-  }
-  to { 
-    max-width: 100%;
-    opacity: 1;
-  }
+  from { width: 0 }
+  to { width: 100% }
+}
+
+@keyframes blink {
+  from, to { border-color: transparent }
+  50% { border-color: var(--primary) }
 }
 
 /* Component Styles */

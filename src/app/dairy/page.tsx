@@ -286,11 +286,9 @@ export default function DairyPage() {
                     ? 'bg-primary text-white ml-auto' 
                     : 'bg-gray-100 mr-auto'
                 }`}>
-                  {message.role === 'assistant' ? (
-                    <span className="typing-animation">{message.content}</span>
-                  ) : (
-                    message.content
-                  )}
+                  <span className={message.role === 'assistant' ? 'typing-animation' : ''}>
+                    {message.content}
+                  </span>
                 </div>
               </div>
             ))}

@@ -44,8 +44,13 @@ export default function GraphModal({ isOpen, onClose, graphData }: GraphModalPro
             <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
-        <div className="w-full h-full">
-          <GraphView graphData={graphData} isModal={true} />
+        <div className="w-full h-full flex flex-col">
+          <div className="p-4 border-b border-gray-200">
+            <h2 className="text-xl font-semibold text-primary">My Relationships</h2>
+          </div>
+          <div className="flex-1">
+            {isOpen && <GraphView key="modal-graph" graphData={graphData} isModal={true} />}
+          </div>
         </div>
       </div>
     </div>
