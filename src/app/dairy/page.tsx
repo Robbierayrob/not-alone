@@ -5,6 +5,8 @@ import DeleteConfirmationModal from '../components/DeleteConfirmationModal';
 import GraphView from '../components/GraphView';
 import GraphSidebar from '../components/GraphSidebar';
 import GraphModal from '../components/GraphModal';
+import ChatHistorySidebar from '../components/ChatHistorySidebar';
+import ChatBox from '../components/ChatBox';
 
 export default function DairyPage() {
   // State management
