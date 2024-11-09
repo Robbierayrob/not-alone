@@ -125,7 +125,27 @@ app.post('/api/chat', async (req, res) => {
     });
 
     // Get response from Gemini
-    const result = await chat.sendMessage(message || systemPrompt);
+    if (!message && !history.length) {
+      // If it's the first message and empty, use system prompt
+      const result = await chat.sendMessage(systemPrompt);
+      const response = await result.response;
+      const aiResponse = response.text();
+      return res.json({ 
+        message: aiResponse,
+        chatId,
+        graphData
+      });
+    } else if (!message) {
+      // If message is empty but we have history, just return graph data
+      return res.json({ 
+        message: '',
+        chatId,
+        graphData
+      });
+    }
+    
+    // Normal message flow
+    const result = await chat.sendMessage(message);
     const response = await result.response;
     const aiResponse = response.text();
 

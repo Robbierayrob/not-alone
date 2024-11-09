@@ -3,6 +3,7 @@
 import { useState, FormEvent, useRef, useEffect } from 'react';
 import DeleteConfirmationModal from '../components/DeleteConfirmationModal';
 import GraphView from '../components/GraphView';
+import GraphSidebar from '../components/GraphSidebar';
 
 export default function DairyPage() {
   // State management
@@ -299,12 +300,7 @@ export default function DairyPage() {
         </div>
       </div>
 
-      {/* Graph View Sidebar */}
-      <div className={`${isGraphViewOpen ? 'w-96' : 'w-0'} bg-gray-50 border-l border-gray-200 transition-all duration-300 overflow-hidden`}>
-          <div className="h-full w-full">
-            <GraphView graphData={graphData} />
-          </div>
-        </div>
+      <GraphSidebar isOpen={isGraphViewOpen} graphData={graphData} />
     </div>
   );
 }
