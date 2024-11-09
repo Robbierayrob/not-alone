@@ -31,7 +31,7 @@ export default function ChatBox({
   }, [messages]);
 
   return (
-    <>
+    <div className="flex flex-col h-full">
       <div 
         ref={messagesContainerRef}
         className="flex-1 overflow-y-auto scrollbar-hide px-4 md:px-8 py-6 relative z-10 flex flex-col-reverse"
