@@ -4,6 +4,7 @@ import { useState, FormEvent, useRef, useEffect } from 'react';
 import DeleteConfirmationModal from '../components/DeleteConfirmationModal';
 import GraphView from '../components/GraphView';
 import GraphSidebar from '../components/GraphSidebar';
+import GraphModal from '../components/GraphModal';
 
 export default function DairyPage() {
   // State management
@@ -12,6 +13,7 @@ export default function DairyPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isGraphViewOpen, setIsGraphViewOpen] = useState(false);
+  const [isGraphModalOpen, setIsGraphModalOpen] = useState(false);
   const [graphData, setGraphData] = useState({
     nodes: [],
     links: []
@@ -224,20 +226,33 @@ export default function DairyPage() {
       {/* Main chat area */}
       <div className="flex-1 flex flex-col relative">
         {/* Graph View Toggle Button */}
-        <button 
-          onClick={() => setIsGraphViewOpen(!isGraphViewOpen)}
-          className={`fixed right-4 top-20 p-2 rounded-lg shadow-md transition-all duration-300 z-50 ${
-            isGraphViewOpen 
-              ? 'bg-primary text-white hover:bg-primary/90 border-2 border-white' 
-              : 'bg-white hover:bg-gray-100 border-2 border-transparent'
-          }`}
-          aria-label={isGraphViewOpen ? "Close graph view" : "Open graph view"}
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6a7.5 7.5 0 107.5 7.5h-7.5V6z" />
-            <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 10.5H21A7.5 7.5 0 0013.5 3v7.5z" />
-          </svg>
-        </button>
+        <div className="fixed right-4 top-20 flex gap-2 z-50">
+          <button 
+            onClick={() => setIsGraphViewOpen(!isGraphViewOpen)}
+            className={`p-2 rounded-lg shadow-md transition-all duration-300 ${
+              isGraphViewOpen 
+                ? 'bg-primary text-white hover:bg-primary/90 border-2 border-white' 
+                : 'bg-white hover:bg-gray-100 border-2 border-transparent'
+            }`}
+            aria-label={isGraphViewOpen ? "Close graph view" : "Open graph view"}
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6a7.5 7.5 0 107.5 7.5h-7.5V6z" />
+              <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 10.5H21A7.5 7.5 0 0013.5 3v7.5z" />
+            </svg>
+          </button>
+          {isGraphViewOpen && (
+            <button
+              onClick={() => setIsGraphModalOpen(true)}
+              className="p-2 rounded-lg shadow-md bg-white hover:bg-gray-100 transition-all duration-300 border-2 border-transparent"
+              aria-label="Expand graph view"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" />
+              </svg>
+            </button>
+          )}
+        </div>
         {/* Floating sidebar toggle */}
         <button 
           onClick={toggleSidebar}
@@ -305,6 +320,11 @@ export default function DairyPage() {
       </div>
 
       <GraphSidebar isOpen={isGraphViewOpen} graphData={graphData} />
+      <GraphModal 
+        isOpen={isGraphModalOpen}
+        onClose={() => setIsGraphModalOpen(false)}
+        graphData={graphData}
+      />
     </div>
   );
 }
