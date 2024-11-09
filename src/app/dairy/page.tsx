@@ -22,24 +22,23 @@ export default function DairyPage() {
   // Load initial graph data and handle graph view state
   useEffect(() => {
     const fetchGraphData = async () => {
-        try {
-          const response = await fetch('http://localhost:3001/api/chat', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              message: '',
-              chatId: currentChatId
-            }),
-          });
-          const data = await response.json();
-          if (data.graphData) {
-            setGraphData(data.graphData);
-          }
-        } catch (error) {
-          console.error('Error fetching graph data:', error);
+      try {
+        const response = await fetch('http://localhost:3001/api/chat', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            message: '',
+            chatId: currentChatId
+          }),
+        });
+        const data = await response.json();
+        if (data.graphData) {
+          setGraphData(data.graphData);
         }
+      } catch (error) {
+        console.error('Error fetching graph data:', error);
       }
     };
     fetchGraphData();
