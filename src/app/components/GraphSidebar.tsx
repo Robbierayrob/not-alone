@@ -19,8 +19,10 @@ export default function GraphSidebar({ isOpen, graphData }: GraphSidebarProps) {
         </div>
         <div className="flex-1 relative">
           {isOpen && (
-            <div className="absolute inset-0 transition-opacity duration-300">
-              <GraphView graphData={graphData} isSidebar={true} />
+            <div className="absolute inset-0 transition-all duration-300 opacity-0 animate-fade-in">
+              <div className="w-full h-full overflow-hidden">
+                <GraphView graphData={graphData} isSidebar={true} />
+              </div>
             </div>
           )}
         </div>

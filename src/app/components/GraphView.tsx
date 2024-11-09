@@ -34,16 +34,30 @@ export default function GraphView({ graphData, isModal, isSidebar }: GraphViewPr
   useEffect(() => {
     const updateDimensions = () => {
       if (containerRef.current) {
+        const rect = containerRef.current.getBoundingClientRect();
         setDimensions({
-          width: containerRef.current.clientWidth,
-          height: containerRef.current.clientHeight
+          width: rect.width,
+          height: rect.height
         });
       }
     };
 
-    updateDimensions();
-    window.addEventListener('resize', updateDimensions);
-    return () => window.removeEventListener('resize', updateDimensions);
+    // Initial delay to allow sidebar transition
+    const initialTimer = setTimeout(() => {
+      updateDimensions();
+    }, 300);
+
+    // Handle resize events
+    const resizeHandler = () => {
+      requestAnimationFrame(updateDimensions);
+    };
+
+    window.addEventListener('resize', resizeHandler);
+    
+    return () => {
+      window.removeEventListener('resize', resizeHandler);
+      clearTimeout(initialTimer);
+    };
   }, []);
 
   // Adjust graph rendering based on context
