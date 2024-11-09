@@ -2,6 +2,7 @@
 
 import { useState, FormEvent, useRef, useEffect } from 'react';
 import DeleteConfirmationModal from '../components/DeleteConfirmationModal';
+import GraphView from '../components/GraphView';
 
 export default function DairyPage() {
   // State management
@@ -9,6 +10,11 @@ export default function DairyPage() {
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isGraphViewOpen, setIsGraphViewOpen] = useState(false);
+  const [graphData, setGraphData] = useState({
+    nodes: [],
+    links: []
+  });
   const [currentChatId, setCurrentChatId] = useState('default-chat');
   const [deleteConfirmation, setDeleteConfirmation] = useState<string | null>(null);
   const [chats, setChats] = useState<Array<{
@@ -187,6 +193,17 @@ export default function DairyPage() {
 
       {/* Main chat area */}
       <div className="flex-1 flex flex-col relative">
+        {/* Graph View Toggle Button */}
+        <button 
+          onClick={() => setIsGraphViewOpen(!isGraphViewOpen)}
+          className={`fixed right-4 top-20 p-2 rounded-lg bg-white shadow-md hover:bg-gray-100 transition-all duration-300 z-50`}
+          aria-label={isGraphViewOpen ? "Close graph view" : "Open graph view"}
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6a7.5 7.5 0 107.5 7.5h-7.5V6z" />
+            <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 10.5H21A7.5 7.5 0 0013.5 3v7.5z" />
+          </svg>
+        </button>
         {/* Floating sidebar toggle */}
         <button 
           onClick={toggleSidebar}
@@ -250,6 +267,13 @@ export default function DairyPage() {
               </svg>
             </button>
           </form>
+        </div>
+      </div>
+
+      {/* Graph View Sidebar */}
+      <div className={`${isGraphViewOpen ? 'w-96' : 'w-0'} bg-gray-50 border-l border-gray-200 transition-all duration-300 overflow-hidden`}>
+        <div className="h-full">
+          <GraphView graphData={graphData} />
         </div>
       </div>
     </div>

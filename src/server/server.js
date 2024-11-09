@@ -87,7 +87,41 @@ app.post('/api/chat', async (req, res) => {
     
     // Initialize Gemini chat
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-002" });
+    const systemPrompt = `You are an AI assistant focused on helping users improve their relationships and personal growth. 
+    As you engage in conversation, analyze the text to identify:
+    1. Entities (people, places, objects, concepts)
+    2. Actions/interactions between entities
+    3. Emotional states and relationship dynamics
+    4. Key events and their impact
+
+    Format your internal understanding as a graph structure where:
+    - Nodes represent entities, emotions, and key concepts
+    - Edges represent relationships, actions, and influences between nodes
+
+    Provide empathetic, constructive responses that help users:
+    - Understand relationship patterns
+    - Identify areas for growth
+    - Develop healthy communication strategies
+    - Build stronger connections
+
+    Always maintain a supportive, non-judgmental tone.`;
+
     const chat = model.startChat({
+      history: history.length > 0 ? history.map(msg => ({
+        role: msg.role === 'user' ? 'user' : 'model',
+        parts: [{ text: msg.content }],
+      })) : [],
+      generationConfig: {
+        temperature: 0.7,
+        topK: 40,
+        topP: 0.95,
+      },
+      safetySettings: [
+        {
+          category: 'HARM_CATEGORY_HARASSMENT',
+          threshold: 'BLOCK_MEDIUM_AND_ABOVE',
+        },
+      ],
       history: history.length > 0 ? history.map(msg => ({
         role: msg.role === 'user' ? 'user' : 'model',
         parts: [{ text: msg.content }],
@@ -106,9 +140,23 @@ app.post('/api/chat', async (req, res) => {
     chatHistory.set(chatId, chatData);
     saveChatHistory();
 
+    // Mock graph data generation (replace with actual NLP later)
+    const graphData = {
+      nodes: [
+        { id: 'user', name: 'User', val: 20, color: '#FF1493' },
+        { id: 'emotion', name: 'Feeling', val: 15, color: '#FF69B4' },
+        { id: 'action', name: 'Action', val: 15, color: '#FFB6C1' }
+      ],
+      links: [
+        { source: 'user', target: 'emotion', value: 1 },
+        { source: 'emotion', target: 'action', value: 1 }
+      ]
+    };
+
     res.json({ 
       message: aiResponse,
-      chatId
+      chatId,
+      graphData
     });
   } catch (error) {
     console.error('Error:', error);
