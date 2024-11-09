@@ -9,7 +9,7 @@ export default function DairyPage() {
   const [messages, setMessages] = useState<Array<{role: string, content: string}>>([]);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isGraphViewOpen, setIsGraphViewOpen] = useState(false);
   const [graphData, setGraphData] = useState({
     nodes: [],
@@ -271,11 +271,13 @@ export default function DairyPage() {
       </div>
 
       {/* Graph View Sidebar */}
-      <div className={`${isGraphViewOpen ? 'w-96' : 'w-0'} bg-gray-50 border-l border-gray-200 transition-all duration-300 overflow-hidden`}>
-        <div className="h-full">
-          <GraphView graphData={graphData} />
+      {messages.length > 0 && (
+        <div className={`${isGraphViewOpen ? 'w-96' : 'w-0'} bg-gray-50 border-l border-gray-200 transition-all duration-300 overflow-hidden`}>
+          <div className="h-full w-full">
+            <GraphView graphData={graphData} />
+          </div>
         </div>
-      </div>
+      )}
     </div>
   );
 }

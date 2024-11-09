@@ -40,11 +40,12 @@ export default function GraphView({ graphData }: GraphViewProps) {
   }, []);
 
   return (
-    <div ref={containerRef} className="w-full h-full bg-white">
+    <div ref={containerRef} className="w-full h-full bg-white relative">
       <ForceGraph2D
         graphData={graphData}
-        width={containerRef.current?.clientWidth || 400}
-        height={containerRef.current?.clientHeight || 600}
+        width={containerRef.current?.clientWidth}
+        height={containerRef.current?.clientHeight}
+        backgroundColor="#ffffff"
         nodeAutoColorBy="group"
         nodeLabel="name"
         linkDirectionalParticles={2}
