@@ -38,12 +38,9 @@ let chatHistory = new Map(mockChats.map(chat => [chat.id, chat]));
 // Mock save function (no-op for now)
 const saveChatHistory = () => {};
 
-// Get all chat IDs
+// Get all chats
 app.get('/api/chats', (req, res) => {
-  const chats = Array.from(chatHistory.keys()).map(id => ({
-    id,
-    preview: chatHistory.get(id)[0]?.content || 'New Chat'
-  }));
+  const chats = Array.from(chatHistory.values());
   res.json(chats);
 });
 
@@ -72,15 +69,15 @@ app.post('/api/chat', async (req, res) => {
     if (!chatData) {
       return res.status(404).json({ error: 'Chat not found' });
     }
-    const history = chatData.messages;
+    const history = chatData.messages || [];
     
     // Initialize Gemini chat
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-002" });
     const chat = model.startChat({
-      history: history.map(msg => ({
+      history: history.length > 0 ? history.map(msg => ({
         role: msg.role === 'user' ? 'user' : 'model',
         parts: [{ text: msg.content }],
-      }))
+      })) : []
     });
 
     // Get response from Gemini
