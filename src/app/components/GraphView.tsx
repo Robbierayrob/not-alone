@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useRef } from 'react';
 import dynamic from 'next/dynamic';
 
 const ForceGraph2D = dynamic(() => import('react-force-graph-2d'), {
@@ -29,41 +29,12 @@ interface GraphViewProps {
 export default function GraphView({ graphData }: GraphViewProps) {
   const containerRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
-    const updateDimensions = () => {
-      if (containerRef.current) {
-        const { width, height } = containerRef.current.getBoundingClientRect();
-        setDimensions({ width, height });
-      }
-    };
-
-    const resizeObserver = new ResizeObserver(updateDimensions);
-    
-    if (containerRef.current) {
-      resizeObserver.observe(containerRef.current);
-      updateDimensions(); // Initial measurement
-    }
-
-    return () => resizeObserver.disconnect();
-  }, []);
-
-  const [dimensions, setDimensions] = useState({ width: 0, height: 0 });
-
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  if (!mounted) return null;
-
   return (
     <div ref={containerRef} className="w-full h-full bg-white relative">
-      {typeof window !== 'undefined' && dimensions.width > 0 && <ForceGraph2D
-        key={`${dimensions.width}-${dimensions.height}`}
+      {typeof window !== 'undefined' && <ForceGraph2D
         graphData={graphData}
-        width={dimensions.width}
-        height={dimensions.height}
+        width={containerRef.current?.clientWidth || 800}
+        height={containerRef.current?.clientHeight || 600}
         backgroundColor="#ffffff"
         nodeAutoColorBy="group"
         nodeLabel="name"
