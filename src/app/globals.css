@@ -209,8 +209,8 @@ body {
 }
 
 @keyframes blink {
-  from, to { border-color: transparent }
-  50% { border-color: var(--primary) }
+  0%, 100% { border-color: transparent; }
+  50% { border-color: var(--primary); }
 }
 
 /* Component Styles */
