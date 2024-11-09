@@ -169,59 +169,14 @@ export default function DairyPage() {
 
   return (
     <div className="h-screen flex">
-      {/* Sidebar */}
-      <div className={`${isSidebarOpen ? 'w-64' : 'w-0'} bg-gray-50 border-r border-gray-200 transition-all duration-300 overflow-hidden`}>
-        <div className="p-4">
-          <div className="mb-4">
-            <button 
-              onClick={createNewChat}
-              className="w-full px-4 py-2 rounded-lg border border-gray-200 hover:bg-gray-100 text-left"
-            >
-              + New Chat
-            </button>
-          </div>
-          <div className="space-y-2">
-            {chats.map((chat) => (
-              <div key={chat.id} className="relative group">
-                <button
-                  onClick={() => setCurrentChatId(chat.id)}
-                  className={`w-full px-4 py-3 rounded-lg text-left hover:bg-gray-100 
-                    ${currentChatId === chat.id ? 'bg-gray-100' : ''} transition-colors`}
-                >
-                  <div className="flex flex-col">
-                    <span className="font-medium truncate">{chat.title}</span>
-                    <span className="text-sm text-gray-500">
-                      {new Date(chat.createdAt).toLocaleDateString()}
-                    </span>
-                  </div>
-                </button>
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setDeleteConfirmation(chat.id);
-                  }}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 
-                    p-2 text-gray-400 hover:text-red-500 transition-all"
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" 
-                    strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-              </div>
-            ))}
-
-            {deleteConfirmation && (
-              <DeleteConfirmationModal
-                key={deleteConfirmation}
-                isOpen={true}
-                onClose={() => setDeleteConfirmation(null)}
-                onConfirm={() => deleteConfirmation && deleteChat(deleteConfirmation)}
-              />
-            )}
-          </div>
-        </div>
-      </div>
+      <ChatHistorySidebar 
+        isSidebarOpen={isSidebarOpen}
+        chats={chats}
+        currentChatId={currentChatId}
+        onCreateNewChat={createNewChat}
+        onChatSelect={setCurrentChatId}
+        onDeleteChat={deleteChat}
+      />
 
       {/* Main chat area */}
       <div className="flex-1 flex flex-col relative">
@@ -273,50 +228,13 @@ export default function DairyPage() {
           <div className="pulsating-circle"></div>
         </div>
 
-        {/* Chat messages */}
-        <div 
-          ref={messagesContainerRef}
-          className="flex-1 overflow-y-auto px-4 md:px-8 py-6 relative z-10 flex flex-col-reverse"
-        >
-          <div className="w-full max-w-5xl mx-auto">
-            {messages.map((message, index) => (
-              <div key={index} className={`mb-8 ${message.role === 'user' ? 'text-right' : ''}`}>
-                <div className={`inline-block p-4 rounded-lg max-w-[85%] shadow-sm ${
-                  message.role === 'user' 
-                    ? 'bg-primary text-white ml-auto' 
-                    : 'bg-gray-100 mr-auto'
-                }`}>
-                  <span className={message.role === 'assistant' ? 'typing-animation' : ''}>
-                    {message.content}
-                  </span>
-                </div>
-              </div>
-            ))}
-            <div ref={messagesEndRef} />
-          </div>
-        </div>
-
-        {/* Input area */}
-        <div className="border-t border-gray-200 p-4 relative z-10">
-          <form onSubmit={handleSubmit} className="max-w-4xl mx-auto relative">
-            <input
-              type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder="Start your diary..."
-              className="w-full p-4 pr-12 rounded-2xl border-2 border-gray-200 focus:border-primary focus:ring-2 focus:ring-pink-200 outline-none shadow-sm hover:shadow-md transition-all duration-300"
-            />
-            <button
-              type="submit"
-              disabled={isLoading}
-              className="absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 hover:text-primary disabled:opacity-50"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" />
-              </svg>
-            </button>
-          </form>
-        </div>
+        <ChatBox
+          messages={messages}
+          input={input}
+          isLoading={isLoading}
+          onInputChange={setInput}
+          onSubmit={handleSubmit}
+        />
       </div>
 
       <GraphSidebar isOpen={isGraphViewOpen} graphData={graphData} />
