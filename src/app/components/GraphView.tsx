@@ -43,6 +43,8 @@ export default function GraphView({ graphData }: GraphViewProps) {
     <div ref={containerRef} className="w-full h-full bg-white">
       <ForceGraph2D
         graphData={graphData}
+        width={containerRef.current?.clientWidth || 400}
+        height={containerRef.current?.clientHeight || 600}
         nodeAutoColorBy="group"
         nodeLabel="name"
         linkDirectionalParticles={2}

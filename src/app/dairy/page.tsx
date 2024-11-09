@@ -229,15 +229,15 @@ export default function DairyPage() {
         {/* Chat messages */}
         <div 
           ref={messagesContainerRef}
-          className="flex-1 overflow-y-auto p-4 relative z-10 flex flex-col-reverse"
+          className="flex-1 overflow-y-auto px-2 py-4 relative z-10 flex flex-col-reverse"
         >
-          <div className="max-w-4xl mx-auto">
+          <div className="w-full max-w-5xl mx-auto">
             {messages.map((message, index) => (
               <div key={index} className={`mb-4 ${message.role === 'user' ? 'text-right' : ''}`}>
-                <div className={`inline-block p-4 rounded-lg ${
+                <div className={`inline-block p-3 rounded-lg max-w-[85%] ${
                   message.role === 'user' 
-                    ? 'bg-primary text-white' 
-                    : 'bg-gray-100'
+                    ? 'bg-primary text-white ml-auto' 
+                    : 'bg-gray-100 mr-auto'
                 }`}>
                   {message.content}
                 </div>
