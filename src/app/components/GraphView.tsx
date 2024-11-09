@@ -46,10 +46,19 @@ export default function GraphView({ graphData, isModal, isSidebar }: GraphViewPr
     return () => window.removeEventListener('resize', updateDimensions);
   }, []);
 
+  // Adjust graph rendering based on context
+  const graphConfig = {
+    width: dimensions.width,
+    height: dimensions.height,
+    centerAt: isModal ? { x: 0, y: 0 } : undefined,
+    zoom: isModal ? 1.5 : 1,
+    backgroundColor: "#ffffff"
+  };
+
   const containerClass = isModal
     ? "w-full h-full bg-white relative flex items-center justify-center"
     : isSidebar
-      ? "w-full h-full bg-white relative"
+      ? "w-full h-full bg-white relative overflow-hidden"
       : "w-full h-full bg-white relative flex items-center justify-center";
 
   return (
