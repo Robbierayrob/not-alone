@@ -140,18 +140,23 @@ app.post('/api/chat', async (req, res) => {
     chatHistory.set(chatId, chatData);
     saveChatHistory();
 
-    // Mock graph data generation (replace with actual NLP later)
-    const graphData = {
-      nodes: [
-        { id: 'user', name: 'User', val: 20, color: '#FF1493' },
-        { id: 'emotion', name: 'Feeling', val: 15, color: '#FF69B4' },
-        { id: 'action', name: 'Action', val: 15, color: '#FFB6C1' }
-      ],
-      links: [
-        { source: 'user', target: 'emotion', value: 1 },
-        { source: 'emotion', target: 'action', value: 1 }
-      ]
-    };
+    // Load and update graph data
+    let graphData;
+    try {
+      const graphPath = path.join(__dirname, '..', 'chat-sessions', 'mock-relationships.json');
+      graphData = JSON.parse(fs.readFileSync(graphPath, 'utf8'));
+      
+      // Here you would normally analyze the message with the LLM
+      // and update the graph data accordingly
+      // For now, we're just using the mock data
+      
+    } catch (error) {
+      console.error('Error loading graph data:', error);
+      graphData = {
+        nodes: [],
+        links: []
+      };
+    }
 
     res.json({ 
       message: aiResponse,

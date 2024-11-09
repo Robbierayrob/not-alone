@@ -48,19 +48,39 @@ export default function GraphView({ graphData }: GraphViewProps) {
         backgroundColor="#ffffff"
         nodeAutoColorBy="group"
         nodeLabel="name"
+        linkLabel="label"
         linkDirectionalParticles={2}
         linkDirectionalParticleSpeed={0.005}
         nodeCanvasObject={(node: any, ctx, globalScale) => {
           const label = node.name;
-          const fontSize = 12/globalScale;
+          const fontSize = 14/globalScale;
           ctx.font = `${fontSize}px Sans-Serif`;
-          ctx.fillStyle = node.color || '#FF1493';
+          ctx.fillStyle = '#FF1493';
           ctx.beginPath();
-          ctx.arc(node.x, node.y, 5, 0, 2 * Math.PI, false);
+          ctx.arc(node.x, node.y, 8, 0, 2 * Math.PI, false);
           ctx.fill();
+          ctx.fillStyle = 'white';
           ctx.textAlign = 'center';
           ctx.textBaseline = 'middle';
-          ctx.fillText(label, node.x, node.y + 10);
+          ctx.fillText(label, node.x, node.y + 15);
+        }}
+        linkCanvasObject={(link: any, ctx, globalScale) => {
+          const start = link.source;
+          const end = link.target;
+          const label = link.label;
+          const fontSize = 12/globalScale;
+          
+          ctx.font = `${fontSize}px Sans-Serif`;
+          ctx.fillStyle = '#666';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          
+          const textPos = {
+            x: start.x + (end.x - start.x) * 0.5,
+            y: start.y + (end.y - start.y) * 0.5
+          };
+          
+          ctx.fillText(label, textPos.x, textPos.y);
         }}
       />
     </div>
