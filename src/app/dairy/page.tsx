@@ -12,8 +12,13 @@ export default function DairyPage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isGraphViewOpen, setIsGraphViewOpen] = useState(false);
   const [graphData, setGraphData] = useState({
-    nodes: [],
-    links: []
+    nodes: [
+      { id: '1', name: 'Test Node 1', val: 1 },
+      { id: '2', name: 'Test Node 2', val: 1 }
+    ],
+    links: [
+      { source: '1', target: '2', value: 1, label: 'Test Link' }
+    ]
   });
   const [currentChatId, setCurrentChatId] = useState('default-chat');
   const [deleteConfirmation, setDeleteConfirmation] = useState<string | null>(null);
@@ -203,8 +208,7 @@ export default function DairyPage() {
             <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6a7.5 7.5 0 107.5 7.5h-7.5V6z" />
             <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 10.5H21A7.5 7.5 0 0013.5 3v7.5z" />
           </svg>
-          </button>
-        )}
+        </button>
         {/* Floating sidebar toggle */}
         <button 
           onClick={toggleSidebar}
@@ -272,13 +276,11 @@ export default function DairyPage() {
       </div>
 
       {/* Graph View Sidebar */}
-      {graphData.nodes.length > 0 && (
-        <div className={`${isGraphViewOpen ? 'w-96' : 'w-0'} bg-gray-50 border-l border-gray-200 transition-all duration-300 overflow-hidden`}>
+      <div className={`${isGraphViewOpen ? 'w-96' : 'w-0'} bg-gray-50 border-l border-gray-200 transition-all duration-300 overflow-hidden`}>
           <div className="h-full w-full">
             <GraphView graphData={graphData} />
           </div>
         </div>
-      )}
     </div>
   );
 }
