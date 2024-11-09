@@ -141,7 +141,7 @@ export default function DairyPage() {
         {/* Floating sidebar toggle */}
         <button 
           onClick={toggleSidebar}
-          className="fixed left-4 top-20 p-2 rounded-lg bg-white shadow-md hover:bg-gray-100 transition-colors z-50"
+          className={`fixed ${isSidebarOpen ? 'left-[260px]' : 'left-4'} top-20 p-2 rounded-lg bg-white shadow-md hover:bg-gray-100 transition-all duration-300 z-50`}
           aria-label={isSidebarOpen ? "Close sidebar" : "Open sidebar"}
         >
           {isSidebarOpen ? (
@@ -156,11 +156,9 @@ export default function DairyPage() {
         </button>
 
         {/* Pulsating Circle */}
-        {isLoading && (
-          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-            <div className="pulsating-circle"></div>
-          </div>
-        )}
+        <div className={`absolute inset-0 flex items-center justify-center pointer-events-none transition-opacity duration-300 ${isLoading ? 'opacity-100' : 'opacity-30'}`}>
+          <div className="pulsating-circle"></div>
+        </div>
 
         {/* Chat messages */}
         <div 

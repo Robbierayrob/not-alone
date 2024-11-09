@@ -36,7 +36,7 @@ body {
   border-radius: 50%;
   filter: blur(20px);
   opacity: 0.8;
-  z-index: -1;
+  z-index: 0;
   animation: 
     morphCircle 12s ease-in-out infinite,
     gradientFloat 25s linear infinite;
