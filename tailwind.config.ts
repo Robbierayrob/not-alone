@@ -10,13 +10,16 @@ const config: Config = {
     extend: {
       colors: {
         background: "var(--background)",
-        foreground: "var(--foreground)",
+        foreground: "var(--foreground)", 
         primary: "var(--primary)",
         secondary: "var(--secondary)",
         accent: "var(--accent)",
       },
     },
   },
+  plugins: [
+    require('tailwind-scrollbar-hide')
+  ],
   plugins: [],
 };
 export default config;
