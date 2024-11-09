@@ -54,8 +54,8 @@ export default function ChatBox({
         </div>
       </div>
 
-      <div className="border-t border-gray-200 p-4 md:p-6 relative z-10 flex items-center">
-        <div className="flex gap-3 mr-6">
+      <div className="border-t border-gray-200 p-4 md:p-6 relative z-10">
+        <div className="max-w-7xl mx-auto flex items-center gap-3">
           <button 
             aria-label="Profile settings"
             className="p-2.5 md:p-3 rounded-lg bg-white shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 hover:border-primary/20 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary/20"
@@ -73,13 +73,13 @@ export default function ChatBox({
             </svg>
           </button>
         </div>
-        <form onSubmit={onSubmit} className="max-w-4xl mx-auto relative">
+        <form onSubmit={onSubmit} className="flex-1 mx-3 relative">
           <input
             type="text"
             value={input}
             onChange={(e) => onInputChange(e.target.value)}
             placeholder="Examine your relationships..."
-            className="w-full max-w-4xl p-4 md:p-5 pr-14 rounded-lg border border-gray-200 focus:border-primary focus:ring-2 focus:ring-pink-200 outline-none shadow-sm hover:shadow-md transition-all duration-300 text-base"
+            className="w-full p-4 md:p-5 pr-14 rounded-lg border border-gray-200 focus:border-primary focus:ring-2 focus:ring-pink-200 outline-none shadow-sm hover:shadow-md transition-all duration-300 text-base"
           />
           <button
             type="submit"
