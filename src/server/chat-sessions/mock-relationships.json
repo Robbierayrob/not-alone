@@ -1,0 +1,15 @@
+{
+  "nodes": [
+    { "id": "john", "name": "John", "val": 20, "group": "person" },
+    { "id": "mary", "name": "Mary", "val": 20, "group": "person" },
+    { "id": "bob", "name": "Bob (boyfriend)", "val": 15, "group": "person" },
+    { "id": "sarah", "name": "Sarah (wife)", "val": 15, "group": "person" },
+    { "id": "mike", "name": "Mike (brother)", "val": 15, "group": "person" }
+  ],
+  "links": [
+    { "source": "john", "target": "mary", "value": 1, "label": "dating" },
+    { "source": "bob", "target": "sarah", "value": 1, "label": "married to" },
+    { "source": "john", "target": "mike", "value": 1, "label": "siblings" },
+    { "source": "mary", "target": "sarah", "value": 1, "label": "best friends" }
+  ]
+}
