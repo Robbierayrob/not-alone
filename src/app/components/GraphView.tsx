@@ -50,14 +50,14 @@ export default function GraphView({ graphData, isModal, isSidebar }: GraphViewPr
   const graphConfig = {
     width: dimensions.width,
     height: dimensions.height,
-    backgroundColor: "#ffffff"
+    backgroundColor: "#ffffff",
+    zoom: isSidebar ? 0.8 : 1,
+    centerAt: isSidebar ? undefined : { x: 0, y: 0 }
   };
 
-  const containerClass = isModal
-    ? "w-full h-full bg-white relative flex items-center justify-center"
-    : isSidebar
-      ? "w-full h-full bg-white relative overflow-hidden"
-      : "w-full h-full bg-white relative flex items-center justify-center";
+  const containerClass = isSidebar
+    ? "w-full h-full bg-white relative"
+    : "w-full h-full bg-white relative flex items-center justify-center";
 
   return (
     <div ref={containerRef} className={containerClass}>
