@@ -37,10 +37,23 @@ export default function GraphView({ graphData }: GraphViewProps) {
       }
     };
 
+    // Create a ResizeObserver to watch for container size changes
+    const resizeObserver = new ResizeObserver(() => {
+      // Add a small delay to ensure proper rendering
+      setTimeout(resizeGraph, 100);
+    });
+
+    if (containerRef.current) {
+      resizeObserver.observe(containerRef.current);
+    }
+
     window.addEventListener('resize', resizeGraph);
     resizeGraph();
 
-    return () => window.removeEventListener('resize', resizeGraph);
+    return () => {
+      resizeObserver.disconnect();
+      window.removeEventListener('resize', resizeGraph);
+    };
   }, []);
 
   const [mounted, setMounted] = useState(false);
