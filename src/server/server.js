@@ -140,16 +140,12 @@ app.post('/api/chat', async (req, res) => {
     chatHistory.set(chatId, chatData);
     saveChatHistory();
 
-    // Load and update graph data
+    // Load graph data
     let graphData;
     try {
-      const graphPath = path.join(__dirname, '..', 'chat-sessions', 'mock-relationships.json');
+      const graphPath = path.join(__dirname, 'chat-sessions', 'mock-relationships.json');
       graphData = JSON.parse(fs.readFileSync(graphPath, 'utf8'));
-      
-      // Here you would normally analyze the message with the LLM
-      // and update the graph data accordingly
-      // For now, we're just using the mock data
-      
+      console.log('Successfully loaded graph data:', graphData);
     } catch (error) {
       console.error('Error loading graph data:', error);
       graphData = {

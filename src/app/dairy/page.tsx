@@ -12,14 +12,34 @@ export default function DairyPage() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isGraphViewOpen, setIsGraphViewOpen] = useState(false);
   const [graphData, setGraphData] = useState({
-    nodes: [
-      { id: '1', name: 'Test Node 1', val: 1 },
-      { id: '2', name: 'Test Node 2', val: 1 }
-    ],
-    links: [
-      { source: '1', target: '2', value: 1, label: 'Test Link' }
-    ]
+    nodes: [],
+    links: []
   });
+
+  // Load initial graph data
+  useEffect(() => {
+    const fetchGraphData = async () => {
+      try {
+        const response = await fetch('http://localhost:3001/api/chat', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            message: '',
+            chatId: currentChatId
+          }),
+        });
+        const data = await response.json();
+        if (data.graphData) {
+          setGraphData(data.graphData);
+        }
+      } catch (error) {
+        console.error('Error fetching graph data:', error);
+      }
+    };
+    fetchGraphData();
+  }, [currentChatId]);
   const [currentChatId, setCurrentChatId] = useState('default-chat');
   const [deleteConfirmation, setDeleteConfirmation] = useState<string | null>(null);
   const [chats, setChats] = useState<Array<{
@@ -126,6 +146,9 @@ export default function DairyPage() {
       
       if (response.ok) {
         setMessages(prev => [...prev, { role: 'assistant', content: data.message }]);
+        if (data.graphData) {
+          setGraphData(data.graphData);
+        }
       } else {
         console.error('Error:', data.error);
       }
