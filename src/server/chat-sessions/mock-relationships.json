@@ -1,15 +1,19 @@
 {
   "nodes": [
-    { "id": "john", "name": "John", "val": 20, "group": "person" },
-    { "id": "mary", "name": "Mary", "val": 20, "group": "person" },
-    { "id": "bob", "name": "Bob (boyfriend)", "val": 15, "group": "person" },
-    { "id": "sarah", "name": "Sarah (wife)", "val": 15, "group": "person" },
-    { "id": "mike", "name": "Mike (brother)", "val": 15, "group": "person" }
+    { "id": "user", "name": "Me", "val": 25, "gender": "female", "group": "central" },
+    { "id": "david", "name": "David", "val": 20, "gender": "male", "group": "family" },
+    { "id": "emma", "name": "Emma", "val": 20, "gender": "female", "group": "friend" },
+    { "id": "james", "name": "James", "val": 18, "gender": "male", "group": "work" },
+    { "id": "sophia", "name": "Sophia", "val": 18, "gender": "female", "group": "friend" },
+    { "id": "alex", "name": "Alex", "val": 18, "gender": "male", "group": "family" },
+    { "id": "lisa", "name": "Lisa", "val": 18, "gender": "female", "group": "work" }
   ],
   "links": [
-    { "source": "john", "target": "mary", "value": 1, "label": "dating" },
-    { "source": "bob", "target": "sarah", "value": 1, "label": "married to" },
-    { "source": "john", "target": "mike", "value": 1, "label": "siblings" },
-    { "source": "mary", "target": "sarah", "value": 1, "label": "best friends" }
+    { "source": "user", "target": "david", "value": 1, "label": "Brother" },
+    { "source": "user", "target": "emma", "value": 1, "label": "Best Friend" },
+    { "source": "user", "target": "james", "value": 1, "label": "Colleague" },
+    { "source": "emma", "target": "sophia", "value": 1, "label": "Friends" },
+    { "source": "david", "target": "alex", "value": 1, "label": "Cousins" },
+    { "source": "james", "target": "lisa", "value": 1, "label": "Manager" }
   ]
 }

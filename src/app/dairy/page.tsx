@@ -22,7 +22,6 @@ export default function DairyPage() {
   // Load initial graph data and handle graph view state
   useEffect(() => {
     const fetchGraphData = async () => {
-      if (isGraphViewOpen) {
         try {
           const response = await fetch('http://localhost:3001/api/chat', {
             method: 'POST',
@@ -44,7 +43,7 @@ export default function DairyPage() {
       }
     };
     fetchGraphData();
-  }, [currentChatId, isGraphViewOpen]);
+  }, [currentChatId]);
   const [deleteConfirmation, setDeleteConfirmation] = useState<string | null>(null);
   const [chats, setChats] = useState<Array<{
     id: string;

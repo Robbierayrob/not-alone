@@ -55,8 +55,8 @@ export default function GraphView({ graphData }: GraphViewProps) {
     <div ref={containerRef} className="w-full h-full bg-white relative">
       {typeof window !== 'undefined' && <ForceGraph2D
         graphData={graphData}
-        width={containerRef.current?.clientWidth}
-        height={containerRef.current?.clientHeight}
+        width={containerRef.current?.clientWidth || 600}
+        height={containerRef.current?.clientHeight || 800}
         backgroundColor="#ffffff"
         nodeAutoColorBy="group"
         nodeLabel="name"
