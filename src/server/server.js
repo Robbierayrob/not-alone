@@ -51,7 +51,9 @@ app.delete('/api/chats/:chatId', (req, res) => {
   if (chatHistory.has(chatId)) {
     chatHistory.delete(chatId);
     saveChatHistory();
-    res.json({ success: true });
+    // Force immediate update of chat list
+    const remainingChats = Array.from(chatHistory.values());
+    res.json({ success: true, chats: remainingChats });
   } else {
     res.status(404).json({ error: 'Chat not found' });
   }

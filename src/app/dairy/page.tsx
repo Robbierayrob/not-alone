@@ -45,17 +45,20 @@ export default function DairyPage() {
       const response = await fetch(`http://localhost:3001/api/chats/${chatId}`, {
         method: 'DELETE'
       });
+      const data = await response.json();
+      
       if (response.ok) {
         if (currentChatId === chatId) {
           setCurrentChatId('default-chat');
           setMessages([]);
         }
-        loadChats();
+        setChats(data.chats);
+        setDeleteConfirmation(null);
       }
     } catch (error) {
       console.error('Error deleting chat:', error);
+      setDeleteConfirmation(null);
     }
-    setDeleteConfirmation(null);
   };
 
   const createNewChat = async () => {
@@ -125,7 +128,7 @@ export default function DairyPage() {
   return (
     <div className="h-screen flex pt-0">
       {/* Sidebar */}
-      <div className={`${isSidebarOpen ? 'w-64' : 'w-0'} bg-gray-50 border-r border-gray-200 transition-all duration-300 overflow-hidden`}>
+      <div className={`${isSidebarOpen ? 'w-64' : 'w-0'} bg-gray-50 border-r border-gray-200 transition-all duration-300 overflow-hidden ${deleteConfirmation ? 'pointer-events-none' : ''}`}>
         <div className="p-4">
           <div className="mb-4">
             <button 
@@ -168,8 +171,8 @@ export default function DairyPage() {
 
             {/* Delete Confirmation Modal */}
             {deleteConfirmation && (
-              <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                <div className="bg-white p-6 rounded-lg shadow-xl max-w-sm w-full mx-4">
+              <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[9999]" style={{ top: 0 }}>
+                <div className="bg-white p-6 rounded-lg shadow-xl max-w-sm w-full mx-4 absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2">
                   <h3 className="text-lg font-semibold mb-4">Delete Chat</h3>
                   <p className="text-gray-600 mb-6">Are you sure you want to delete this chat? This action cannot be undone.</p>
                   <div className="flex justify-end space-x-4">
