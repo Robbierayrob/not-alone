@@ -9,7 +9,12 @@ export default function DairyPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [currentChatId, setCurrentChatId] = useState('default-chat');
-  const [chats, setChats] = useState<Array<{id: string, preview: string}>>([]);
+  const [chats, setChats] = useState<Array<{
+    id: string;
+    title: string;
+    createdAt: string;
+    messages: Array<{role: string, content: string}>;
+  }>>([]);
   
   // Refs for scrolling
   const messagesContainerRef = useRef<HTMLDivElement>(null);
@@ -116,10 +121,15 @@ export default function DairyPage() {
               <button
                 key={chat.id}
                 onClick={() => setCurrentChatId(chat.id)}
-                className={`w-full px-4 py-2 rounded-lg text-left hover:bg-gray-100 
-                  ${currentChatId === chat.id ? 'bg-gray-100' : ''}`}
+                className={`w-full px-4 py-3 rounded-lg text-left hover:bg-gray-100 
+                  ${currentChatId === chat.id ? 'bg-gray-100' : ''} transition-colors`}
               >
-                {chat.preview}
+                <div className="flex flex-col">
+                  <span className="font-medium truncate">{chat.title}</span>
+                  <span className="text-sm text-gray-500">
+                    {new Date(chat.createdAt).toLocaleDateString()}
+                  </span>
+                </div>
               </button>
             ))}
           </div>
@@ -129,14 +139,24 @@ export default function DairyPage() {
       {/* Main chat area */}
       <div className="flex-1 flex flex-col relative">
         {/* Sidebar toggle */}
-        <button 
-          onClick={toggleSidebar}
-          className="absolute top-4 left-4 z-20 p-2 rounded-lg hover:bg-gray-100"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-            <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
-          </svg>
-        </button>
+        <div className="border-b border-gray-200 p-4 flex items-center">
+          <button 
+            onClick={toggleSidebar}
+            className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+            aria-label={isSidebarOpen ? "Close sidebar" : "Open sidebar"}
+          >
+            {isSidebarOpen ? (
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            ) : (
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+              </svg>
+            )}
+          </button>
+          <h1 className="ml-4 text-lg font-semibold">Chat History</h1>
+        </div>
 
         {/* Pulsating Circle */}
         {isLoading && (
