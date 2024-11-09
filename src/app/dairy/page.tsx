@@ -194,16 +194,18 @@ export default function DairyPage() {
       {/* Main chat area */}
       <div className="flex-1 flex flex-col relative">
         {/* Graph View Toggle Button */}
-        <button 
-          onClick={() => setIsGraphViewOpen(!isGraphViewOpen)}
-          className={`fixed right-4 top-20 p-2 rounded-lg bg-white shadow-md hover:bg-gray-100 transition-all duration-300 z-50`}
-          aria-label={isGraphViewOpen ? "Close graph view" : "Open graph view"}
-        >
+        {graphData.nodes.length > 0 && (
+          <button 
+            onClick={() => setIsGraphViewOpen(!isGraphViewOpen)}
+            className={`fixed right-4 top-20 p-2 rounded-lg bg-white shadow-md hover:bg-gray-100 transition-all duration-300 z-50 ${isGraphViewOpen ? 'bg-primary text-white hover:bg-primary/90' : ''}`}
+            aria-label={isGraphViewOpen ? "Close graph view" : "Open graph view"}
+          >
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
             <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6a7.5 7.5 0 107.5 7.5h-7.5V6z" />
             <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 10.5H21A7.5 7.5 0 0013.5 3v7.5z" />
           </svg>
-        </button>
+          </button>
+        )}
         {/* Floating sidebar toggle */}
         <button 
           onClick={toggleSidebar}
@@ -255,7 +257,7 @@ export default function DairyPage() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="Start your diary..."
-              className="w-full p-4 pr-12 rounded-lg border border-gray-200 focus:border-primary focus:ring-2 focus:ring-pink-200 outline-none"
+              className="w-full p-4 pr-12 rounded-2xl border-2 border-gray-200 focus:border-primary focus:ring-2 focus:ring-pink-200 outline-none shadow-sm hover:shadow-md transition-all duration-300"
             />
             <button
               type="submit"
@@ -271,7 +273,7 @@ export default function DairyPage() {
       </div>
 
       {/* Graph View Sidebar */}
-      {messages.length > 0 && (
+      {graphData.nodes.length > 0 && (
         <div className={`${isGraphViewOpen ? 'w-96' : 'w-0'} bg-gray-50 border-l border-gray-200 transition-all duration-300 overflow-hidden`}>
           <div className="h-full w-full">
             <GraphView graphData={graphData} />
