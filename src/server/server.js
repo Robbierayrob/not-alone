@@ -121,15 +121,11 @@ app.post('/api/chat', async (req, res) => {
           category: 'HARM_CATEGORY_HARASSMENT',
           threshold: 'BLOCK_MEDIUM_AND_ABOVE',
         },
-      ],
-      history: history.length > 0 ? history.map(msg => ({
-        role: msg.role === 'user' ? 'user' : 'model',
-        parts: [{ text: msg.content }],
-      })) : []
+      ]
     });
 
     // Get response from Gemini
-    const result = await chat.sendMessage([{ text: message }]);
+    const result = await chat.sendMessage(message || systemPrompt);
     const response = await result.response;
     const aiResponse = response.text();
 
