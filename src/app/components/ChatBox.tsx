@@ -95,6 +95,6 @@ export default function ChatBox({
           </button>
         </form>
       </div>
-    </>
+    </div>
   );
 }
