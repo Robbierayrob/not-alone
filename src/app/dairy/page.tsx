@@ -280,8 +280,8 @@ export default function DairyPage() {
         >
           <div className="w-full max-w-5xl mx-auto">
             {messages.map((message, index) => (
-              <div key={index} className={`mb-4 ${message.role === 'user' ? 'text-right' : ''}`}>
-                <div className={`inline-block p-3 rounded-lg max-w-[85%] ${
+              <div key={index} className={`mb-8 ${message.role === 'user' ? 'text-right' : ''}`}>
+                <div className={`inline-block p-4 rounded-lg max-w-[85%] shadow-sm ${
                   message.role === 'user' 
                     ? 'bg-primary text-white ml-auto' 
                     : 'bg-gray-100 mr-auto'
