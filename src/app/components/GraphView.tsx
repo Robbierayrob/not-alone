@@ -23,6 +23,7 @@ interface GraphData {
 
 interface GraphViewProps {
   graphData: GraphData;
+  isModal?: boolean;
 }
 
 export default function GraphView({ graphData }: GraphViewProps) {

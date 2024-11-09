@@ -226,7 +226,16 @@ export default function DairyPage() {
       {/* Main chat area */}
       <div className="flex-1 flex flex-col relative">
         {/* Graph View Toggle Button */}
-        <div className="fixed right-4 top-20 flex gap-2 z-50">
+        <div className="fixed right-4 top-20 flex flex-col gap-2 z-50">
+          <button
+            onClick={() => setIsGraphModalOpen(true)}
+            className="p-2 rounded-lg shadow-md bg-white hover:bg-gray-100 transition-all duration-300 border-2 border-transparent"
+            aria-label="Expand graph view"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" />
+            </svg>
+          </button>
           <button 
             onClick={() => setIsGraphViewOpen(!isGraphViewOpen)}
             className={`p-2 rounded-lg shadow-md transition-all duration-300 ${
@@ -241,17 +250,6 @@ export default function DairyPage() {
               <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 10.5H21A7.5 7.5 0 0013.5 3v7.5z" />
             </svg>
           </button>
-          {isGraphViewOpen && (
-            <button
-              onClick={() => setIsGraphModalOpen(true)}
-              className="p-2 rounded-lg shadow-md bg-white hover:bg-gray-100 transition-all duration-300 border-2 border-transparent"
-              aria-label="Expand graph view"
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 3.75v4.5m0-4.5h4.5m-4.5 0L9 9M3.75 20.25v-4.5m0 4.5h4.5m-4.5 0L9 15M20.25 3.75h-4.5m4.5 0v4.5m0-4.5L15 9m5.25 11.25h-4.5m4.5 0v-4.5m0 4.5L15 15" />
-              </svg>
-            </button>
-          )}
         </div>
         {/* Floating sidebar toggle */}
         <button 
@@ -288,7 +286,11 @@ export default function DairyPage() {
                     ? 'bg-primary text-white ml-auto' 
                     : 'bg-gray-100 mr-auto'
                 }`}>
-                  {message.content}
+                  {message.role === 'assistant' ? (
+                    <span className="typing-animation">{message.content}</span>
+                  ) : (
+                    message.content
+                  )}
                 </div>
               </div>
             ))}

@@ -184,6 +184,25 @@ body {
   animation: modalPop 0.3s ease-out forwards;
 }
 
+.typing-animation {
+  display: inline-block;
+  overflow: hidden;
+  animation: typing 2s steps(40, end);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+@keyframes typing {
+  from { 
+    max-width: 0;
+    opacity: 0;
+  }
+  to { 
+    max-width: 100%;
+    opacity: 1;
+  }
+}
+
 /* Component Styles */
 @layer components {
   .feature-card {
