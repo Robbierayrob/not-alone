@@ -20,7 +20,7 @@ export default function GraphSidebar({ isOpen, graphData }: GraphSidebarProps) {
         <div className="flex-1 relative">
           {isOpen && (
             <div className="absolute inset-0 transition-opacity duration-300">
-              <GraphView graphData={graphData} />
+              <GraphView graphData={graphData} isSidebar={true} />
             </div>
           )}
         </div>

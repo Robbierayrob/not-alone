@@ -49,7 +49,11 @@ export default function GraphModal({ isOpen, onClose, graphData }: GraphModalPro
             <h2 className="text-xl font-semibold text-primary">My Relationships</h2>
           </div>
           <div className="flex-1">
-            {isOpen && <GraphView key="modal-graph" graphData={graphData} isModal={true} />}
+            {isOpen && (
+              <div className="w-full h-full flex items-center justify-center">
+                <GraphView key="modal-graph" graphData={graphData} isModal={true} />
+              </div>
+            )}
           </div>
         </div>
       </div>

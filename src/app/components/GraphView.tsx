@@ -24,17 +24,40 @@ interface GraphData {
 interface GraphViewProps {
   graphData: GraphData;
   isModal?: boolean;
+  isSidebar?: boolean;
 }
 
-export default function GraphView({ graphData }: GraphViewProps) {
+export default function GraphView({ graphData, isModal, isSidebar }: GraphViewProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const [dimensions, setDimensions] = useState({ width: 800, height: 600 });
+
+  useEffect(() => {
+    const updateDimensions = () => {
+      if (containerRef.current) {
+        setDimensions({
+          width: containerRef.current.clientWidth,
+          height: containerRef.current.clientHeight
+        });
+      }
+    };
+
+    updateDimensions();
+    window.addEventListener('resize', updateDimensions);
+    return () => window.removeEventListener('resize', updateDimensions);
+  }, []);
+
+  const containerClass = isModal
+    ? "w-full h-full bg-white relative flex items-center justify-center"
+    : isSidebar
+      ? "w-full h-full bg-white relative"
+      : "w-full h-full bg-white relative flex items-center justify-center";
 
   return (
-    <div ref={containerRef} className="w-full h-full bg-white relative">
+    <div ref={containerRef} className={containerClass}>
       {typeof window !== 'undefined' && <ForceGraph2D
         graphData={graphData}
-        width={containerRef.current?.clientWidth || 800}
-        height={containerRef.current?.clientHeight || 600}
+        width={dimensions.width}
+        height={dimensions.height}
         backgroundColor="#ffffff"
         nodeAutoColorBy="group"
         nodeLabel="name"
