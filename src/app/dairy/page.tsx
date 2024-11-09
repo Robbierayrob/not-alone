@@ -46,18 +46,21 @@ export default function DairyPage() {
       const response = await fetch(`http://localhost:3001/api/chats/${chatId}`, {
         method: 'DELETE'
       });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      
       const data = await response.json();
       
-      if (response.ok) {
-        if (currentChatId === chatId) {
-          setCurrentChatId('default-chat');
-          setMessages([]);
-        }
-        setChats(data.chats);
-        setDeleteConfirmation(null);
+      if (currentChatId === chatId) {
+        setCurrentChatId('default-chat');
+        setMessages([]);
       }
+      setChats(data.chats);
+      setDeleteConfirmation(null);
     } catch (error) {
-      console.error('Error deleting chat:', error);
+      console.error('Error deleting chat:', error instanceof Error ? error.message : String(error));
       setDeleteConfirmation(null);
     }
   };
@@ -170,11 +173,14 @@ export default function DairyPage() {
               </div>
             ))}
 
-            <DeleteConfirmationModal
-              isOpen={!!deleteConfirmation}
-              onClose={() => setDeleteConfirmation(null)}
-              onConfirm={() => deleteConfirmation && deleteChat(deleteConfirmation)}
-            />
+            {deleteConfirmation && (
+              <DeleteConfirmationModal
+                key={deleteConfirmation}
+                isOpen={true}
+                onClose={() => setDeleteConfirmation(null)}
+                onConfirm={() => deleteConfirmation && deleteChat(deleteConfirmation)}
+              />
+            )}
           </div>
         </div>
       </div>
