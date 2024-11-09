@@ -17,25 +17,26 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const fs = require('fs');
 const path = require('path');
 
-// Chat history store with file persistence
-const CHAT_STORAGE_PATH = path.join(__dirname, 'chat_history.json');
-
-// Load existing chat history or create new
-let chatHistory = new Map();
-try {
-  if (fs.existsSync(CHAT_STORAGE_PATH)) {
-    const data = JSON.parse(fs.readFileSync(CHAT_STORAGE_PATH, 'utf8'));
-    chatHistory = new Map(Object.entries(data));
+// Mock chat data
+const mockChats = [
+  {
+    id: 'chat-1',
+    title: 'First Chat',
+    createdAt: '2024-01-01T00:00:00.000Z',
+    messages: []
+  },
+  {
+    id: 'chat-2',
+    title: 'Second Chat',
+    createdAt: '2024-01-02T00:00:00.000Z',
+    messages: []
   }
-} catch (error) {
-  console.error('Error loading chat history:', error);
-}
+];
 
-// Save chat history to file
-const saveChatHistory = () => {
-  const obj = Object.fromEntries(chatHistory);
-  fs.writeFileSync(CHAT_STORAGE_PATH, JSON.stringify(obj, null, 2));
-};
+let chatHistory = new Map(mockChats.map(chat => [chat.id, chat]));
+
+// Mock save function (no-op for now)
+const saveChatHistory = () => {};
 
 // Get all chat IDs
 app.get('/api/chats', (req, res) => {
