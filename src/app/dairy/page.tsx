@@ -9,6 +9,7 @@ export default function DairyPage() {
   const [isLoading, setIsLoading] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const [currentChatId, setCurrentChatId] = useState('default-chat');
+  const [deleteConfirmation, setDeleteConfirmation] = useState<string | null>(null);
   const [chats, setChats] = useState<Array<{
     id: string;
     title: string;
@@ -39,6 +40,24 @@ export default function DairyPage() {
   };
 
   // Create new chat
+  const deleteChat = async (chatId: string) => {
+    try {
+      const response = await fetch(`http://localhost:3001/api/chats/${chatId}`, {
+        method: 'DELETE'
+      });
+      if (response.ok) {
+        if (currentChatId === chatId) {
+          setCurrentChatId('default-chat');
+          setMessages([]);
+        }
+        loadChats();
+      }
+    } catch (error) {
+      console.error('Error deleting chat:', error);
+    }
+    setDeleteConfirmation(null);
+  };
+
   const createNewChat = async () => {
     try {
       const response = await fetch('http://localhost:3001/api/chats/new', {
@@ -118,20 +137,58 @@ export default function DairyPage() {
           </div>
           <div className="space-y-2">
             {chats.map((chat) => (
-              <button
-                key={chat.id}
-                onClick={() => setCurrentChatId(chat.id)}
-                className={`w-full px-4 py-3 rounded-lg text-left hover:bg-gray-100 
-                  ${currentChatId === chat.id ? 'bg-gray-100' : ''} transition-colors`}
-              >
-                <div className="flex flex-col">
-                  <span className="font-medium truncate">{chat.title}</span>
-                  <span className="text-sm text-gray-500">
-                    {new Date(chat.createdAt).toLocaleDateString()}
-                  </span>
-                </div>
-              </button>
+              <div key={chat.id} className="relative group">
+                <button
+                  onClick={() => setCurrentChatId(chat.id)}
+                  className={`w-full px-4 py-3 rounded-lg text-left hover:bg-gray-100 
+                    ${currentChatId === chat.id ? 'bg-gray-100' : ''} transition-colors`}
+                >
+                  <div className="flex flex-col">
+                    <span className="font-medium truncate">{chat.title}</span>
+                    <span className="text-sm text-gray-500">
+                      {new Date(chat.createdAt).toLocaleDateString()}
+                    </span>
+                  </div>
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setDeleteConfirmation(chat.id);
+                  }}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 
+                    p-2 text-gray-400 hover:text-red-500 transition-all"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" 
+                    strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
             ))}
+
+            {/* Delete Confirmation Modal */}
+            {deleteConfirmation && (
+              <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                <div className="bg-white p-6 rounded-lg shadow-xl max-w-sm w-full mx-4">
+                  <h3 className="text-lg font-semibold mb-4">Delete Chat</h3>
+                  <p className="text-gray-600 mb-6">Are you sure you want to delete this chat? This action cannot be undone.</p>
+                  <div className="flex justify-end space-x-4">
+                    <button
+                      onClick={() => setDeleteConfirmation(null)}
+                      className="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      onClick={() => deleteChat(deleteConfirmation)}
+                      className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors"
+                    >
+                      Delete
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>

@@ -45,6 +45,18 @@ app.get('/api/chats', (req, res) => {
 });
 
 // Create new chat
+// Delete chat
+app.delete('/api/chats/:chatId', (req, res) => {
+  const { chatId } = req.params;
+  if (chatHistory.has(chatId)) {
+    chatHistory.delete(chatId);
+    saveChatHistory();
+    res.json({ success: true });
+  } else {
+    res.status(404).json({ error: 'Chat not found' });
+  }
+});
+
 app.post('/api/chats/new', (req, res) => {
   const chatId = `chat-${Date.now()}`;
   const timestamp = new Date().toISOString();
