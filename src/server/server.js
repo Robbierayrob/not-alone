@@ -17,6 +17,22 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 // Chat history store (in memory for demonstration)
 const chatHistory = new Map();
 
+// Get all chat IDs
+app.get('/api/chats', (req, res) => {
+  const chats = Array.from(chatHistory.keys()).map(id => ({
+    id,
+    preview: chatHistory.get(id)[0]?.content || 'New Chat'
+  }));
+  res.json(chats);
+});
+
+// Create new chat
+app.post('/api/chats/new', (req, res) => {
+  const chatId = `chat-${Date.now()}`;
+  chatHistory.set(chatId, []);
+  res.json({ chatId });
+});
+
 app.post('/api/chat', async (req, res) => {
   try {
     const { message, chatId } = req.body;
