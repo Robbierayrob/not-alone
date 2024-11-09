@@ -55,7 +55,7 @@ export default function ChatBox({
       </div>
 
       <div className="border-t border-gray-200 p-4 md:p-6 relative z-10">
-        <div className="max-w-7xl mx-auto flex items-center gap-3">
+        <div className="max-w-5xl mx-auto flex items-center gap-3">
           <button 
             aria-label="Profile settings"
             className="p-2.5 md:p-3 rounded-lg bg-white shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 hover:border-primary/20 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary/20"
@@ -73,7 +73,7 @@ export default function ChatBox({
             </svg>
           </button>
         </div>
-        <form onSubmit={onSubmit} className="flex-1 mx-3 relative">
+        <form onSubmit={onSubmit} className="flex-1 mx-3 relative max-w-4xl">
           <input
             type="text"
             value={input}
