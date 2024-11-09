@@ -67,7 +67,11 @@ export default function GraphView({ graphData }: GraphViewProps) {
           const label = node.name;
           const fontSize = 14/globalScale;
           ctx.font = `${fontSize}px Sans-Serif`;
-          ctx.fillStyle = node.color || '#FF1493';
+          // Set color based on gender property, default to neutral color
+          const nodeColor = node.gender === 'male' ? '#4299E1' : // Blue for male
+                           node.gender === 'female' ? '#FF1493' : // Pink for female
+                           '#A0AEC0'; // Gray for undefined/other
+          ctx.fillStyle = nodeColor;
           ctx.beginPath();
           ctx.arc(node.x, node.y, 8, 0, 2 * Math.PI, false);
           ctx.fill();

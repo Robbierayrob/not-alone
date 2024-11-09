@@ -19,30 +19,32 @@ export default function DairyPage() {
 
   const [currentChatId, setCurrentChatId] = useState('default-chat');
   
-  // Load initial graph data
+  // Load initial graph data and handle graph view state
   useEffect(() => {
     const fetchGraphData = async () => {
-      try {
-        const response = await fetch('http://localhost:3001/api/chat', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            message: '',
-            chatId: currentChatId
-          }),
-        });
-        const data = await response.json();
-        if (data.graphData) {
-          setGraphData(data.graphData);
+      if (isGraphViewOpen) {
+        try {
+          const response = await fetch('http://localhost:3001/api/chat', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              message: '',
+              chatId: currentChatId
+            }),
+          });
+          const data = await response.json();
+          if (data.graphData) {
+            setGraphData(data.graphData);
+          }
+        } catch (error) {
+          console.error('Error fetching graph data:', error);
         }
-      } catch (error) {
-        console.error('Error fetching graph data:', error);
       }
     };
     fetchGraphData();
-  }, [currentChatId]);
+  }, [currentChatId, isGraphViewOpen]);
   const [deleteConfirmation, setDeleteConfirmation] = useState<string | null>(null);
   const [chats, setChats] = useState<Array<{
     id: string;
