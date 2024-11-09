@@ -67,11 +67,23 @@ export default function GraphView({ graphData }: GraphViewProps) {
           const label = node.name;
           const fontSize = 14/globalScale;
           ctx.font = `${fontSize}px Sans-Serif`;
-          ctx.fillStyle = '#FF1493';
+          ctx.fillStyle = node.color || '#FF1493';
           ctx.beginPath();
           ctx.arc(node.x, node.y, 8, 0, 2 * Math.PI, false);
           ctx.fill();
-          ctx.fillStyle = 'white';
+          
+          // Add a background for text
+          const textWidth = ctx.measureText(label).width;
+          ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+          ctx.fillRect(
+            node.x - textWidth/2 - 2,
+            node.y + 8,
+            textWidth + 4,
+            fontSize + 4
+          );
+          
+          // Draw text
+          ctx.fillStyle = '#000';
           ctx.textAlign = 'center';
           ctx.textBaseline = 'middle';
           ctx.fillText(label, node.x, node.y + 15);

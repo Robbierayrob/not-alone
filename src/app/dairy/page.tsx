@@ -226,7 +226,11 @@ export default function DairyPage() {
         {/* Graph View Toggle Button */}
         <button 
           onClick={() => setIsGraphViewOpen(!isGraphViewOpen)}
-          className={`fixed right-4 top-20 p-2 rounded-lg bg-white shadow-md hover:bg-gray-100 transition-all duration-300 z-50 ${isGraphViewOpen ? 'bg-primary text-white hover:bg-primary/90' : ''}`}
+          className={`fixed right-4 top-20 p-2 rounded-lg shadow-md transition-all duration-300 z-50 ${
+            isGraphViewOpen 
+              ? 'bg-primary text-white hover:bg-primary/90 border-2 border-white' 
+              : 'bg-white hover:bg-gray-100 border-2 border-transparent'
+          }`}
           aria-label={isGraphViewOpen ? "Close graph view" : "Open graph view"}
         >
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
