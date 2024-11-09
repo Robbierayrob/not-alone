@@ -130,7 +130,7 @@ export default function DairyPage() {
   };
 
   return (
-    <div className="h-screen flex pt-0">
+    <div className="h-screen flex">
       {/* Sidebar */}
       <div className={`${isSidebarOpen ? 'w-64' : 'w-0'} bg-gray-50 border-r border-gray-200 transition-all duration-300 overflow-hidden`}>
         <div className="p-4">

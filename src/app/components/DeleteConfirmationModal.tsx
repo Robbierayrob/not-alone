@@ -15,13 +15,15 @@ export default function DeleteConfirmationModal({
 
   return (
     <div 
-      className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center"
+      className="fixed inset-0 m-0 p-0 bg-black/50 backdrop-blur-sm flex items-center justify-center"
       style={{ 
         position: 'fixed', 
-        top: 0, 
-        left: 0, 
-        right: 0, 
-        bottom: 0, 
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0,
+        margin: 0,
+        padding: 0,
         zIndex: 100000,
         pointerEvents: 'auto'
       }}
