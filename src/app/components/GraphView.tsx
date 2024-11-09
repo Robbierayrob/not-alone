@@ -1,7 +1,11 @@
 "use client";
 
-import { useEffect, useRef } from 'react';
-import ForceGraph2D from 'react-force-graph-2d';
+import { useEffect, useRef, useState } from 'react';
+import dynamic from 'next/dynamic';
+
+const ForceGraph2D = dynamic(() => import('react-force-graph-2d'), {
+  ssr: false
+});
 
 interface GraphData {
   nodes: Array<{
@@ -39,9 +43,17 @@ export default function GraphView({ graphData }: GraphViewProps) {
     return () => window.removeEventListener('resize', resizeGraph);
   }, []);
 
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
+
   return (
     <div ref={containerRef} className="w-full h-full bg-white relative">
-      <ForceGraph2D
+      {typeof window !== 'undefined' && <ForceGraph2D
         graphData={graphData}
         width={containerRef.current?.clientWidth}
         height={containerRef.current?.clientHeight}
@@ -82,7 +94,7 @@ export default function GraphView({ graphData }: GraphViewProps) {
           
           ctx.fillText(label, textPos.x, textPos.y);
         }}
-      />
+      />}
     </div>
   );
 }
