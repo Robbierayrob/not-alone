@@ -21,13 +21,11 @@ interface GraphData {
   }>;
 }
 
-interface GraphViewProps {
+interface GraphModalViewProps {
   graphData: GraphData;
-  isModal?: boolean;
-  isSidebar?: boolean;
 }
 
-export default function GraphView({ graphData, isModal, isSidebar }: GraphViewProps) {
+export default function GraphModalView({ graphData }: GraphModalViewProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [dimensions, setDimensions] = useState({ width: 800, height: 600 });
 
@@ -46,21 +44,8 @@ export default function GraphView({ graphData, isModal, isSidebar }: GraphViewPr
     return () => window.removeEventListener('resize', updateDimensions);
   }, []);
 
-  // Adjust graph rendering based on context
-  const graphConfig = {
-    width: dimensions.width,
-    height: dimensions.height,
-    backgroundColor: "#ffffff"
-  };
-
-  const containerClass = isModal
-    ? "w-full h-full bg-white relative flex items-center justify-center"
-    : isSidebar
-      ? "w-full h-full bg-white relative overflow-hidden"
-      : "w-full h-full bg-white relative flex items-center justify-center";
-
   return (
-    <div ref={containerRef} className={containerClass}>
+    <div ref={containerRef} className="w-full h-full bg-white relative flex items-center justify-center">
       {typeof window !== 'undefined' && <ForceGraph2D
         graphData={graphData}
         width={dimensions.width}
@@ -71,20 +56,20 @@ export default function GraphView({ graphData, isModal, isSidebar }: GraphViewPr
         linkLabel="label"
         linkDirectionalParticles={2}
         linkDirectionalParticleSpeed={0.005}
+        centerAt={{ x: 0, y: 0 }}
+        zoom={1.5}
         nodeCanvasObject={(node: any, ctx, globalScale) => {
           const label = node.name;
           const fontSize = 14/globalScale;
           ctx.font = `${fontSize}px Sans-Serif`;
-          // Set color based on gender property, default to neutral color
-          const nodeColor = node.gender === 'male' ? '#4299E1' : // Blue for male
-                           node.gender === 'female' ? '#FF1493' : // Pink for female
-                           '#A0AEC0'; // Gray for undefined/other
+          const nodeColor = node.gender === 'male' ? '#4299E1' :
+                           node.gender === 'female' ? '#FF1493' :
+                           '#A0AEC0';
           ctx.fillStyle = nodeColor;
           ctx.beginPath();
           ctx.arc(node.x, node.y, 8, 0, 2 * Math.PI, false);
           ctx.fill();
           
-          // Add a background for text
           const textWidth = ctx.measureText(label).width;
           ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
           ctx.fillRect(
@@ -94,7 +79,6 @@ export default function GraphView({ graphData, isModal, isSidebar }: GraphViewPr
             fontSize + 4
           );
           
-          // Draw text
           ctx.fillStyle = '#000';
           ctx.textAlign = 'center';
           ctx.textBaseline = 'middle';

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from 'react';
-import GraphView from './GraphView';
+import GraphModalView from './GraphModalView';
 
 interface GraphModalProps {
   isOpen: boolean;
@@ -51,7 +51,7 @@ export default function GraphModal({ isOpen, onClose, graphData }: GraphModalPro
           <div className="flex-1">
             {isOpen && (
               <div className="w-full h-full flex items-center justify-center">
-                <GraphView key="modal-graph" graphData={graphData} isModal={true} />
+                <GraphModalView graphData={graphData} />
               </div>
             )}
           </div>
