@@ -143,7 +143,7 @@ app.post('/api/chat', async (req, res) => {
     // Load graph data
     let graphData;
     try {
-      const graphPath = path.join(__dirname, 'chat-sessions', 'mock-relationships.json');
+      const graphPath = path.join(__dirname, '..', 'server', 'chat-sessions', 'mock-relationships.json');
       graphData = JSON.parse(fs.readFileSync(graphPath, 'utf8'));
       console.log('Successfully loaded graph data:', graphData);
     } catch (error) {

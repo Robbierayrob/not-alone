@@ -16,6 +16,8 @@ export default function DairyPage() {
     links: []
   });
 
+  const [currentChatId, setCurrentChatId] = useState('default-chat');
+  
   // Load initial graph data
   useEffect(() => {
     const fetchGraphData = async () => {
@@ -40,7 +42,6 @@ export default function DairyPage() {
     };
     fetchGraphData();
   }, [currentChatId]);
-  const [currentChatId, setCurrentChatId] = useState('default-chat');
   const [deleteConfirmation, setDeleteConfirmation] = useState<string | null>(null);
   const [chats, setChats] = useState<Array<{
     id: string;
