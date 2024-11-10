@@ -59,25 +59,30 @@ export default function SuggestionCards({ onSuggestionClick }: SuggestionCardsPr
     return <div className="flex justify-center space-x-4 mb-6">Loading suggestions...</div>;
   }
 
+  const handleSuggestionClick = (text: string) => {
+    onSuggestionClick(text);
+    const formEvent = new Event('submit', { bubbles: true, cancelable: true });
+    document.querySelector('form')?.dispatchEvent(formEvent);
+  };
+
   return (
-    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl">
-      <div className="grid grid-cols-2 gap-3 px-4">
+    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-xl">
+      <div className="grid grid-cols-2 gap-4 px-4">
         {suggestions.map((suggestion) => (
           <button
             key={suggestion.id}
-            onClick={() => {
-              onSuggestionClick(suggestion.text);
-              // Simulate form submission
-              const formEvent = new Event('submit', { bubbles: true });
-              document.querySelector('form')?.dispatchEvent(formEvent);
+            onClick={(e) => {
+              e.preventDefault();
+              handleSuggestionClick(suggestion.text);
             }}
-            className="feature-card group p-3 flex items-center space-x-3 hover:scale-102 
-                       transform transition-all duration-300 cursor-pointer"
+            className="bg-white/50 backdrop-blur-sm border border-primary/20 rounded-xl p-4
+                       hover:border-primary/40 hover:shadow-sm hover:-translate-y-0.5
+                       transition-all duration-200 flex items-center gap-3 group"
           >
-            <span className="feature-icon-wrapper text-xl min-w-[2.5rem]">
+            <span className="text-xl opacity-60 group-hover:opacity-100 transition-opacity">
               {suggestion.icon}
             </span>
-            <span className="feature-description text-sm font-medium">
+            <span className="text-sm text-gray-600 group-hover:text-gray-900 transition-colors text-left">
               {suggestion.text}
             </span>
           </button>

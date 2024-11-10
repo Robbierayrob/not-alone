@@ -246,25 +246,6 @@ body {
 
 /* Component Styles */
 @layer components {
-  .feature-card {
-    @apply bg-white bg-opacity-80 backdrop-blur-sm p-8 rounded-2xl shadow-lg
-           hover:shadow-xl transition-all duration-300 hover:-translate-y-1
-           border border-transparent hover:border-primary hover:border-opacity-20;
-  }
-
-  .feature-icon-wrapper {
-    @apply w-14 h-14 rounded-full bg-primary bg-opacity-10 flex items-center justify-center
-           text-primary mb-6 group-hover:bg-primary group-hover:text-white
-           transition-all duration-300;
-  }
-
-  .feature-title {
-    @apply text-xl font-semibold mb-4 group-hover:text-primary transition-colors;
-  }
-
-  .feature-description {
-    @apply text-gray-600 leading-relaxed;
-  }
 
   .hero-search {
     @apply w-full max-w-[1200px] px-6 py-4 text-lg border rounded-full
