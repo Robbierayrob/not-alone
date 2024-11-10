@@ -49,16 +49,9 @@ export default function ChatBox({
     <div className="flex flex-col h-full">
       <div 
         ref={messagesContainerRef}
-        className="message-container py-4 relative z-[1] flex flex-col h-[calc(100vh-180px)] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent hover:scrollbar-thumb-gray-400 transition-colors"
+        className="message-container py-4 relative z-[1] flex flex-col-reverse justify-start h-[calc(100vh-180px)] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent hover:scrollbar-thumb-gray-400 transition-colors"
       >
-        {messages.length === 0 && (
-          <div className="welcome-message">
-            <h1 className="welcome-title">Welcome to Not Alone</h1>
-            <p className="welcome-subtitle">The AI assistant to help you through your relationships</p>
-          </div>
-        )}
-        <div className="relative z-0" style={{ height: '100vh' }} />
-        <div className="w-full flex flex-col space-y-4 px-4">
+        <div className="w-full flex flex-col-reverse space-y-reverse space-y-4 px-4">
           {messages.map((message, index) => (
             <div 
               key={index} 
