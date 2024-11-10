@@ -231,7 +231,9 @@ export default function DairyPage() {
           </button>
         </div>
         {/* Floating sidebar toggles */}
-        <div className={`fixed top-20 z-50 flex flex-col gap-2 transition-all duration-300 ${
+        <div className={`fixed top-20 z-50 flex flex-col gap-2 transition-all duration-300 button-stack ${
+          (isSidebarOpen || isProfileSidebarOpen) ? 'compact' : ''
+        } ${
           isSidebarOpen && isProfileSidebarOpen ? 'left-[532px]' : 
           isSidebarOpen ? 'left-[268px]' : 
           isProfileSidebarOpen ? 'left-[268px]' : 
@@ -270,7 +272,10 @@ export default function DairyPage() {
           <div className="pulsating-circle"></div>
         </div>
 
-        <div className="flex-1 relative">
+        <div className={`flex-1 relative content-with-sidebar ${
+          isSidebarOpen && isProfileSidebarOpen ? 'double-sidebar' : 
+          (isSidebarOpen || isProfileSidebarOpen) ? 'single-sidebar' : ''
+        }`}>
           <ChatBox
             messages={messages}
             input={input}

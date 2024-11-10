@@ -15,6 +15,33 @@ body {
   background: var(--background);
 }
 
+/* Sidebar content padding utility */
+.content-with-sidebar {
+  padding-left: 4rem;  /* Default padding */
+  transition: padding 0.3s ease;
+}
+
+.content-with-sidebar.single-sidebar {
+  padding-left: 20rem;  /* When one sidebar is open */
+}
+
+.content-with-sidebar.double-sidebar {
+  padding-left: 36rem;  /* When both sidebars are open */
+}
+
+/* Button stack utility */
+.button-stack {
+  transition: all 0.3s ease;
+}
+
+.button-stack.compact {
+  transform: scale(0.85);
+}
+
+.button-stack.compact button {
+  margin-bottom: 0.25rem;
+}
+
 .pulsating-circle {
   position: fixed;
   left: 50%;
