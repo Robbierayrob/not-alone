@@ -1,15 +1,47 @@
 {
   "nodes": [
-    { "id": "john", "name": "John", "val": 20, "group": "person" },
-    { "id": "mary", "name": "Mary", "val": 20, "group": "person" },
-    { "id": "bob", "name": "Bob (boyfriend)", "val": 15, "group": "person" },
-    { "id": "sarah", "name": "Sarah (wife)", "val": 15, "group": "person" },
-    { "id": "mike", "name": "Mike (brother)", "val": 15, "group": "person" }
+    {
+      "id": "john",
+      "name": "John Smith",
+      "val": 20,
+      "gender": "male",
+      "age": 28,
+      "summary": "Software engineer, outgoing personality",
+      "details": {
+        "occupation": "Software Engineer",
+        "interests": ["coding", "hiking", "photography"],
+        "personality": "Extroverted, friendly, ambitious",
+        "background": "Born in Seattle, moved to current city for work",
+        "emotionalState": "Generally happy and content",
+        "lastUpdated": "2024-01-01"
+      }
+    }
   ],
   "links": [
-    { "source": "john", "target": "mary", "value": 1, "label": "dating" },
-    { "source": "bob", "target": "sarah", "value": 1, "label": "married to" },
-    { "source": "john", "target": "mike", "value": 1, "label": "siblings" },
-    { "source": "mary", "target": "sarah", "value": 1, "label": "best friends" }
-  ]
+    {
+      "source": "john",
+      "target": "mary",
+      "value": 1,
+      "label": "dating",
+      "details": {
+        "relationshipType": "romantic",
+        "duration": "6 months",
+        "status": "active",
+        "sentiment": "positive",
+        "interactions": [
+          {
+            "date": "2024-01-01",
+            "type": "conflict",
+            "description": "Had a disagreement about future plans",
+            "resolution": "Resolved through open communication"
+          }
+        ],
+        "lastUpdated": "2024-01-01"
+      }
+    }
+  ],
+  "metadata": {
+    "lastUpdated": "2024-01-01",
+    "version": "1.0"
+  }
 }

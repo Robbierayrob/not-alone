@@ -14,8 +14,15 @@ app.use(express.json());
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-const fs = require('fs');
+const fs = require('fs').promises;
 const path = require('path');
+
+// Firebase setup would go here:
+// import { initializeApp } from 'firebase/app';
+// import { getFirestore, collection, doc, setDoc, getDoc } from 'firebase/firestore';
+// const firebaseConfig = { ... };
+// const app = initializeApp(firebaseConfig);
+// const db = getFirestore(app);
 
 // Mock chat data
 const mockChats = [
@@ -156,18 +163,45 @@ app.post('/api/chat', async (req, res) => {
     chatHistory.set(chatId, chatData);
     saveChatHistory();
 
-    // Load graph data
-    let graphData;
-    try {
+    // Process message for relationship data
+    const relationshipData = await processRelationshipData(message, history);
+    
+    // Update graph data
+    if (relationshipData) {
       const graphPath = path.join(__dirname, '..', 'server', 'chat-sessions', 'mock-relationships.json');
-      graphData = JSON.parse(fs.readFileSync(graphPath, 'utf8'));
-      console.log('Successfully loaded graph data:', graphData);
-    } catch (error) {
-      console.error('Error loading graph data:', error);
-      graphData = {
-        nodes: [],
-        links: []
-      };
+      try {
+        const currentData = JSON.parse(await fs.readFile(graphPath, 'utf8'));
+        const updatedData = mergeRelationshipData(currentData, relationshipData);
+        await fs.writeFile(graphPath, JSON.stringify(updatedData, null, 2));
+        graphData = updatedData;
+        
+        // Firebase version would be:
+        // await setDoc(doc(db, 'relationships', 'graphData'), updatedData);
+        
+      } catch (error) {
+        console.error('Error updating graph data:', error);
+        graphData = {
+          nodes: [],
+          links: []
+        };
+      }
+    } else {
+      // Load existing graph data
+      try {
+        const graphPath = path.join(__dirname, '..', 'server', 'chat-sessions', 'mock-relationships.json');
+        graphData = JSON.parse(await fs.readFile(graphPath, 'utf8'));
+        
+        // Firebase version would be:
+        // const docSnap = await getDoc(doc(db, 'relationships', 'graphData'));
+        // graphData = docSnap.exists() ? docSnap.data() : { nodes: [], links: [] };
+        
+      } catch (error) {
+        console.error('Error loading graph data:', error);
+        graphData = {
+          nodes: [],
+          links: []
+        };
+      }
     }
 
     res.json({ 
@@ -184,3 +218,95 @@ app.post('/api/chat', async (req, res) => {
 app.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
+async function processRelationshipData(message, history) {
+  // Extract relationship information from the message using the LLM
+  const relationshipPrompt = `
+    Analyze the following conversation for relationship information:
+    ${history.map(msg => `${msg.role}: ${msg.content}`).join('\n')}
+    Current message: ${message}
+    
+    Extract and structure the following information:
+    1. People mentioned (names, ages, gender, descriptions)
+    2. Relationships between people
+    3. Interactions or events between people
+    4. Emotional states or sentiments
+    
+    Return the data in a structured format matching our graph schema.
+  `;
+
+  try {
+    const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-002" });
+    const result = await model.generateContent(relationshipPrompt);
+    const response = await result.response;
+    const extractedData = JSON.parse(response.text());
+    return extractedData;
+  } catch (error) {
+    console.error('Error processing relationship data:', error);
+    return null;
+  }
+}
+
+function mergeRelationshipData(currentData, newData) {
+  const merged = { ...currentData };
+
+  // Merge nodes
+  if (newData.nodes) {
+    newData.nodes.forEach(newNode => {
+      const existingNodeIndex = merged.nodes.findIndex(node => node.id === newNode.id);
+      if (existingNodeIndex >= 0) {
+        merged.nodes[existingNodeIndex] = {
+          ...merged.nodes[existingNodeIndex],
+          ...newNode,
+          details: {
+            ...merged.nodes[existingNodeIndex].details,
+            ...newNode.details,
+            lastUpdated: new Date().toISOString()
+          }
+        };
+      } else {
+        merged.nodes.push({
+          ...newNode,
+          details: {
+            ...newNode.details,
+            lastUpdated: new Date().toISOString()
+          }
+        });
+      }
+    });
+  }
+
+  // Merge links
+  if (newData.links) {
+    newData.links.forEach(newLink => {
+      const existingLinkIndex = merged.links.findIndex(link => 
+        link.source === newLink.source && link.target === newLink.target
+      );
+      if (existingLinkIndex >= 0) {
+        merged.links[existingLinkIndex] = {
+          ...merged.links[existingLinkIndex],
+          ...newLink,
+          details: {
+            ...merged.links[existingLinkIndex].details,
+            ...newLink.details,
+            lastUpdated: new Date().toISOString()
+          }
+        };
+      } else {
+        merged.links.push({
+          ...newLink,
+          details: {
+            ...newLink.details,
+            lastUpdated: new Date().toISOString()
+          }
+        });
+      }
+    });
+  }
+
+  merged.metadata = {
+    lastUpdated: new Date().toISOString(),
+    version: "1.0"
+  };
+
+  return merged;
+}

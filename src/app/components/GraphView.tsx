@@ -73,8 +73,19 @@ export default function GraphView({ graphData, isModal, isSidebar }: GraphViewPr
     ? "w-full h-full bg-white relative"
     : "w-full h-full bg-white relative flex items-center justify-center";
 
+  const [selectedNode, setSelectedNode] = useState<any>(null);
+
+  const handleNodeClick = useCallback((node: any) => {
+    setSelectedNode(node);
+  }, []);
+
   return (
     <div ref={containerRef} className={containerClass}>
+      <NodeDetailsModal
+        isOpen={selectedNode !== null}
+        onClose={() => setSelectedNode(null)}
+        nodeData={selectedNode}
+      />
       {typeof window !== 'undefined' && <ForceGraph2D
         graphData={graphData}
         width={dimensions.width}
