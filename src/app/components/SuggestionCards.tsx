@@ -80,9 +80,9 @@ export default function SuggestionCards({
 
   const suggestionContent = (
     <div className={`fixed w-full max-w-xl mx-auto bottom-32 transition-all duration-300
-      ${isGraphViewOpen ? 'translate-x-[-150px]' : ''}
+      ${isGraphViewOpen ? 'mr-[300px]' : ''}
       ${isGraphModalOpen ? 'scale-90 opacity-90' : ''}
-      ${isSidebarOpen ? 'translate-x-[132px]' : ''}
+      ${isSidebarOpen ? 'ml-[264px]' : ''}
       left-1/2 transform -translate-x-1/2 z-50`}>
       <div className="grid grid-cols-2 gap-4 px-4">
         {suggestions.map((suggestion) => (
