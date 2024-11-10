@@ -269,41 +269,42 @@ export default function DairyPage() {
           <SuggestionCards 
             isVisible={true}
             onSuggestionClick={(text) => {
-          const userMessage = { role: 'user', content: text };
-          setMessages(prev => [...prev, userMessage]);
-          setShowSuggestions(false);
-          setIsLoading(true);
+              const userMessage = { role: 'user', content: text };
+              setMessages(prev => [...prev, userMessage]);
+              setShowSuggestions(false);
+              setIsLoading(true);
 
-          fetch('http://localhost:3001/api/chat', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              message: text,
-              chatId: currentChatId
-            }),
-          })
-          .then(response => response.json())
-          .then(data => {
-            if (data.message) {
-              setMessages(prev => [...prev, { role: 'assistant', content: data.message }]);
-              if (data.graphData) {
-                setGraphData(data.graphData);
-              }
-            }
-          })
-          .catch(error => console.error('Error:', error))
-          .finally(() => setIsLoading(false));
-        }} />
+              fetch('http://localhost:3001/api/chat', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  message: text,
+                  chatId: currentChatId
+                }),
+              })
+              .then(response => response.json())
+              .then(data => {
+                if (data.message) {
+                  setMessages(prev => [...prev, { role: 'assistant', content: data.message }]);
+                  if (data.graphData) {
+                    setGraphData(data.graphData);
+                  }
+                }
+              })
+              .catch(error => console.error('Error:', error))
+              .finally(() => setIsLoading(false));
+            }} 
+          />
+        )}
+
+        <GraphSidebar isOpen={isGraphViewOpen} graphData={graphData} />
+        <GraphModal 
+          isOpen={isGraphModalOpen}
+          onClose={() => setIsGraphModalOpen(false)}
+          graphData={graphData}
+        />
       </div>
-
-      <GraphSidebar isOpen={isGraphViewOpen} graphData={graphData} />
-      <GraphModal 
-        isOpen={isGraphModalOpen}
-        onClose={() => setIsGraphModalOpen(false)}
-        graphData={graphData}
-      />
-    </div>
   );
 }
