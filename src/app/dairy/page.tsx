@@ -181,7 +181,7 @@ export default function DairyPage() {
 
   const toggleGraphModal = () => {
     setIsGraphModalOpen(!isGraphModalOpen);
-  };
+  }
 
   return (
     <div className="h-screen flex relative">
