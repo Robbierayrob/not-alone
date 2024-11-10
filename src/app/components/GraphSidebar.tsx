@@ -68,7 +68,9 @@ export default function GraphSidebar({ isOpen, graphData }: GraphSidebarProps) {
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
                   </div>
                 ) : (
-                  <GraphView graphData={localGraphData} isSidebar={true} />
+                  <div className="relative w-full h-full">
+                    <GraphView graphData={localGraphData} isSidebar={true} />
+                  </div>
                 )}
               </div>
             </div>
