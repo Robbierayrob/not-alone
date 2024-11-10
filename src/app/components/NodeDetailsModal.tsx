@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom';
 
 interface NodeDetailsModalProps {
   isOpen: boolean;
@@ -32,10 +33,10 @@ export default function NodeDetailsModal({ isOpen, onClose, nodeData }: NodeDeta
 
   if (!isOpen || !nodeData) return null;
 
-  return (
-    <>
-      {isOpen && (
-        <div className="fixed inset-0 z-[9999999] flex items-center justify-center">
+  if (!isOpen || !nodeData) return null;
+
+  const modalContent = (
+    <div className="fixed inset-0 z-[9999999] flex items-center justify-center isolate">
           <div 
             onClick={onClose}
             className="absolute inset-0 bg-black bg-opacity-50 backdrop-blur-sm"
@@ -116,7 +117,10 @@ export default function NodeDetailsModal({ isOpen, onClose, nodeData }: NodeDeta
             </div>
           </div>
         </div>
-      )}
-    </>
   );
+
+  // Create portal to render modal at document body level
+  return typeof document !== 'undefined' 
+    ? createPortal(modalContent, document.body) 
+    : null;
 }
