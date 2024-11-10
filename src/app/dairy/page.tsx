@@ -1,11 +1,12 @@
 "use client";
 
-import { useState, FormEvent, useRef, useEffect } from 'react';
+import { useState, FormEvent, useRef, useEffect, useMemo } from 'react';
 import DeleteConfirmationModal from '../components/DeleteConfirmationModal';
 import GraphView from '../components/GraphView';
 import GraphSidebar from '../components/GraphSidebar';
 import GraphModal from '../components/GraphModal';
 import ChatHistorySidebar from '../components/ChatHistorySidebar';
+import ProfileSidebar from '../components/ProfileSidebar';
 import ChatBox from '../components/ChatBox';
 
 export default function DairyPage() {
@@ -14,6 +15,7 @@ export default function DairyPage() {
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [isProfileSidebarOpen, setIsProfileSidebarOpen] = useState(false);
   const [isGraphViewOpen, setIsGraphViewOpen] = useState(false);
   const [isGraphModalOpen, setIsGraphModalOpen] = useState(false);
   const [graphData, setGraphData] = useState({
@@ -170,7 +172,11 @@ export default function DairyPage() {
   };
 
   return (
-    <div className="h-screen flex">
+    <div className="h-screen flex relative">
+      <ProfileSidebar 
+        isOpen={isProfileSidebarOpen}
+        profiles={graphData.nodes}
+      />
       <ChatHistorySidebar 
         isSidebarOpen={isSidebarOpen}
         chats={chats}
@@ -208,12 +214,13 @@ export default function DairyPage() {
             </svg>
           </button>
         </div>
-        {/* Floating sidebar toggle */}
-        <button 
-          onClick={toggleSidebar}
-          className={`fixed ${isSidebarOpen ? 'left-[260px]' : 'left-4'} top-20 p-2 rounded-lg bg-white shadow-md hover:bg-gray-100 transition-all duration-300 z-50`}
-          aria-label={isSidebarOpen ? "Close sidebar" : "Open sidebar"}
-        >
+        {/* Floating sidebar toggles */}
+        <div className="fixed left-4 top-20 flex gap-2 z-50">
+          <button 
+            onClick={toggleSidebar}
+            className={`p-2 rounded-lg bg-white shadow-md hover:bg-gray-100 transition-all duration-300`}
+            aria-label={isSidebarOpen ? "Close chat history" : "Open chat history"}
+          >
           {isSidebarOpen ? (
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -223,7 +230,23 @@ export default function DairyPage() {
               <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
             </svg>
           )}
-        </button>
+          </button>
+          <button 
+            onClick={() => setIsProfileSidebarOpen(!isProfileSidebarOpen)}
+            className={`p-2 rounded-lg bg-white shadow-md hover:bg-gray-100 transition-all duration-300`}
+            aria-label={isProfileSidebarOpen ? "Close profiles" : "Open profiles"}
+          >
+            {isProfileSidebarOpen ? (
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            ) : (
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
+              </svg>
+            )}
+          </button>
+        </div>
 
         {/* Pulsating Circle */}
         <div className={`absolute inset-0 flex items-center justify-center pointer-events-none transition-opacity duration-300 ${isLoading ? 'opacity-100' : 'opacity-30'}`}>
