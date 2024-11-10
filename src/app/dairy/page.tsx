@@ -265,9 +265,10 @@ export default function DairyPage() {
           onInputChange={setInput}
           onSubmit={handleSubmit}
         />
-        <SuggestionCards 
-          isVisible={showSuggestions && messages.length === 0}
-          onSuggestionClick={(text) => {
+        {showSuggestions && messages.length === 0 && (
+          <SuggestionCards 
+            isVisible={true}
+            onSuggestionClick={(text) => {
           const userMessage = { role: 'user', content: text };
           setMessages(prev => [...prev, userMessage]);
           setShowSuggestions(false);

@@ -233,20 +233,26 @@ body {
 
 /* Chat Message Styling */
 .message-container {
-  @apply flex flex-col-reverse overflow-y-auto;
+  @apply flex flex-col-reverse overflow-y-auto px-4;
   height: calc(100vh - 180px);
+  margin: 0 auto;
+  width: 100%;
+  max-width: 1200px;
 }
 
 .message {
-  @apply p-4 rounded-lg mb-4 max-w-[80%] break-words;
+  @apply p-3 rounded-2xl mb-2 break-words;
+  max-width: min(600px, 85%);
 }
 
 .user-message {
-  @apply bg-primary text-white self-end;
+  @apply bg-primary text-white self-end rounded-br-sm;
+  margin-left: auto;
 }
 
 .assistant-message {
-  @apply bg-gray-100 text-gray-800 self-start;
+  @apply bg-gray-100 text-gray-800 self-start rounded-bl-sm;
+  margin-right: auto;
 }
 
 /* Markdown Styling */
