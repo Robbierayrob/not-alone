@@ -186,7 +186,7 @@ export default function DiaryPage() {
   return (
     <main>
       <div className="h-screen flex relative">
-      <ProfileSidebar
+        <ProfileSidebar
         isOpen={isProfileSidebarOpen}
         profiles={graphData.nodes}
       />
@@ -326,7 +326,7 @@ export default function DiaryPage() {
           onClose={() => setIsGraphModalOpen(false)}
           graphData={graphData}
         />
-      </div>
+        </div>
       </div>
     </main>
   );
