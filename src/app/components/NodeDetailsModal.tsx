@@ -25,9 +25,9 @@ export default function NodeDetailsModal({ isOpen, onClose, nodeData }: NodeDeta
   if (!isOpen || !nodeData) return null;
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center">
       <div 
-        className="absolute inset-0 bg-black bg-opacity-50 backdrop-blur-sm"
+        className="fixed inset-0 bg-black/50 backdrop-blur-md"
         onClick={onClose}
       />
       <div 
@@ -35,8 +35,11 @@ export default function NodeDetailsModal({ isOpen, onClose, nodeData }: NodeDeta
         className="relative w-[500px] max-h-[80vh] bg-white rounded-2xl shadow-2xl transform transition-all duration-300 ease-in-out animate-modal-pop overflow-auto"
       >
         <button
-          onClick={onClose}
-          className="absolute right-4 top-4 p-2 rounded-full bg-white shadow-md hover:bg-gray-100 transition-all duration-300 z-50"
+          onClick={(e) => {
+            e.stopPropagation();
+            onClose();
+          }}
+          className="absolute right-4 top-4 p-2 rounded-full bg-white shadow-md hover:bg-gray-100 transition-all duration-300 z-[101]"
           aria-label="Close modal"
         >
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
