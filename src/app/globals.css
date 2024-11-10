@@ -234,7 +234,7 @@ body {
 /* Chat Message Styling */
 .message-container {
   @apply flex flex-col-reverse overflow-y-auto px-4;
-  height: calc(100vh - 280px);
+  height: calc(100vh - 120px);
   margin: 0 auto;
   width: 100%;
   max-width: 1200px;
