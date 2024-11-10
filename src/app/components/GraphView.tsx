@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
+import NodeDetailsModal from './NodeDetailsModal';
 
 const ForceGraph2D = dynamic(() => import('react-force-graph-2d'), {
   ssr: false
