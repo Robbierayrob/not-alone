@@ -11,7 +11,7 @@ import ChatBox from '../components/ChatBox';
 import SuggestionCards from '../components/SuggestionCards';
 
 
-export default function DairyPage() {
+export default function DiaryPage() {
   // State management
   const [messages, setMessages] = useState<Array<{role: string, content: string}>>([]);
   const [showSuggestions, setShowSuggestions] = useState(true);
