@@ -64,20 +64,17 @@ export default function NodeDetailsModal({ isOpen, onClose, nodeData }: NodeDeta
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
               </svg>
-            </motion.button>
+            </button>
 
             <div className="p-6 space-y-6">
               <div className="flex items-center gap-4">
-                <motion.div 
-                  initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  transition={{ type: "spring", duration: 0.5 }}
-                  className={`w-14 h-14 rounded-full flex items-center justify-center text-white text-xl font-semibold shadow-lg ${
+                <div 
+                  className={`w-14 h-14 rounded-full flex items-center justify-center text-white text-xl font-semibold shadow-lg transition-transform duration-300 ${
                     nodeData.gender === 'male' ? 'bg-blue-500' : 'bg-pink-500'
                   }`}
                 >
                   {nodeData.name.charAt(0)}
-                </motion.div>
+                </div>
                 <div>
                   <h2 className="text-2xl font-bold text-gray-800">{nodeData.name}</h2>
                   <p className="text-gray-600">{nodeData.age} years old</p>
@@ -106,7 +103,7 @@ export default function NodeDetailsModal({ isOpen, onClose, nodeData }: NodeDeta
                             className="px-3 py-1.5 bg-white shadow-sm border border-gray-200 rounded-full text-sm font-medium text-gray-700 transition-transform duration-200 hover:scale-105"
                           >
                             {interest}
-                          </motion.span>
+                          </span>
                         ))}
                       </div>
                     </div>
@@ -129,7 +126,7 @@ export default function NodeDetailsModal({ isOpen, onClose, nodeData }: NodeDeta
                 )}
               </div>
             </div>
-          </motion.div>
+          </div>
         </div>
       )}
     </>
