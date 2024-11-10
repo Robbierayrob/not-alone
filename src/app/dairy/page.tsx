@@ -190,11 +190,6 @@ export default function DairyPage() {
 
       {/* Main chat area */}
       <div className="flex-1 flex flex-col relative">
-        <SuggestionCards onSuggestionClick={(text) => {
-          setInput(text);
-          const formEvent = new FormEvent('submit');
-          handleSubmit(formEvent);
-        }} />
         {/* Graph View Toggle Button */}
         <div className="fixed right-4 top-20 flex flex-col gap-2 z-50">
           <button
@@ -268,6 +263,33 @@ export default function DairyPage() {
           onInputChange={setInput}
           onSubmit={handleSubmit}
         />
+        <SuggestionCards onSuggestionClick={(text) => {
+          const userMessage = { role: 'user', content: text };
+          setMessages(prev => [...prev, userMessage]);
+          setIsLoading(true);
+
+          fetch('http://localhost:3001/api/chat', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              message: text,
+              chatId: currentChatId
+            }),
+          })
+          .then(response => response.json())
+          .then(data => {
+            if (data.message) {
+              setMessages(prev => [...prev, { role: 'assistant', content: data.message }]);
+              if (data.graphData) {
+                setGraphData(data.graphData);
+              }
+            }
+          })
+          .catch(error => console.error('Error:', error))
+          .finally(() => setIsLoading(false));
+        }} />
       </div>
 
       <GraphSidebar isOpen={isGraphViewOpen} graphData={graphData} />
