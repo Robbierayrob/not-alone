@@ -1,4 +1,4 @@
-"use client";
+'use client';
 
 import { useState, FormEvent, useRef, useEffect, useMemo } from 'react';
 import DeleteConfirmationModal from '../components/DeleteConfirmationModal';
