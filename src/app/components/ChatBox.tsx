@@ -1,6 +1,7 @@
 "use client";
 
-import { FormEvent, useRef, useEffect, useState } from 'react';
+import { FormEvent, useRef, useEffect, useState, useCallback } from 'react';
+import ReactMarkdown from 'react-markdown';
 import ProfileSettingsModal from './ProfileSettingsModal';
 import SupportModal from './SupportModal';
 
@@ -24,15 +25,18 @@ export default function ChatBox({
   const messagesContainerRef = useRef<HTMLDivElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const scrollToBottom = () => {
+  const scrollToBottom = useCallback((behavior: ScrollBehavior = 'auto') => {
     if (messagesContainerRef.current) {
-      messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
+      messagesContainerRef.current.scrollTo({
+        top: messagesContainerRef.current.scrollHeight,
+        behavior: behavior
+      });
     }
-  };
+  }, []);
 
   useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
+    scrollToBottom('smooth');
+  }, [messages, scrollToBottom]);
 
   return (
     <div className="flex flex-col h-full">
@@ -49,7 +53,9 @@ export default function ChatBox({
                   : 'bg-gray-100 mr-auto'
               }`}>
                 <span className={message.role === 'assistant' ? 'typing-animation' : ''}>
-                  {message.content}
+                  <ReactMarkdown>
+                    {message.content}
+                  </ReactMarkdown>
                 </span>
               </div>
             </div>
