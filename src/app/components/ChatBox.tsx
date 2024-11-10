@@ -45,9 +45,13 @@ export default function ChatBox({
           {[...messages].reverse().map((message, index) => (
             <div 
               key={index} 
-              className={`message ${message.role === 'user' ? 'user-message' : 'assistant-message'}`}
+              className={`message inline-block max-w-[85%] ${
+                message.role === 'user' 
+                  ? 'user-message ml-auto bg-primary text-white rounded-2xl rounded-tr-sm px-4 py-2' 
+                  : 'assistant-message bg-gray-100 rounded-2xl rounded-tl-sm px-4 py-2'
+              }`}
             >
-              <div className={`prose prose-sm md:prose-base max-w-none ${
+              <div className={`prose prose-sm md:prose-base max-w-none break-words ${
                 message.role === 'user' ? 'prose-invert' : ''
               } ${message.role === 'assistant' ? 'typing-animation' : ''}`}>
                 <ReactMarkdown>
