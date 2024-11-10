@@ -35,18 +35,18 @@ export default function NodeDetailsModal({ isOpen, onClose, nodeData }: NodeDeta
   return (
     <>
       {isOpen && (
-        <div className="fixed inset-0 z-[999999] flex items-center justify-center">
+        <div className="fixed inset-0 z-[9999999] flex items-center justify-center">
           <div 
             onClick={onClose}
-            className="fixed inset-0 bg-black/70 backdrop-blur-lg transition-opacity duration-300 ease-in-out"
+            className="absolute inset-0 bg-black bg-opacity-50 backdrop-blur-sm"
           />
           <div
             ref={modalRef}
-            className="relative w-[90%] max-w-[400px] max-h-[75vh] bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl custom-scrollbar overflow-y-auto transform transition-all duration-300 ease-in-out z-[999999] animate-modal-pop"
+            className="relative w-[90%] max-w-[400px] max-h-[80vh] bg-white rounded-2xl shadow-2xl custom-scrollbar overflow-y-auto transform transition-all duration-300 ease-in-out animate-modal-pop"
           >
             <button
               onClick={onClose}
-              className="fixed right-4 top-4 p-2 rounded-full bg-white shadow-lg hover:bg-gray-100 transition-colors duration-200 z-[10000] focus:outline-none focus:ring-2 focus:ring-primary"
+              className="absolute right-4 top-4 p-2 rounded-full bg-white shadow-md hover:bg-gray-100 transition-all duration-300 z-50"
               aria-label="Close modal"
             >
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
