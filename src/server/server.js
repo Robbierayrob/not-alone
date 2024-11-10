@@ -233,9 +233,20 @@ app.get('/api/suggestions', async (req, res) => {
 
     const result = await model.generateContent(prompt);
     const response = await result.response;
-    const suggestions = JSON.parse(response.text());
+    let suggestions;
+    try {
+      suggestions = JSON.parse(response.text());
+    } catch (error) {
+      console.error('Error parsing LLM response:', error);
+      suggestions = [
+        { id: '1', text: 'How can I improve communication with my partner?', icon: '💭' },
+        { id: '2', text: 'Help me resolve a recent conflict', icon: '🤝' },
+        { id: '3', text: 'Understanding my emotional patterns', icon: '❤️' },
+        { id: '4', text: 'Building trust in relationships', icon: '🔒' }
+      ];
+    }
     
-    res.json(suggestions);
+    res.json({ suggestions });
   } catch (error) {
     console.error('Error generating suggestions:', error);
     res.status(500).json({ 

@@ -20,8 +20,11 @@ export default function SuggestionCards({ onSuggestionClick }: SuggestionCardsPr
     const fetchSuggestions = async () => {
       try {
         const response = await fetch('http://localhost:3001/api/suggestions');
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
         const data = await response.json();
-        setSuggestions(data);
+        setSuggestions(data.suggestions || []);
       } catch (error) {
         console.error('Error fetching suggestions:', error);
       } finally {
