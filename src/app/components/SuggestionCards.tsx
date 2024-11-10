@@ -14,6 +14,7 @@ interface SuggestionCardsProps {
   isVisible?: boolean;
   isGraphViewOpen?: boolean;
   isGraphModalOpen?: boolean;
+  isSidebarOpen?: boolean;
 }
 
 export default function SuggestionCards({ 
