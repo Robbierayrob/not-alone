@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useRef, useEffect, useState } from 'react';
+import SuggestionCards from './SuggestionCards';
 import ProfileSettingsModal from './ProfileSettingsModal';
 import SupportModal from './SupportModal';
 
@@ -36,6 +37,10 @@ export default function ChatBox({
 
   return (
     <div className="flex flex-col h-full">
+      <SuggestionCards onSuggestionClick={(text) => {
+        onInputChange(text);
+        onSubmit(new Event('submit') as unknown as FormEvent);
+      }} />
       <div 
         ref={messagesContainerRef}
         className="flex-1 overflow-y-auto scrollbar-hide px-4 md:px-8 py-6 relative z-[1] flex flex-col-reverse"
