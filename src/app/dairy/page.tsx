@@ -306,5 +306,6 @@ export default function DairyPage() {
           graphData={graphData}
         />
       </div>
+    </div>
   );
 }
