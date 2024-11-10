@@ -54,7 +54,7 @@ export default function GraphSidebar({ isOpen, graphData }: GraphSidebarProps) {
     loadGraphData();
   }, [isOpen, graphData]);
   return (
-    <div className={`${isOpen ? 'w-[600px]' : 'w-0'} bg-gray-50 border-l border-gray-200 transition-all duration-300 overflow-hidden`}>
+    <div className={`fixed right-0 top-0 h-full ${isOpen ? 'w-[600px]' : 'w-0'} bg-gray-50 border-l border-gray-200 transition-all duration-300 overflow-hidden z-40`}>
       <div className="h-full w-full flex flex-col">
         <div className="p-4 border-b border-gray-200">
           <h2 className="text-xl font-semibold text-gray-800">Relationships</h2>

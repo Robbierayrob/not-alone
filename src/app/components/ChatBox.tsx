@@ -39,10 +39,10 @@ export default function ChatBox({
     <div className="flex flex-col h-full">
       <div 
         ref={messagesContainerRef}
-        className="message-container py-4 relative z-[1]"
+        className="message-container py-4 relative z-[1] flex flex-col-reverse"
       >
         <div className="w-full space-y-2">
-          {[...messages].reverse().map((message, index) => (
+          {messages.map((message, index) => (
             <div 
               key={index} 
               className={`message inline-block max-w-[85%] ${

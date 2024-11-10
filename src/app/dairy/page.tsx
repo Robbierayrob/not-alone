@@ -313,7 +313,7 @@ export default function DairyPage() {
           )}
         </div>
 
-        {isGraphViewOpen && <GraphSidebar isOpen={isGraphViewOpen} graphData={graphData} />}
+        <GraphSidebar isOpen={isGraphViewOpen} graphData={graphData} />
         <GraphModal 
           isOpen={isGraphModalOpen}
           onClose={() => setIsGraphModalOpen(false)}
