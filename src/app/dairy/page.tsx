@@ -215,7 +215,9 @@ export default function DairyPage() {
           </button>
         </div>
         {/* Floating sidebar toggles */}
-        <div className="fixed left-4 top-20 flex gap-2 z-50">
+        <div className={`fixed top-20 z-50 flex flex-col gap-2 transition-all duration-300 ${
+          isSidebarOpen ? 'left-[268px]' : 'left-4'
+        }`}>
           <button 
             onClick={toggleSidebar}
             className={`p-2 rounded-lg bg-white shadow-md hover:bg-gray-100 transition-all duration-300`}
