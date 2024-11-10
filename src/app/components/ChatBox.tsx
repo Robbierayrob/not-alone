@@ -37,10 +37,6 @@ export default function ChatBox({
 
   return (
     <div className="flex flex-col h-full">
-      <SuggestionCards onSuggestionClick={(text) => {
-        onInputChange(text);
-        onSubmit(new Event('submit') as unknown as FormEvent);
-      }} />
       <div 
         ref={messagesContainerRef}
         className="flex-1 overflow-y-auto scrollbar-hide px-4 md:px-8 py-6 relative z-[1] flex flex-col-reverse"
@@ -64,6 +60,10 @@ export default function ChatBox({
       </div>
 
       <div className="border-t border-gray-200 p-4 md:p-6 relative z-10">
+        <SuggestionCards onSuggestionClick={(text) => {
+          onInputChange(text);
+          onSubmit(new Event('submit') as unknown as FormEvent);
+        }} />
         <div className="max-w-5xl mx-auto flex items-center gap-3">
           <form onSubmit={onSubmit} className="flex-1 relative flex items-center gap-3">
             <div className="flex gap-3">

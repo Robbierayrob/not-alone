@@ -66,7 +66,7 @@ export default function SuggestionCards({ onSuggestionClick }: SuggestionCardsPr
   };
 
   return (
-    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-xl">
+    <div className="w-full max-w-xl mx-auto mb-6">
       <div className="grid grid-cols-2 gap-4 px-4">
         {suggestions.map((suggestion) => (
           <button
