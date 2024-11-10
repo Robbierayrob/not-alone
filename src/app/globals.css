@@ -8,7 +8,13 @@
   font-family: 'IBM Plex Sans', sans-serif;
   text-align: center;
   padding: 2rem;
-  transition: all 0.3s ease;
+  position: absolute;
+  left: 50%;
+  top: 40%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+  animation: gentleFloat 6s ease-in-out infinite;
+  z-index: 10;
 }
 
 .welcome-title {
@@ -17,7 +23,9 @@
   font-weight: 600;
   margin-bottom: 0.5rem;
   opacity: 0;
-  animation: fadeSlideUp 0.8s ease forwards;
+  text-shadow: 0 0 20px rgba(255, 20, 147, 0.1);
+  animation: fadeSlideUp 0.8s ease forwards,
+             glowPulse 4s ease-in-out infinite;
 }
 
 .welcome-subtitle {
@@ -35,6 +43,24 @@
   to {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+@keyframes gentleFloat {
+  0%, 100% {
+    transform: translate(-50%, -50%);
+  }
+  50% {
+    transform: translate(-50%, -53%);
+  }
+}
+
+@keyframes glowPulse {
+  0%, 100% {
+    text-shadow: 0 0 20px rgba(255, 20, 147, 0.1);
+  }
+  50% {
+    text-shadow: 0 0 30px rgba(255, 20, 147, 0.2);
   }
 }
 

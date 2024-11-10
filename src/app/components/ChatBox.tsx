@@ -57,6 +57,7 @@ export default function ChatBox({
             <p className="welcome-subtitle">The AI assistant to help you through your relationships</p>
           </div>
         )}
+        <div className="relative z-0" style={{ height: '100vh' }} />
         <div className="w-full flex flex-col space-y-4 px-4">
           {messages.map((message, index) => (
             <div 
