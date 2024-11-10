@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
 
 interface NodeDetailsModalProps {
   isOpen: boolean;
@@ -47,26 +46,17 @@ export default function NodeDetailsModal({ isOpen, onClose, nodeData }: NodeDeta
   if (!isOpen || !nodeData) return null;
 
   return (
-    <AnimatePresence>
+    <>
       {isOpen && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center">
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 bg-black/60 backdrop-blur-md"
+          <div 
+            className="fixed inset-0 bg-black/60 backdrop-blur-md transition-opacity duration-300 ease-in-out"
           />
-          <motion.div
+          <div
             ref={modalRef}
-            initial={{ scale: 0.95, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.95, opacity: 0 }}
-            transition={{ type: "spring", duration: 0.3 }}
-            className="relative w-[90%] max-w-[500px] max-h-[85vh] bg-white rounded-2xl shadow-2xl overflow-hidden"
+            className="relative w-[90%] max-w-[500px] max-h-[85vh] bg-white rounded-2xl shadow-2xl overflow-hidden transform transition-all duration-300 ease-in-out"
           >
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
+            <button
               onClick={onClose}
               className="absolute right-4 top-4 p-2 rounded-full bg-white shadow-lg hover:bg-gray-100 transition-colors duration-200 z-[101] focus:outline-none focus:ring-2 focus:ring-primary"
               aria-label="Close modal"
@@ -111,12 +101,9 @@ export default function NodeDetailsModal({ isOpen, onClose, nodeData }: NodeDeta
                       <h3 className="font-semibold text-gray-800 mb-3">Interests</h3>
                       <div className="flex flex-wrap gap-2">
                         {nodeData.details.interests.map((interest: string) => (
-                          <motion.span
+                          <span
                             key={interest}
-                            initial={{ scale: 0 }}
-                            animate={{ scale: 1 }}
-                            whileHover={{ scale: 1.05 }}
-                            className="px-3 py-1.5 bg-white shadow-sm border border-gray-200 rounded-full text-sm font-medium text-gray-700"
+                            className="px-3 py-1.5 bg-white shadow-sm border border-gray-200 rounded-full text-sm font-medium text-gray-700 transition-transform duration-200 hover:scale-105"
                           >
                             {interest}
                           </motion.span>
@@ -145,6 +132,6 @@ export default function NodeDetailsModal({ isOpen, onClose, nodeData }: NodeDeta
           </motion.div>
         </div>
       )}
-    </AnimatePresence>
+    </>
   );
 }
