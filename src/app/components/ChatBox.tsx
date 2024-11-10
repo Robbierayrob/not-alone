@@ -39,31 +39,17 @@ export default function ChatBox({
     <div className="flex flex-col h-full">
       <div 
         ref={messagesContainerRef}
-        className="flex-1 overflow-y-auto scrollbar-hide px-4 md:px-8 py-6 relative z-[1]"
+        className="message-container px-4 md:px-8 py-6 relative z-[1]"
       >
-        <div className="w-full max-w-4xl mx-auto space-y-6">
-          {messages.map((message, index) => (
+        <div className="w-full max-w-4xl mx-auto space-y-4">
+          {[...messages].reverse().map((message, index) => (
             <div 
               key={index} 
-              className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+              className={`message ${message.role === 'user' ? 'user-message' : 'assistant-message'}`}
             >
-              <div 
-                className={`
-                  relative flex flex-col
-                  max-w-[85%] md:max-w-[75%]
-                  p-6 rounded-2xl shadow-md
-                  transition-all duration-200
-                  ${message.role === 'user' 
-                    ? 'bg-primary text-white ml-auto rounded-tr-none' 
-                    : 'bg-white border border-gray-100 mr-auto rounded-tl-none'
-                  }
-                `}
-              >
-                <div className={`
-                  prose prose-sm md:prose-base max-w-none
-                  ${message.role === 'user' ? 'text-white prose-invert' : 'text-gray-800'}
-                  ${message.role === 'assistant' ? 'typing-animation' : ''}
-                `}>
+              <div className={`prose prose-sm md:prose-base max-w-none ${
+                message.role === 'user' ? 'prose-invert' : ''
+              } ${message.role === 'assistant' ? 'typing-animation' : ''}`}>
                   <ReactMarkdown>
                     {message.content}
                   </ReactMarkdown>
