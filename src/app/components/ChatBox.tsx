@@ -69,7 +69,7 @@ export default function ChatBox({
               isGraphViewOpen={isGraphViewOpen}
               onSuggestionClick={onSuggestionClick}
             />
-            <div className="absolute bottom-32 left-0 right-0">
+            <div className="absolute bottom-40 left-0 right-0">
               <SuggestionCards
                 isVisible={true}
                 isSidebarOpen={isSidebarOpen}
