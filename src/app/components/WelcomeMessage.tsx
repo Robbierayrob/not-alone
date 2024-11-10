@@ -23,15 +23,13 @@ export default function WelcomeMessage({
       <div className={`welcome-message ${getPositionClasses()}`}>
         <h2 className="welcome-title">You're not alone</h2>
         <p className="welcome-subtitle">Share your thoughts and feelings, I'm here to listen and help.</p>
-        <div className="mt-8">
-          <SuggestionCards 
-            isVisible={true}
-            isSidebarOpen={isSidebarOpen}
-            isProfileSidebarOpen={isProfileSidebarOpen}
-            isGraphViewOpen={isGraphViewOpen}
-            onSuggestionClick={onSuggestionClick}
-          />
-        </div>
+        <SuggestionCards 
+          isVisible={true}
+          isSidebarOpen={isSidebarOpen}
+          isProfileSidebarOpen={isProfileSidebarOpen}
+          isGraphViewOpen={isGraphViewOpen}
+          onSuggestionClick={onSuggestionClick}
+        />
       </div>
     </div>
   );
