@@ -284,47 +284,39 @@ export default function DiaryPage() {
             />
             
             {messages.length === 0 && (
-              <>
-                <WelcomeMessage 
-                  isSidebarOpen={isSidebarOpen} 
-                  isProfileSidebarOpen={isProfileSidebarOpen}
-                  isGraphViewOpen={isGraphViewOpen}
-                />
-                <SuggestionCards 
-                  isVisible={true}
-                  isSidebarOpen={isSidebarOpen}
-                  isProfileSidebarOpen={isProfileSidebarOpen}
-                  isGraphViewOpen={isGraphViewOpen}
-                  onSuggestionClick={(text) => {
-                    const userMessage = { role: 'user', content: text };
-                    setMessages(prev => [...prev, userMessage]);
-                    setShowSuggestions(false);
-                    setIsLoading(true);
-  
-                    fetch('http://localhost:3001/api/chat', {
-                      method: 'POST',
-                      headers: {
-                        'Content-Type': 'application/json',
-                      },
-                      body: JSON.stringify({
-                        message: text,
-                        chatId: currentChatId
-                      }),
-                    })
-                      .then(response => response.json())
-                      .then(data => {
-                        if (data.message) {
-                          setMessages(prev => [...prev, { role: 'assistant', content: data.message }]);
-                          if (data.graphData) {
-                            setGraphData(data.graphData);
-                          }
+              <WelcomeMessage 
+                isSidebarOpen={isSidebarOpen} 
+                isProfileSidebarOpen={isProfileSidebarOpen}
+                isGraphViewOpen={isGraphViewOpen}
+                onSuggestionClick={(text) => {
+                  const userMessage = { role: 'user', content: text };
+                  setMessages(prev => [...prev, userMessage]);
+                  setShowSuggestions(false);
+                  setIsLoading(true);
+
+                  fetch('http://localhost:3001/api/chat', {
+                    method: 'POST',
+                    headers: {
+                      'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                      message: text,
+                      chatId: currentChatId
+                    }),
+                  })
+                    .then(response => response.json())
+                    .then(data => {
+                      if (data.message) {
+                        setMessages(prev => [...prev, { role: 'assistant', content: data.message }]);
+                        if (data.graphData) {
+                          setGraphData(data.graphData);
                         }
-                      })
-                      .catch(error => console.error('Error:', error))
-                      .finally(() => setIsLoading(false));
-                  }} 
-                />
-              </>
+                      }
+                    })
+                    .catch(error => console.error('Error:', error))
+                    .finally(() => setIsLoading(false));
+                }}
+              />
             )}
           </div>
   
