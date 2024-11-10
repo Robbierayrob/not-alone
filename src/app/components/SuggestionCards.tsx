@@ -16,7 +16,23 @@ export default function SuggestionCards({ onSuggestionClick }: SuggestionCardsPr
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
+  // Mock suggestions data
+  const mockSuggestions = [
+    { id: '1', text: 'How can I improve communication?', icon: '💭' },
+    { id: '2', text: 'Help me resolve a conflict', icon: '🤝' },
+    { id: '3', text: 'Understanding my emotions', icon: '❤️' },
+    { id: '4', text: 'Building trust in relationships', icon: '🔒' }
+  ];
+
   useEffect(() => {
+    // Simulate API delay
+    setTimeout(() => {
+      setSuggestions(mockSuggestions);
+      setIsLoading(false);
+    }, 500);
+    
+    // Commented out API call for future reference
+    /*
     const fetchSuggestions = async () => {
       try {
         const response = await fetch('http://localhost:3001/api/suggestions');
@@ -36,6 +52,7 @@ export default function SuggestionCards({ onSuggestionClick }: SuggestionCardsPr
     };
 
     fetchSuggestions();
+    */
   }, []);
 
   if (isLoading) {
