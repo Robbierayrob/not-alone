@@ -177,12 +177,10 @@ export default function DairyPage() {
 
   const toggleGraphView = () => {
     setIsGraphViewOpen(!isGraphViewOpen);
-    setShowSuggestions(false);
   };
 
   const toggleGraphModal = () => {
     setIsGraphModalOpen(!isGraphModalOpen);
-    setShowSuggestions(false);
   };
 
   return (
@@ -278,13 +276,18 @@ export default function DairyPage() {
             onInputChange={setInput}
             onSubmit={handleSubmit}
           />
-          {showSuggestions && messages.length === 0 && (
-            <SuggestionCards 
-              isVisible={true}
-              isGraphViewOpen={isGraphViewOpen}
-              isGraphModalOpen={isGraphModalOpen}
-              isSidebarOpen={isSidebarOpen}
-              onSuggestionClick={(text) => {
+          {messages.length === 0 && (
+            <>
+              <div className="fixed top-1/3 left-1/2 transform -translate-x-1/2 text-center text-gray-500">
+                <h2 className="text-2xl font-semibold mb-2">You're not alone</h2>
+                <p className="text-sm">Share your thoughts and feelings, I'm here to listen and help.</p>
+              </div>
+              <SuggestionCards 
+                isVisible={true}
+                isGraphViewOpen={isGraphViewOpen}
+                isGraphModalOpen={isGraphModalOpen}
+                isSidebarOpen={isSidebarOpen}
+                onSuggestionClick={(text) => {
                 const userMessage = { role: 'user', content: text };
                 setMessages(prev => [...prev, userMessage]);
                 setShowSuggestions(false);
