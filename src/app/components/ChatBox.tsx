@@ -33,23 +33,18 @@ export default function ChatBox({
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [isSupportModalOpen, setIsSupportModalOpen] = useState(false);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
-
-  const scrollToNewMessage = useCallback(() => {
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ 
-        behavior: 'smooth', 
-        block: 'start',
-        inline: 'nearest'
-      });
-    }
-  }, []);
+  const lastMessageRef = useRef<HTMLDivElement>(null);
+  const prevMessagesLengthRef = useRef(messages.length);
 
   useEffect(() => {
-    if (messages.length > 0) {
-      scrollToNewMessage();
+    if (messages.length > prevMessagesLengthRef.current) {
+      lastMessageRef.current?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start',
+      });
     }
-  }, [messages, scrollToNewMessage]);
+    prevMessagesLengthRef.current = messages.length;
+  }, [messages.length]);
 
   return (
     <div className="flex flex-col h-full">
@@ -77,9 +72,12 @@ export default function ChatBox({
           </div>
         )}
         <div className="w-full flex flex-col space-y-4 px-4">
-          {messages.map((message, index) => (
+          {messages.map((message, index) => {
+            const isLastMessage = index === messages.length - 1;
+            return (
             <div 
               key={index} 
+              ref={isLastMessage ? lastMessageRef : null}
               className={`message inline-flex max-w-[85%] animate-slide-in ${
                 message.role === 'user' 
                   ? 'user-message ml-auto bg-primary text-white rounded-2xl rounded-tr-sm px-4 py-2 shadow-sm' 
@@ -94,8 +92,7 @@ export default function ChatBox({
                 </ReactMarkdown>
               </div>
             </div>
-          ))}
-          <div ref={messagesEndRef} className="h-1" />
+          )})}
         </div>
       </div>
 
