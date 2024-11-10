@@ -278,14 +278,16 @@ export default function DiaryPage() {
               isLoading={isLoading}
               onInputChange={setInput}
               onSubmit={handleSubmit}
+              isSidebarOpen={isSidebarOpen}
+              isProfileSidebarOpen={isProfileSidebarOpen}
             />
             
             {messages.length === 0 && (
               <>
-                <div className="fixed top-1/3 left-1/2 transform -translate-x-1/2 text-center text-gray-500">
-                  <h2 className="text-2xl font-semibold mb-2">You're not alone</h2>
-                  <p className="text-sm">Share your thoughts and feelings, I'm here to listen and help.</p>
-                </div>
+                <WelcomeMessage 
+                  isSidebarOpen={isSidebarOpen} 
+                  isProfileSidebarOpen={isProfileSidebarOpen}
+                />
                 <SuggestionCards 
                   isVisible={true}
                   isGraphViewOpen={isGraphViewOpen}

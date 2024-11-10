@@ -1,6 +1,7 @@
 "use client";
 
 import { FormEvent, useRef, useEffect, useState, useCallback } from 'react';
+import WelcomeMessage from './WelcomeMessage';
 import ReactMarkdown from 'react-markdown';
 import ProfileSettingsModal from './ProfileSettingsModal';
 import SupportModal from './SupportModal';
@@ -11,6 +12,8 @@ interface ChatBoxProps {
   isLoading: boolean;
   onInputChange: (value: string) => void;
   onSubmit: (e: FormEvent) => void;
+  isSidebarOpen: boolean;
+  isProfileSidebarOpen: boolean;
 }
 
 export default function ChatBox({ 

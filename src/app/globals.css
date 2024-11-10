@@ -8,13 +8,13 @@
   font-family: 'IBM Plex Sans', sans-serif;
   text-align: center;
   padding: 2rem;
-  position: absolute;
+  position: fixed;
   left: 50%;
   top: 40%;
   transform: translate(-50%, -50%);
   width: 100%;
-  animation: gentleFloat 6s ease-in-out infinite;
   z-index: 10;
+  transition: all 0.3s ease;
 }
 
 .welcome-title {
@@ -24,15 +24,19 @@
   margin-bottom: 0.5rem;
   opacity: 0;
   text-shadow: 0 0 20px rgba(255, 20, 147, 0.1);
-  animation: fadeSlideUp 0.8s ease forwards,
-             glowPulse 4s ease-in-out infinite;
+  animation: 
+    fadeSlideUp 0.8s ease forwards,
+    glowPulse 4s ease-in-out infinite,
+    gentleFloat 6s ease-in-out infinite;
 }
 
 .welcome-subtitle {
   color: #666;
   font-size: 1.2rem;
   opacity: 0;
-  animation: fadeSlideUp 0.8s ease 0.2s forwards;
+  animation: 
+    fadeSlideUp 0.8s ease 0.2s forwards,
+    gentleFloat 6s ease-in-out infinite;
 }
 
 @keyframes fadeSlideUp {
