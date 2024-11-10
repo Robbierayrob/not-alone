@@ -294,6 +294,7 @@ export default function DiaryPage() {
                   isGraphViewOpen={isGraphViewOpen}
                   isGraphModalOpen={isGraphModalOpen}
                   isSidebarOpen={isSidebarOpen}
+                  isProfileSidebarOpen={isProfileSidebarOpen}
                   onSuggestionClick={(text) => {
                     const userMessage = { role: 'user', content: text };
                     setMessages(prev => [...prev, userMessage]);
