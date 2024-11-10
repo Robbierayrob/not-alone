@@ -81,7 +81,7 @@ export default function ChatBox({
           </div>
         )}
         <div className="w-full flex flex-col space-y-4 px-4">
-          {[...messages].reverse().map((message, index) => (
+          {messages.map((message, index) => (
             <div 
               key={index} 
               className={`message inline-flex max-w-[85%] animate-slide-in ${
