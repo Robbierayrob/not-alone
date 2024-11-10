@@ -231,6 +231,24 @@ body {
   }
 }
 
+/* Chat Message Styling */
+.message-container {
+  @apply flex flex-col-reverse overflow-y-auto;
+  height: calc(100vh - 180px);
+}
+
+.message {
+  @apply p-4 rounded-lg mb-4 max-w-[80%] break-words;
+}
+
+.user-message {
+  @apply bg-primary text-white self-end;
+}
+
+.assistant-message {
+  @apply bg-gray-100 text-gray-800 self-start;
+}
+
 /* Markdown Styling */
 .prose {
   @apply leading-relaxed;
