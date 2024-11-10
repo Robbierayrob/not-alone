@@ -34,7 +34,7 @@ export default function ChatBox({
     <div className="flex flex-col h-full">
       <div 
         ref={messagesContainerRef}
-        className="flex-1 overflow-y-auto scrollbar-hide px-4 md:px-8 py-6 relative z-10 flex flex-col-reverse"
+        className="flex-1 overflow-y-auto scrollbar-hide px-4 md:px-8 py-6 relative z-[1] flex flex-col-reverse"
       >
         <div className="w-full max-w-2xl mx-auto">
           {messages.map((message, index) => (

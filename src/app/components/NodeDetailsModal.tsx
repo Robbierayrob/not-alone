@@ -35,14 +35,14 @@ export default function NodeDetailsModal({ isOpen, onClose, nodeData }: NodeDeta
   return (
     <>
       {isOpen && (
-        <div className="fixed inset-0 z-[99999] flex items-center justify-center">
+        <div className="fixed inset-0 z-[999999] flex items-center justify-center">
           <div 
             onClick={onClose}
-            className="fixed inset-0 bg-black/60 backdrop-blur-lg transition-opacity duration-300 ease-in-out"
+            className="fixed inset-0 bg-black/70 backdrop-blur-lg transition-opacity duration-300 ease-in-out"
           />
           <div
             ref={modalRef}
-            className="relative w-[90%] max-w-[450px] max-h-[80vh] bg-white rounded-2xl shadow-2xl overflow-y-auto transform transition-all duration-300 ease-in-out z-[99999]"
+            className="relative w-[90%] max-w-[400px] max-h-[75vh] bg-white/95 backdrop-blur-sm rounded-2xl shadow-2xl custom-scrollbar overflow-y-auto transform transition-all duration-300 ease-in-out z-[999999] animate-modal-pop"
           >
             <button
               onClick={onClose}
@@ -54,7 +54,7 @@ export default function NodeDetailsModal({ isOpen, onClose, nodeData }: NodeDeta
               </svg>
             </button>
 
-            <div className="p-4 space-y-4">
+            <div className="p-6 space-y-3">
               <div className="flex items-center gap-3">
                 <div 
                   className={`w-14 h-14 rounded-full flex items-center justify-center text-white text-xl font-semibold shadow-lg transition-transform duration-300 ${
@@ -70,19 +70,19 @@ export default function NodeDetailsModal({ isOpen, onClose, nodeData }: NodeDeta
               </div>
 
               <div className="space-y-3">
-                <div className="bg-gray-50 rounded-lg p-3">
+                <div className="bg-white/80 backdrop-blur-sm rounded-lg p-3 shadow-sm border border-gray-100">
                   <h3 className="font-semibold text-gray-800 mb-2">Summary</h3>
                   <p className="text-gray-600 leading-relaxed">{nodeData.summary}</p>
                 </div>
 
                 {nodeData.details && (
                   <div className="space-y-3">
-                    <div className="bg-gray-50 rounded-lg p-3">
+                    <div className="bg-white/80 backdrop-blur-sm rounded-lg p-3 shadow-sm border border-gray-100">
                       <h3 className="font-semibold text-gray-800 mb-2">Occupation</h3>
                       <p className="text-gray-600">{nodeData.details.occupation}</p>
                     </div>
 
-                    <div className="bg-gray-50 rounded-xl p-4">
+                    <div className="bg-white/80 backdrop-blur-sm rounded-lg p-3 shadow-sm border border-gray-100">
                       <h3 className="font-semibold text-gray-800 mb-3">Interests</h3>
                       <div className="flex flex-wrap gap-2">
                         {nodeData.details.interests.map((interest: string) => (
