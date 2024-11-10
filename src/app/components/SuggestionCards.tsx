@@ -82,11 +82,9 @@ export default function SuggestionCards({
 
   const suggestionContent = (
     <div className={`fixed w-full max-w-xl mx-auto bottom-32 transition-all duration-300 ease-in-out
-      ${isGraphViewOpen ? 'mr-[300px]' : ''}
-      ${isGraphModalOpen ? 'scale-95 opacity-95' : ''}
-      ${isSidebarOpen && isProfileSidebarOpen ? 'ml-[532px]' : 
-        isSidebarOpen ? 'ml-[264px]' : 
-        isProfileSidebarOpen ? 'ml-[264px]' : 'ml-0'
+      ${isSidebarOpen && isProfileSidebarOpen ? 'ml-[266px]' : 
+        isSidebarOpen || isProfileSidebarOpen ? 'ml-[134px]' : 
+        'ml-0'
       }
       left-1/2 transform -translate-x-1/2 z-50`}>
       <div className="grid grid-cols-2 gap-4 px-4 animate-suggestions-appear">
