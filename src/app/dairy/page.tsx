@@ -185,7 +185,7 @@ export default function DairyPage() {
 
   return (
     <div className="h-screen flex relative">
-      <ProfileSidebar 
+      <ProfileSidebar
         isOpen={isProfileSidebarOpen}
         profiles={graphData.nodes}
       />
