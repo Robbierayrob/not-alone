@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from 'react';
+import { useSidebarPosition } from '../hooks/useSidebarPosition';
 
 interface Suggestion {
   id: string;
@@ -79,11 +80,7 @@ export default function SuggestionCards({
 
   return (
     <div className={`fixed w-full max-w-xl mx-auto bottom-32 transition-all duration-300 ease-in-out
-      ${isSidebarOpen && isProfileSidebarOpen ? 'ml-[266px]' : 
-        isSidebarOpen || isProfileSidebarOpen ? 'ml-[134px]' : 
-        'ml-0'
-      }
-      ${isGraphViewOpen ? 'mr-[300px]' : 'mr-0'}
+      ${getPositionClasses()}
       left-1/2 transform -translate-x-1/2 z-50`}>
       <div className="grid grid-cols-2 gap-4 px-4 animate-suggestions-appear">
         {suggestions.map((suggestion) => (

@@ -288,6 +288,7 @@ export default function DiaryPage() {
                 <WelcomeMessage 
                   isSidebarOpen={isSidebarOpen} 
                   isProfileSidebarOpen={isProfileSidebarOpen}
+                  isGraphViewOpen={isGraphViewOpen}
                 />
                 <SuggestionCards 
                   isVisible={true}
