@@ -62,7 +62,7 @@ export default function GraphSidebar({ isOpen, graphData }: GraphSidebarProps) {
         <div className="flex-1 relative overflow-hidden">
           {isOpen && (
             <div className="absolute inset-0 transition-all duration-300 opacity-0 animate-fade-in">
-              <div className="w-full h-full overflow-hidden">
+              <div className="w-full h-full overflow-auto">
                 {isLoading ? (
                   <div className="flex items-center justify-center h-full">
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>

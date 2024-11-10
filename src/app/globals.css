@@ -241,26 +241,39 @@ body {
 }
 
 /* Graph container scrollbar */
-.graph-container {
+/* Custom scrollbar styles */
+.graph-container,
+.overflow-auto {
   scrollbar-width: thin;
   scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
 }
 
-.graph-container::-webkit-scrollbar {
+.graph-container::-webkit-scrollbar,
+.overflow-auto::-webkit-scrollbar {
   width: 6px;
+  height: 6px;
 }
 
-.graph-container::-webkit-scrollbar-track {
+.graph-container::-webkit-scrollbar-track,
+.overflow-auto::-webkit-scrollbar-track {
   background: transparent;
 }
 
-.graph-container::-webkit-scrollbar-thumb {
+.graph-container::-webkit-scrollbar-thumb,
+.overflow-auto::-webkit-scrollbar-thumb {
   background-color: rgba(0, 0, 0, 0.2);
   border-radius: 3px;
+  border: none;
 }
 
-.graph-container::-webkit-scrollbar-thumb:hover {
+.graph-container::-webkit-scrollbar-thumb:hover,
+.overflow-auto::-webkit-scrollbar-thumb:hover {
   background-color: rgba(0, 0, 0, 0.3);
+}
+
+.graph-container::-webkit-scrollbar-corner,
+.overflow-auto::-webkit-scrollbar-corner {
+  background: transparent;
 }
 
 .message {
