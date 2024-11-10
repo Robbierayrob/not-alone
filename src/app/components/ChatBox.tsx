@@ -59,7 +59,7 @@ export default function ChatBox({
     <div className="flex flex-col h-full">
       <div 
         ref={messagesContainerRef}
-        className="message-container py-4 relative z-[1] flex flex-col justify-end h-[calc(100vh-180px)] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent hover:scrollbar-thumb-gray-400 transition-colors mx-auto w-full max-w-5xl"
+        className="message-container py-4 relative z-[1] flex flex-col-reverse h-[calc(100vh-180px)] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent hover:scrollbar-thumb-gray-400 transition-colors mx-auto w-full max-w-5xl"
       >
         {messages.length === 0 && (
           <div className="absolute inset-0 flex flex-col">
@@ -80,7 +80,7 @@ export default function ChatBox({
             </div>
           </div>
         )}
-        <div className="w-full flex flex-col space-y-4 px-4">
+        <div className="w-full flex flex-col-reverse space-y-4 space-y-reverse px-4">
           {messages.map((message, index) => (
             <div 
               key={index} 
