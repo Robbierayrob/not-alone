@@ -78,6 +78,8 @@ export default function SuggestionCards({
 
   if (!isVisible) return null;
 
+  const { getPositionClasses } = useSidebarPosition(isSidebarOpen, isProfileSidebarOpen, isGraphViewOpen);
+
   return (
     <div className={`fixed w-full max-w-xl mx-auto bottom-32 transition-all duration-300 ease-in-out
       ${getPositionClasses()}
