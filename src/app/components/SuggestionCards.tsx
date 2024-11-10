@@ -81,9 +81,9 @@ export default function SuggestionCards({
   const { getPositionClasses } = useSidebarPosition(isSidebarOpen, isProfileSidebarOpen, isGraphViewOpen);
 
   return (
-    <div className={`w-full max-w-xl mx-auto px-4 transition-all duration-300 ease-in-out
+    <div className={`w-full max-w-xl mx-auto transition-all duration-300 ease-in-out
       ${getPositionClasses()}
-      left-1/2 transform -translate-x-1/2 z-50`}>
+      absolute left-1/2 transform -translate-x-1/2 z-50`}>
       <div className="grid grid-cols-2 gap-4 px-4 animate-suggestions-appear">
         {suggestions.map((suggestion) => (
           <button
