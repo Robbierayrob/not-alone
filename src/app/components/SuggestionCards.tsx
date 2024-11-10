@@ -12,9 +12,16 @@ interface Suggestion {
 interface SuggestionCardsProps {
   onSuggestionClick: (text: string) => void;
   isVisible?: boolean;
+  isGraphViewOpen?: boolean;
+  isGraphModalOpen?: boolean;
 }
 
-export default function SuggestionCards({ onSuggestionClick, isVisible = true }: SuggestionCardsProps) {
+export default function SuggestionCards({ 
+  onSuggestionClick, 
+  isVisible = true,
+  isGraphViewOpen = false,
+  isGraphModalOpen = false 
+}: SuggestionCardsProps) {
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -65,7 +72,7 @@ export default function SuggestionCards({ onSuggestionClick, isVisible = true }:
     onSuggestionClick(text);
   };
 
-  if (!isVisible) return null;
+  if (!isVisible || isGraphViewOpen || isGraphModalOpen) return null;
 
   const suggestionContent = (
     <div className="fixed w-full max-w-xl mx-auto bottom-32 left-1/2 transform -translate-x-1/2 z-50">

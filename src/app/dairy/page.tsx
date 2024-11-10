@@ -175,6 +175,16 @@ export default function DairyPage() {
     setIsSidebarOpen(!isSidebarOpen);
   };
 
+  const toggleGraphView = () => {
+    setIsGraphViewOpen(!isGraphViewOpen);
+    setShowSuggestions(false);
+  };
+
+  const toggleGraphModal = () => {
+    setIsGraphModalOpen(!isGraphModalOpen);
+    setShowSuggestions(false);
+  };
+
   return (
     <div className="h-screen flex relative">
       <ProfileSidebar 
@@ -195,7 +205,7 @@ export default function DairyPage() {
         {/* Graph View Toggle Button */}
         <div className="fixed right-4 top-20 flex flex-col gap-2 z-50">
           <button
-            onClick={() => setIsGraphModalOpen(true)}
+            onClick={toggleGraphModal}
             className="p-2 rounded-lg shadow-md bg-white hover:bg-gray-100 transition-all duration-300 border-2 border-transparent"
             aria-label="Expand graph view"
           >
@@ -204,7 +214,7 @@ export default function DairyPage() {
             </svg>
           </button>
           <button 
-            onClick={() => setIsGraphViewOpen(!isGraphViewOpen)}
+            onClick={toggleGraphView}
             className={`p-2 rounded-lg shadow-md transition-all duration-300 ${
               isGraphViewOpen 
                 ? 'bg-primary text-white hover:bg-primary/90 border-2 border-white' 
@@ -269,6 +279,8 @@ export default function DairyPage() {
           {showSuggestions && messages.length === 0 && (
             <SuggestionCards 
               isVisible={true}
+              isGraphViewOpen={isGraphViewOpen}
+              isGraphModalOpen={isGraphModalOpen}
               onSuggestionClick={(text) => {
                 const userMessage = { role: 'user', content: text };
                 setMessages(prev => [...prev, userMessage]);
