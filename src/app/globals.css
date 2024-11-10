@@ -4,39 +4,65 @@
 @tailwind components;
 @tailwind utilities;
 
+.welcome-message-container {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
 .welcome-message {
   font-family: 'IBM Plex Sans', sans-serif;
   text-align: center;
   padding: 2rem;
-  position: fixed;
-  left: 50%;
-  top: 40%;
-  transform: translate(-50%, -50%);
-  width: 100%;
-  z-index: 10;
-  transition: all 0.3s ease;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateY(-2rem);
 }
 
 .welcome-title {
   color: var(--primary);
   font-size: 2.5rem;
   font-weight: 600;
-  margin-bottom: 0.5rem;
+  margin-bottom: 1rem;
   opacity: 0;
-  text-shadow: 0 0 20px rgba(255, 20, 147, 0.1);
+  transform: translateY(20px);
+  text-shadow: 0 0 30px rgba(255, 20, 147, 0.2);
   animation: 
-    fadeSlideUp 0.8s ease forwards,
-    glowPulse 4s ease-in-out infinite,
-    gentleFloat 6s ease-in-out infinite;
+    titleAnimation 1s cubic-bezier(0.4, 0, 0.2, 1) forwards,
+    titleGlow 3s ease-in-out infinite;
 }
 
 .welcome-subtitle {
   color: #666;
   font-size: 1.2rem;
   opacity: 0;
-  animation: 
-    fadeSlideUp 0.8s ease 0.2s forwards,
-    gentleFloat 6s ease-in-out infinite;
+  transform: translateY(20px);
+  animation: subtitleAnimation 1s cubic-bezier(0.4, 0, 0.2, 1) 0.3s forwards;
+}
+
+@keyframes titleAnimation {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes subtitleAnimation {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes titleGlow {
+  0%, 100% {
+    text-shadow: 0 0 30px rgba(255, 20, 147, 0.2);
+  }
+  50% {
+    text-shadow: 0 0 40px rgba(255, 20, 147, 0.4);
+  }
 }
 
 @keyframes fadeSlideUp {

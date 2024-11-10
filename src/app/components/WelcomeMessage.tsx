@@ -7,14 +7,15 @@ interface WelcomeMessageProps {
 
 export default function WelcomeMessage({ isSidebarOpen, isProfileSidebarOpen }: WelcomeMessageProps) {
   return (
-    <div className={`welcome-message transition-all duration-300 ${
-      isSidebarOpen && isProfileSidebarOpen ? 'ml-[532px]' : 
-      isSidebarOpen ? 'ml-[268px]' : 
-      isProfileSidebarOpen ? 'ml-[268px]' : 
-      'ml-0'
-    }`}>
-      <h2 className="welcome-title text-primary">You're not alone</h2>
-      <p className="welcome-subtitle">Share your thoughts and feelings, I'm here to listen and help.</p>
+    <div className="welcome-message-container">
+      <div className={`welcome-message ${
+        isSidebarOpen && isProfileSidebarOpen ? 'ml-[266px]' : 
+        isSidebarOpen || isProfileSidebarOpen ? 'ml-[134px]' : 
+        'ml-0'
+      }`}>
+        <h2 className="welcome-title">You're not alone</h2>
+        <p className="welcome-subtitle">Share your thoughts and feelings, I'm here to listen and help.</p>
+      </div>
     </div>
   );
 }
