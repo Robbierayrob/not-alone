@@ -23,8 +23,11 @@ export default function SuggestionCards({ onSuggestionClick }: SuggestionCardsPr
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }
-        const data = await response.json();
-        setSuggestions(data.suggestions || []);
+        const { suggestions: fetchedSuggestions, error } = await response.json();
+        if (error) {
+          throw new Error(error);
+        }
+        setSuggestions(fetchedSuggestions || []);
       } catch (error) {
         console.error('Error fetching suggestions:', error);
       } finally {

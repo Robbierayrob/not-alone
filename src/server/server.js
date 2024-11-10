@@ -222,31 +222,52 @@ app.get('/api/suggestions', async (req, res) => {
   try {
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-002" });
     
-    const prompt = `Generate 4 different relationship-focused conversation starters or questions that users might want to discuss. 
-    These should be helpful for people seeking relationship advice or insights.
-    Format the response as a JSON array of objects, each with:
-    - id: a unique string
-    - text: the suggestion text (keep it concise, max 50 chars)
-    - icon: an emoji that represents the topic
+    const prompt = `Generate 4 different relationship-focused conversation starters or questions.
+    Return ONLY a JSON array of objects with this exact structure:
+    [
+      {
+        "id": "1",
+        "text": "conversation starter text here",
+        "icon": "emoji here"
+      }
+    ]
     
-    Make suggestions relevant to: communication issues, personal growth, conflict resolution, and understanding emotions.`;
+    Guidelines:
+    - Keep each text under 50 characters
+    - Use relevant emojis that match the topic
+    - Topics should cover: communication, growth, conflicts, emotions
+    - Make suggestions practical and engaging
+    - Ensure the response is valid JSON
+    
+    Example suggestion: "How do you handle disagreements in relationships?"`;
 
     const result = await model.generateContent(prompt);
     const response = await result.response;
     let suggestions;
     try {
-      suggestions = JSON.parse(response.text());
+      const responseText = response.text();
+      console.log('LLM Response:', responseText); // Debug log
+      suggestions = JSON.parse(responseText);
+      
+      // Validate suggestion structure
+      if (!Array.isArray(suggestions) || suggestions.length !== 4 || 
+          !suggestions.every(s => s.id && s.text && s.icon)) {
+        throw new Error('Invalid suggestion format');
+      }
     } catch (error) {
       console.error('Error parsing LLM response:', error);
       suggestions = [
-        { id: '1', text: 'How can I improve communication with my partner?', icon: '💭' },
-        { id: '2', text: 'Help me resolve a recent conflict', icon: '🤝' },
-        { id: '3', text: 'Understanding my emotional patterns', icon: '❤️' },
+        { id: '1', text: 'How can I improve communication?', icon: '💭' },
+        { id: '2', text: 'Help me resolve a conflict', icon: '🤝' },
+        { id: '3', text: 'Understanding my emotions', icon: '❤️' },
         { id: '4', text: 'Building trust in relationships', icon: '🔒' }
       ];
     }
     
-    res.json({ suggestions });
+    res.json({ 
+      suggestions,
+      timestamp: new Date().toISOString()
+    });
   } catch (error) {
     console.error('Error generating suggestions:', error);
     res.status(500).json({ 
