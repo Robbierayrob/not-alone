@@ -95,6 +95,7 @@ export default function GraphView({ graphData, isModal, isSidebar }: GraphViewPr
         nodeAutoColorBy="group"
         nodeLabel="name"
         linkLabel="label"
+        onNodeClick={handleNodeClick}
         linkDirectionalParticles={2}
         linkDirectionalParticleSpeed={0.005}
         nodeCanvasObject={(node: any, ctx, globalScale) => {
