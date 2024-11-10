@@ -1,7 +1,6 @@
 "use client";
 
 import { FormEvent, useRef, useEffect, useState } from 'react';
-import SuggestionCards from './SuggestionCards';
 import ProfileSettingsModal from './ProfileSettingsModal';
 import SupportModal from './SupportModal';
 
@@ -60,10 +59,6 @@ export default function ChatBox({
       </div>
 
       <div className="border-t border-gray-200 p-4 md:p-6 relative z-10">
-        <SuggestionCards onSuggestionClick={(text) => {
-          onInputChange(text);
-          onSubmit(new Event('submit') as unknown as FormEvent);
-        }} />
         <div className="max-w-5xl mx-auto flex items-center gap-3">
           <form onSubmit={onSubmit} className="flex-1 relative flex items-center gap-3">
             <div className="flex gap-3">

@@ -188,6 +188,11 @@ export default function DairyPage() {
 
       {/* Main chat area */}
       <div className="flex-1 flex flex-col relative">
+        <SuggestionCards onSuggestionClick={(text) => {
+          setInput(text);
+          const formEvent = new FormEvent('submit');
+          handleSubmit(formEvent);
+        }} />
         {/* Graph View Toggle Button */}
         <div className="fixed right-4 top-20 flex flex-col gap-2 z-50">
           <button

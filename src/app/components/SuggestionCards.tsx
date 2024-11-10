@@ -61,8 +61,6 @@ export default function SuggestionCards({ onSuggestionClick }: SuggestionCardsPr
 
   const handleSuggestionClick = (text: string) => {
     onSuggestionClick(text);
-    const formEvent = new Event('submit', { bubbles: true, cancelable: true });
-    document.querySelector('form')?.dispatchEvent(formEvent);
   };
 
   return (
