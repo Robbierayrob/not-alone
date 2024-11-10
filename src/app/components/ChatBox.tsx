@@ -39,27 +39,23 @@ export default function ChatBox({
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ 
         behavior: 'smooth', 
-        block: 'end',
+        block: 'start',
         inline: 'nearest'
       });
     }
   }, []);
 
-  // Scroll to bottom on initial load
   useEffect(() => {
-    const timer = setTimeout(scrollToNewMessage, 100);
-    return () => clearTimeout(timer);
-  }, []);
-
-  useEffect(() => {
-    scrollToNewMessage();
+    if (messages.length > 0) {
+      scrollToNewMessage();
+    }
   }, [messages, scrollToNewMessage]);
 
   return (
     <div className="flex flex-col h-full">
       <div 
         ref={messagesContainerRef}
-        className="message-container py-4 relative z-[1] flex flex-col-reverse h-[calc(100vh-180px)] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent hover:scrollbar-thumb-gray-400 transition-colors mx-auto w-full max-w-5xl"
+        className="message-container py-4 relative z-[1] flex flex-col h-[calc(100vh-180px)] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent hover:scrollbar-thumb-gray-400 transition-colors mx-auto w-full max-w-5xl"
       >
         {messages.length === 0 && (
           <div className="absolute inset-0 flex flex-col">
