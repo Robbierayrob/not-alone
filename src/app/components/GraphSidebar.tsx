@@ -13,11 +13,14 @@ interface GraphSidebarProps {
 
 export default function GraphSidebar({ isOpen, graphData }: GraphSidebarProps) {
   const [localGraphData, setLocalGraphData] = useState(graphData);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const loadGraphData = async () => {
       if (isOpen) {
+        setIsLoading(true);
         try {
+          // First try to load from mock-relationships.json
           const response = await fetch('http://localhost:3001/api/chat', {
             method: 'POST',
             headers: {
@@ -28,18 +31,28 @@ export default function GraphSidebar({ isOpen, graphData }: GraphSidebarProps) {
               chatId: 'default-chat'
             }),
           });
+          
+          if (!response.ok) {
+            throw new Error('Failed to load graph data');
+          }
+          
           const data = await response.json();
-          if (data.graphData) {
+          if (data.graphData && Object.keys(data.graphData).length > 0) {
             setLocalGraphData(data.graphData);
+          } else {
+            setLocalGraphData(graphData); // Fallback to props data
           }
         } catch (error) {
           console.error('Error loading graph data:', error);
+          setLocalGraphData(graphData); // Fallback to props data
+        } finally {
+          setIsLoading(false);
         }
       }
     };
 
     loadGraphData();
-  }, [isOpen]);
+  }, [isOpen, graphData]);
   return (
     <div className={`${isOpen ? 'w-[600px]' : 'w-0'} bg-gray-50 border-l border-gray-200 transition-all duration-300 overflow-hidden`}>
       <div className="h-full w-full flex flex-col">
@@ -50,7 +63,13 @@ export default function GraphSidebar({ isOpen, graphData }: GraphSidebarProps) {
           {isOpen && (
             <div className="absolute inset-0 transition-all duration-300 opacity-0 animate-fade-in">
               <div className="w-full h-full overflow-hidden">
-                <GraphView graphData={localGraphData} isSidebar={true} />
+                {isLoading ? (
+                  <div className="flex items-center justify-center h-full">
+                    <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900"></div>
+                  </div>
+                ) : (
+                  <GraphView graphData={localGraphData} isSidebar={true} />
+                )}
               </div>
             </div>
           )}

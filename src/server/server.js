@@ -17,6 +17,8 @@ const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 const fs = require('fs').promises;
 const path = require('path');
 
+let graphData = {};
+
 // Firebase setup would go here:
 // import { initializeApp } from 'firebase/app';
 // import { getFirestore, collection, doc, setDoc, getDoc } from 'firebase/firestore';
