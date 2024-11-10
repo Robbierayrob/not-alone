@@ -48,17 +48,17 @@ export default function NodeDetailsModal({ isOpen, onClose, nodeData }: NodeDeta
   return (
     <>
       {isOpen && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center">
+        <div className="fixed inset-0 z-[9999] flex items-center justify-center">
           <div 
-            className="fixed inset-0 bg-black/60 backdrop-blur-md transition-opacity duration-300 ease-in-out"
+            className="fixed inset-0 bg-black/60 backdrop-blur-lg transition-opacity duration-300 ease-in-out"
           />
           <div
             ref={modalRef}
-            className="relative w-[90%] max-w-[500px] max-h-[85vh] bg-white rounded-2xl shadow-2xl overflow-hidden transform transition-all duration-300 ease-in-out"
+            className="relative w-[90%] max-w-[450px] max-h-[80vh] bg-white rounded-2xl shadow-2xl overflow-y-auto transform transition-all duration-300 ease-in-out"
           >
             <button
               onClick={onClose}
-              className="absolute right-4 top-4 p-2 rounded-full bg-white shadow-lg hover:bg-gray-100 transition-colors duration-200 z-[101] focus:outline-none focus:ring-2 focus:ring-primary"
+              className="fixed right-4 top-4 p-2 rounded-full bg-white shadow-lg hover:bg-gray-100 transition-colors duration-200 z-[10000] focus:outline-none focus:ring-2 focus:ring-primary"
               aria-label="Close modal"
             >
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
@@ -66,8 +66,8 @@ export default function NodeDetailsModal({ isOpen, onClose, nodeData }: NodeDeta
               </svg>
             </button>
 
-            <div className="p-6 space-y-6">
-              <div className="flex items-center gap-4">
+            <div className="p-4 space-y-4">
+              <div className="flex items-center gap-3">
                 <div 
                   className={`w-14 h-14 rounded-full flex items-center justify-center text-white text-xl font-semibold shadow-lg transition-transform duration-300 ${
                     nodeData.gender === 'male' ? 'bg-blue-500' : 'bg-pink-500'
@@ -81,15 +81,15 @@ export default function NodeDetailsModal({ isOpen, onClose, nodeData }: NodeDeta
                 </div>
               </div>
 
-              <div className="space-y-6">
-                <div className="bg-gray-50 rounded-xl p-4">
+              <div className="space-y-3">
+                <div className="bg-gray-50 rounded-lg p-3">
                   <h3 className="font-semibold text-gray-800 mb-2">Summary</h3>
                   <p className="text-gray-600 leading-relaxed">{nodeData.summary}</p>
                 </div>
 
                 {nodeData.details && (
-                  <div className="space-y-6">
-                    <div className="bg-gray-50 rounded-xl p-4">
+                  <div className="space-y-3">
+                    <div className="bg-gray-50 rounded-lg p-3">
                       <h3 className="font-semibold text-gray-800 mb-2">Occupation</h3>
                       <p className="text-gray-600">{nodeData.details.occupation}</p>
                     </div>
