@@ -35,10 +35,12 @@ export default function SuggestionCards({
 
   useEffect(() => {
     // Simulate API delay
-    setTimeout(() => {
+    const timer = setTimeout(() => {
       setSuggestions(mockSuggestions);
       setIsLoading(false);
     }, 500);
+
+    return () => clearTimeout(timer);
     
     // Commented out API call for future reference
     /*
@@ -72,7 +74,7 @@ export default function SuggestionCards({
     onSuggestionClick(text);
   };
 
-  if (!isVisible || isGraphViewOpen || isGraphModalOpen) return null;
+  if (!isVisible) return null;
 
   const suggestionContent = (
     <div className="fixed w-full max-w-xl mx-auto bottom-32 left-1/2 transform -translate-x-1/2 z-50">

@@ -280,9 +280,7 @@ export default function DairyPage() {
           />
           {showSuggestions && messages.length === 0 && (
             <SuggestionCards 
-              isVisible={true}
-              isGraphViewOpen={isGraphViewOpen}
-              isGraphModalOpen={isGraphModalOpen}
+              isVisible={!isGraphViewOpen && !isGraphModalOpen}
               onSuggestionClick={(text) => {
                 const userMessage = { role: 'user', content: text };
                 setMessages(prev => [...prev, userMessage]);

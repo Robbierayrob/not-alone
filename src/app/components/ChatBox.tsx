@@ -51,7 +51,7 @@ export default function ChatBox({
         ref={messagesContainerRef}
         className="message-container py-4 relative z-[1] flex flex-col h-[calc(100vh-180px)] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent hover:scrollbar-thumb-gray-400 transition-colors"
       >
-        <div className="w-full space-y-4 px-4">
+        <div className="w-full flex flex-col space-y-4 px-4">
           {messages.map((message, index) => (
             <div 
               key={index} 
