@@ -258,46 +258,15 @@ export default function DairyPage() {
           <div className="pulsating-circle"></div>
         </div>
 
-        <ChatBox
-          messages={messages}
-          input={input}
-          isLoading={isLoading}
-          onInputChange={setInput}
-          onSubmit={handleSubmit}
-        />
-        {showSuggestions && messages.length === 0 && (
-          <SuggestionCards 
-            isVisible={true}
-            onSuggestionClick={(text) => {
-              const userMessage = { role: 'user', content: text };
-              setMessages(prev => [...prev, userMessage]);
-              setShowSuggestions(false);
-              setIsLoading(true);
-
-              fetch('http://localhost:3001/api/chat', {
-                method: 'POST',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                  message: text,
-                  chatId: currentChatId
-                }),
-              })
-              .then(response => response.json())
-              .then(data => {
-                if (data.message) {
-                  setMessages(prev => [...prev, { role: 'assistant', content: data.message }]);
-                  if (data.graphData) {
-                    setGraphData(data.graphData);
-                  }
-                }
-              })
-              .catch(error => console.error('Error:', error))
-              .finally(() => setIsLoading(false));
-            }} 
+        <div className="flex-1 relative">
+          <ChatBox
+            messages={messages}
+            input={input}
+            isLoading={isLoading}
+            onInputChange={setInput}
+            onSubmit={handleSubmit}
           />
-        )}
+        </div>
 
         <GraphSidebar isOpen={isGraphViewOpen} graphData={graphData} />
         <GraphModal 
