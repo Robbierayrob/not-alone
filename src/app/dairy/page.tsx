@@ -14,6 +14,7 @@ import SuggestionCards from '../components/SuggestionCards';
 export default function DairyPage() {
   // State management
   const [messages, setMessages] = useState<Array<{role: string, content: string}>>([]);
+  const [showSuggestions, setShowSuggestions] = useState(true);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -137,6 +138,7 @@ export default function DairyPage() {
 
     const userMessage = { role: 'user', content: input };
     setMessages(prev => [...prev, userMessage]);
+    setShowSuggestions(false);
     setInput('');
     setIsLoading(true);
 
@@ -263,9 +265,12 @@ export default function DairyPage() {
           onInputChange={setInput}
           onSubmit={handleSubmit}
         />
-        <SuggestionCards onSuggestionClick={(text) => {
+        <SuggestionCards 
+          isVisible={showSuggestions && messages.length === 0}
+          onSuggestionClick={(text) => {
           const userMessage = { role: 'user', content: text };
           setMessages(prev => [...prev, userMessage]);
+          setShowSuggestions(false);
           setIsLoading(true);
 
           fetch('http://localhost:3001/api/chat', {
