@@ -39,7 +39,7 @@ export default function ChatBox({
     if (messagesEndRef.current) {
       messagesEndRef.current.scrollIntoView({ 
         behavior: 'smooth', 
-        block: 'end',
+        block: 'start',
         inline: 'nearest'
       });
     }
