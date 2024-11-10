@@ -216,11 +216,18 @@ export default function DairyPage() {
         </div>
         {/* Floating sidebar toggles */}
         <div className={`fixed top-20 z-50 flex flex-col gap-2 transition-all duration-300 ${
-          isSidebarOpen ? 'left-[268px]' : 'left-4'
+          isSidebarOpen && isProfileSidebarOpen ? 'left-[532px]' : 
+          isSidebarOpen ? 'left-[268px]' : 
+          isProfileSidebarOpen ? 'left-[268px]' : 
+          'left-4'
         }`}>
           <button 
             onClick={toggleSidebar}
-            className={`p-2 rounded-lg bg-white shadow-md hover:bg-gray-100 transition-all duration-300`}
+            className={`p-2 rounded-lg shadow-md transition-all duration-300 ${
+              isSidebarOpen 
+                ? 'bg-primary text-white hover:bg-primary/90 border-2 border-white' 
+                : 'bg-white hover:bg-gray-100 border-2 border-transparent'
+            }`}
             aria-label={isSidebarOpen ? "Close chat history" : "Open chat history"}
           >
           {isSidebarOpen ? (
@@ -235,7 +242,11 @@ export default function DairyPage() {
           </button>
           <button 
             onClick={() => setIsProfileSidebarOpen(!isProfileSidebarOpen)}
-            className={`p-2 rounded-lg bg-white shadow-md hover:bg-gray-100 transition-all duration-300`}
+            className={`p-2 rounded-lg shadow-md transition-all duration-300 ${
+              isProfileSidebarOpen 
+                ? 'bg-primary text-white hover:bg-primary/90 border-2 border-white' 
+                : 'bg-white hover:bg-gray-100 border-2 border-transparent'
+            }`}
             aria-label={isProfileSidebarOpen ? "Close profiles" : "Open profiles"}
           >
             {isProfileSidebarOpen ? (
