@@ -23,7 +23,8 @@ export default function SuggestionCards({
   isVisible = true,
   isGraphViewOpen = false,
   isGraphModalOpen = false,
-  isSidebarOpen = false
+  isSidebarOpen = false,
+  isProfileSidebarOpen = false
 }: SuggestionCardsProps) {
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [isLoading, setIsLoading] = useState(true);
