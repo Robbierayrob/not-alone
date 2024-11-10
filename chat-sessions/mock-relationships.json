@@ -6,14 +6,43 @@
       "val": 20,
       "gender": "male",
       "age": 28,
-      "summary": "Software engineer, outgoing personality",
+      "summary": "Software engineer with a passion for technology and outdoor activities",
       "details": {
-        "occupation": "Software Engineer",
-        "interests": ["coding", "hiking", "photography"],
+        "occupation": "Senior Software Engineer",
+        "interests": ["coding", "hiking", "photography", "rock climbing"],
         "personality": "Extroverted, friendly, ambitious",
-        "background": "Born in Seattle, moved to current city for work",
-        "emotionalState": "Generally happy and content",
-        "lastUpdated": "2024-01-01"
+        "background": "Born in Seattle, graduated from MIT, moved to San Francisco for work",
+        "emotionalState": "Generally happy and content"
+      }
+    },
+    {
+      "id": "mary",
+      "name": "Mary Johnson",
+      "val": 18,
+      "gender": "female",
+      "age": 26,
+      "summary": "UX designer who loves creating intuitive user experiences",
+      "details": {
+        "occupation": "Senior UX Designer",
+        "interests": ["design", "art", "yoga", "travel"],
+        "personality": "Creative, empathetic, detail-oriented",
+        "background": "Art school graduate, worked at several tech startups",
+        "emotionalState": "Excited about new projects"
+      }
+    },
+    {
+      "id": "david",
+      "name": "David Chen",
+      "val": 15,
+      "gender": "male",
+      "age": 30,
+      "summary": "Product manager with strong technical background",
+      "details": {
+        "occupation": "Product Manager",
+        "interests": ["technology", "basketball", "cooking", "reading"],
+        "personality": "Analytical, strategic, team-oriented",
+        "background": "Former developer turned PM, MBA from Stanford",
+        "emotionalState": "Focused and motivated"
       }
     }
   ],
@@ -31,17 +60,56 @@
         "interactions": [
           {
             "date": "2024-01-01",
-            "type": "conflict",
-            "description": "Had a disagreement about future plans",
-            "resolution": "Resolved through open communication"
+            "type": "milestone",
+            "description": "Started dating after meeting at a tech conference",
+            "impact": "Very positive"
           }
-        ],
-        "lastUpdated": "2024-01-01"
+        ]
+      }
+    },
+    {
+      "source": "john",
+      "target": "david",
+      "value": 1,
+      "label": "colleagues",
+      "details": {
+        "relationshipType": "professional",
+        "duration": "2 years",
+        "status": "active",
+        "sentiment": "positive",
+        "interactions": [
+          {
+            "date": "2024-01-05",
+            "type": "collaboration",
+            "description": "Working together on new product feature",
+            "impact": "Strengthened working relationship"
+          }
+        ]
+      }
+    },
+    {
+      "source": "mary",
+      "target": "david",
+      "value": 1,
+      "label": "project partners",
+      "details": {
+        "relationshipType": "professional",
+        "duration": "1 year",
+        "status": "active",
+        "sentiment": "positive",
+        "interactions": [
+          {
+            "date": "2024-01-03",
+            "type": "project",
+            "description": "Collaborating on UX improvements",
+            "impact": "Successful project delivery"
+          }
+        ]
       }
     }
   ],
   "metadata": {
-    "lastUpdated": "2024-01-01",
+    "lastUpdated": "2024-01-10",
     "version": "1.0"
   }
 }

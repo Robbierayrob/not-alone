@@ -27,8 +27,11 @@ export default function NodeDetailsModal({ isOpen, onClose, nodeData }: NodeDeta
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center">
       <div 
-        className="fixed inset-0 bg-black/50 backdrop-blur-md"
-        onClick={onClose}
+        className="fixed inset-0 bg-black/50 backdrop-blur-sm"
+        onClick={(e) => {
+          e.stopPropagation();
+          onClose();
+        }}
       />
       <div 
         ref={modalRef}
