@@ -25,42 +25,53 @@ export default function ChatBox({
   const messagesContainerRef = useRef<HTMLDivElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  const scrollToBottom = useCallback((behavior: ScrollBehavior = 'auto') => {
-    if (messagesContainerRef.current) {
-      messagesContainerRef.current.scrollTo({
-        top: messagesContainerRef.current.scrollHeight,
-        behavior: behavior
-      });
+  const scrollToNewMessage = useCallback(() => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
   }, []);
 
   useEffect(() => {
-    scrollToBottom('smooth');
-  }, [messages, scrollToBottom]);
+    scrollToNewMessage();
+  }, [messages, scrollToNewMessage]);
 
   return (
     <div className="flex flex-col h-full">
       <div 
         ref={messagesContainerRef}
-        className="flex-1 overflow-y-auto scrollbar-hide px-4 md:px-8 py-6 relative z-[1] flex flex-col-reverse"
+        className="flex-1 overflow-y-auto scrollbar-hide px-4 md:px-8 py-6 relative z-[1]"
       >
-        <div className="w-full max-w-2xl mx-auto">
+        <div className="w-full max-w-4xl mx-auto space-y-6">
           {messages.map((message, index) => (
-            <div key={index} className={`mb-8 ${message.role === 'user' ? 'text-right' : ''}`}>
-              <div className={`inline-block p-4 rounded-lg max-w-[85%] shadow-sm ${
-                message.role === 'user' 
-                  ? 'bg-primary text-white ml-auto' 
-                  : 'bg-gray-100 mr-auto'
-              }`}>
-                <span className={message.role === 'assistant' ? 'typing-animation' : ''}>
+            <div 
+              key={index} 
+              className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
+            >
+              <div 
+                className={`
+                  relative flex flex-col
+                  max-w-[85%] md:max-w-[75%]
+                  p-6 rounded-2xl shadow-md
+                  transition-all duration-200
+                  ${message.role === 'user' 
+                    ? 'bg-primary text-white ml-auto rounded-tr-none' 
+                    : 'bg-white border border-gray-100 mr-auto rounded-tl-none'
+                  }
+                `}
+              >
+                <div className={`
+                  prose prose-sm md:prose-base max-w-none
+                  ${message.role === 'user' ? 'text-white prose-invert' : 'text-gray-800'}
+                  ${message.role === 'assistant' ? 'typing-animation' : ''}
+                `}>
                   <ReactMarkdown>
                     {message.content}
                   </ReactMarkdown>
-                </span>
+                </div>
               </div>
             </div>
           ))}
-          <div ref={messagesEndRef} />
+          <div ref={messagesEndRef} className="h-1" />
         </div>
       </div>
 
