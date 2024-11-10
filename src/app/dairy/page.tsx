@@ -201,7 +201,9 @@ export default function DairyPage() {
       />
 
       {/* Main chat area */}
-      <div className="flex-1 flex flex-col relative">
+      <div className={`flex-1 flex flex-col relative transition-all duration-300 ${
+        isGraphViewOpen ? 'mr-[600px]' : ''
+      }`}>
         {/* Graph View Toggle Button */}
         <div className="fixed right-4 top-20 flex flex-col gap-2 z-50">
           <button

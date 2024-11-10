@@ -55,7 +55,7 @@ export default function ChatBox({
           {messages.map((message, index) => (
             <div 
               key={index} 
-              className={`message flex max-w-[85%] animate-slide-in ${
+              className={`message inline-flex max-w-[85%] animate-slide-in ${
                 message.role === 'user' 
                   ? 'user-message ml-auto bg-primary text-white rounded-2xl rounded-tr-sm px-4 py-2 shadow-sm' 
                   : 'assistant-message bg-gray-100 rounded-2xl rounded-tl-sm px-4 py-2 shadow-sm'
