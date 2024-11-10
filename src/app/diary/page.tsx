@@ -280,8 +280,9 @@ export default function DiaryPage() {
               onInputChange={setInput}
               onSubmit={handleSubmit}
               isSidebarOpen={isSidebarOpen}
-              isProfileSidebarOpen={isProfileSidebarOpen}
-            />
+              isProfileSidebarOpen={isProfileSidebarOpen} isGraphViewOpen={false} onSuggestionClick={function (text: string): void {
+                throw new Error('Function not implemented.');
+              } }            />
             
             {messages.length === 0 && (
               <WelcomeMessage 
