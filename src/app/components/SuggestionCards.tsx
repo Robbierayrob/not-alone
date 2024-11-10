@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from 'react';
-import Portal from './Portal';
+import { createPortal } from 'react-dom';
 
 interface Suggestion {
   id: string;
@@ -67,9 +67,8 @@ export default function SuggestionCards({ onSuggestionClick, isVisible = true }:
 
   if (!isVisible) return null;
 
-  return (
-    <Portal>
-      <div className="fixed w-full max-w-xl mx-auto bottom-32 left-1/2 transform -translate-x-1/2 z-50">
+  const suggestionContent = (
+    <div className="fixed w-full max-w-xl mx-auto bottom-32 left-1/2 transform -translate-x-1/2 z-50">
       <div className="grid grid-cols-2 gap-4 px-4">
         {suggestions.map((suggestion) => (
           <button
@@ -91,6 +90,10 @@ export default function SuggestionCards({ onSuggestionClick, isVisible = true }:
           </button>
         ))}
       </div>
-    </Portal>
+    </div>
   );
+
+  return typeof document !== 'undefined' 
+    ? createPortal(suggestionContent, document.body) 
+    : null;
 }
