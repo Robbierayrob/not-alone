@@ -28,19 +28,6 @@ export default function NodeDetailsModal({ isOpen, onClose, nodeData }: NodeDeta
   }, [isOpen, onClose]);
 
   useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
-        onClose();
-      }
-    };
-
-    if (isOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
   }, [isOpen, onClose]);
 
   if (!isOpen || !nodeData) return null;
@@ -48,13 +35,14 @@ export default function NodeDetailsModal({ isOpen, onClose, nodeData }: NodeDeta
   return (
     <>
       {isOpen && (
-        <div className="fixed inset-0 z-[9999] flex items-center justify-center">
+        <div className="fixed inset-0 z-[99999] flex items-center justify-center">
           <div 
+            onClick={onClose}
             className="fixed inset-0 bg-black/60 backdrop-blur-lg transition-opacity duration-300 ease-in-out"
           />
           <div
             ref={modalRef}
-            className="relative w-[90%] max-w-[450px] max-h-[80vh] bg-white rounded-2xl shadow-2xl overflow-y-auto transform transition-all duration-300 ease-in-out"
+            className="relative w-[90%] max-w-[450px] max-h-[80vh] bg-white rounded-2xl shadow-2xl overflow-y-auto transform transition-all duration-300 ease-in-out z-[99999]"
           >
             <button
               onClick={onClose}
