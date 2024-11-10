@@ -12,8 +12,6 @@ interface Suggestion {
 interface SuggestionCardsProps {
   onSuggestionClick: (text: string) => void;
   isVisible?: boolean;
-  isGraphViewOpen?: boolean;
-  isGraphModalOpen?: boolean;
   isSidebarOpen?: boolean;
   isProfileSidebarOpen?: boolean;
 }
@@ -21,8 +19,6 @@ interface SuggestionCardsProps {
 export default function SuggestionCards({ 
   onSuggestionClick, 
   isVisible = true,
-  isGraphViewOpen = false,
-  isGraphModalOpen = false,
   isSidebarOpen = false,
   isProfileSidebarOpen = false
 }: SuggestionCardsProps) {
