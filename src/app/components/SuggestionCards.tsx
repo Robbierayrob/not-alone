@@ -13,13 +13,15 @@ interface SuggestionCardsProps {
   isVisible?: boolean;
   isSidebarOpen?: boolean;
   isProfileSidebarOpen?: boolean;
+  isGraphViewOpen?: boolean;
 }
 
 export default function SuggestionCards({ 
   onSuggestionClick, 
   isVisible = true,
   isSidebarOpen = false,
-  isProfileSidebarOpen = false
+  isProfileSidebarOpen = false,
+  isGraphViewOpen = false
 }: SuggestionCardsProps) {
   const [suggestions, setSuggestions] = useState<Suggestion[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -81,6 +83,7 @@ export default function SuggestionCards({
         isSidebarOpen || isProfileSidebarOpen ? 'ml-[134px]' : 
         'ml-0'
       }
+      ${isGraphViewOpen ? 'mr-[300px]' : ''}
       left-1/2 transform -translate-x-1/2 z-50`}>
       <div className="grid grid-cols-2 gap-4 px-4 animate-suggestions-appear">
         {suggestions.map((suggestion) => (

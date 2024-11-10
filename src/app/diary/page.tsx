@@ -291,10 +291,9 @@ export default function DiaryPage() {
                 />
                 <SuggestionCards 
                   isVisible={true}
-                  isGraphViewOpen={isGraphViewOpen}
-                  isGraphModalOpen={isGraphModalOpen}
                   isSidebarOpen={isSidebarOpen}
                   isProfileSidebarOpen={isProfileSidebarOpen}
+                  isGraphViewOpen={isGraphViewOpen}
                   onSuggestionClick={(text) => {
                     const userMessage = { role: 'user', content: text };
                     setMessages(prev => [...prev, userMessage]);
