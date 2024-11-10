@@ -54,12 +54,12 @@ export default function GraphSidebar({ isOpen, graphData }: GraphSidebarProps) {
     loadGraphData();
   }, [isOpen, graphData]);
   return (
-    <div className={`fixed right-0 top-0 h-full ${isOpen ? 'w-[600px]' : 'w-0'} bg-gray-50 border-l border-gray-200 transition-all duration-300 overflow-hidden z-40`}>
-      <div className="h-full w-full flex flex-col">
+    <div className={`fixed right-0 top-0 h-full ${isOpen ? 'w-[600px]' : 'w-0'} bg-gray-50 border-l border-gray-200 transition-all duration-300 overflow-hidden z-40 flex flex-col`}>
+      <div className="h-full w-full flex flex-col overflow-hidden">
         <div className="p-4 border-b border-gray-200">
           <h2 className="text-xl font-semibold text-gray-800">Relationships</h2>
         </div>
-        <div className="flex-1 relative">
+        <div className="flex-1 relative overflow-hidden">
           {isOpen && (
             <div className="absolute inset-0 transition-all duration-300 opacity-0 animate-fade-in">
               <div className="w-full h-full overflow-hidden">
