@@ -2,6 +2,7 @@
 
 import { FormEvent, useRef, useEffect, useState, useCallback } from 'react';
 import WelcomeMessage from './WelcomeMessage';
+import SuggestionCards from './SuggestionCards';
 import ReactMarkdown from 'react-markdown';
 import ProfileSettingsModal from './ProfileSettingsModal';
 import SupportModal from './SupportModal';
@@ -14,6 +15,8 @@ interface ChatBoxProps {
   onSubmit: (e: FormEvent) => void;
   isSidebarOpen: boolean;
   isProfileSidebarOpen: boolean;
+  isGraphViewOpen: boolean;
+  onSuggestionClick: (text: string) => void;
 }
 
 export default function ChatBox({ 
@@ -21,7 +24,11 @@ export default function ChatBox({
   input,
   isLoading,
   onInputChange,
-  onSubmit
+  onSubmit,
+  isSidebarOpen,
+  isProfileSidebarOpen,
+  isGraphViewOpen,
+  onSuggestionClick
 }: ChatBoxProps) {
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [isSupportModalOpen, setIsSupportModalOpen] = useState(false);
@@ -54,6 +61,25 @@ export default function ChatBox({
         ref={messagesContainerRef}
         className="message-container py-4 relative z-[1] flex flex-col-reverse justify-start h-[calc(100vh-180px)] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent hover:scrollbar-thumb-gray-400 transition-colors"
       >
+        {messages.length === 0 && (
+          <div className="absolute inset-0 flex flex-col">
+            <WelcomeMessage 
+              isSidebarOpen={isSidebarOpen}
+              isProfileSidebarOpen={isProfileSidebarOpen}
+              isGraphViewOpen={isGraphViewOpen}
+              onSuggestionClick={onSuggestionClick}
+            />
+            <div className="absolute bottom-20 left-0 right-0">
+              <SuggestionCards
+                isVisible={true}
+                isSidebarOpen={isSidebarOpen}
+                isProfileSidebarOpen={isProfileSidebarOpen}
+                isGraphViewOpen={isGraphViewOpen}
+                onSuggestionClick={onSuggestionClick}
+              />
+            </div>
+          </div>
+        )}
         <div className="w-full flex flex-col-reverse space-y-reverse space-y-4 px-4">
           {messages.map((message, index) => (
             <div 
