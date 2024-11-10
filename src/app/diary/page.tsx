@@ -184,7 +184,8 @@ export default function DiaryPage() {
   }
 
   return (
-    <div className="h-screen flex relative">
+    <main>
+      <div className="h-screen flex relative">
       <ProfileSidebar
         isOpen={isProfileSidebarOpen}
         profiles={graphData.nodes}
@@ -326,6 +327,7 @@ export default function DiaryPage() {
           graphData={graphData}
         />
       </div>
-    </div>
+      </div>
+    </main>
   );
 }
