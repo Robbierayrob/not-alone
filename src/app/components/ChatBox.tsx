@@ -27,8 +27,18 @@ export default function ChatBox({
 
   const scrollToNewMessage = useCallback(() => {
     if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      messagesEndRef.current.scrollIntoView({ 
+        behavior: 'smooth', 
+        block: 'end',
+        inline: 'nearest'
+      });
     }
+  }, []);
+
+  // Scroll to bottom on initial load
+  useEffect(() => {
+    const timer = setTimeout(scrollToNewMessage, 100);
+    return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
@@ -39,16 +49,16 @@ export default function ChatBox({
     <div className="flex flex-col h-full">
       <div 
         ref={messagesContainerRef}
-        className="message-container py-4 relative z-[1] flex flex-col-reverse"
+        className="message-container py-4 relative z-[1] flex flex-col h-[calc(100vh-180px)] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent hover:scrollbar-thumb-gray-400 transition-colors"
       >
-        <div className="w-full space-y-2">
+        <div className="w-full space-y-4 px-4">
           {messages.map((message, index) => (
             <div 
               key={index} 
-              className={`message inline-block max-w-[85%] ${
+              className={`message flex max-w-[85%] animate-slide-in ${
                 message.role === 'user' 
-                  ? 'user-message ml-auto bg-primary text-white rounded-2xl rounded-tr-sm px-4 py-2' 
-                  : 'assistant-message bg-gray-100 rounded-2xl rounded-tl-sm px-4 py-2'
+                  ? 'user-message ml-auto bg-primary text-white rounded-2xl rounded-tr-sm px-4 py-2 shadow-sm' 
+                  : 'assistant-message bg-gray-100 rounded-2xl rounded-tl-sm px-4 py-2 shadow-sm'
               }`}
             >
               <div className={`prose prose-sm md:prose-base max-w-none break-words ${
