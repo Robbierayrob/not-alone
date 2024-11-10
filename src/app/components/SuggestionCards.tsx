@@ -60,25 +60,29 @@ export default function SuggestionCards({ onSuggestionClick }: SuggestionCardsPr
   }
 
   return (
-    <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 px-4 md:px-8">
-      {suggestions.map((suggestion) => (
-        <button
-          key={suggestion.id}
-          onClick={() => onSuggestionClick(suggestion.text)}
-          className="p-4 bg-white bg-opacity-80 rounded-lg shadow-sm hover:shadow-md 
-                     transition-all duration-300 text-left border border-gray-100 
-                     hover:border-primary/20 hover:bg-gray-50 group"
-        >
-          <div className="flex items-start space-x-3">
-            <span className="text-gray-400 group-hover:text-primary transition-colors">
+    <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-full max-w-2xl">
+      <div className="grid grid-cols-2 gap-3 px-4">
+        {suggestions.map((suggestion) => (
+          <button
+            key={suggestion.id}
+            onClick={() => {
+              onSuggestionClick(suggestion.text);
+              // Simulate form submission
+              const formEvent = new Event('submit', { bubbles: true });
+              document.querySelector('form')?.dispatchEvent(formEvent);
+            }}
+            className="feature-card group p-3 flex items-center space-x-3 hover:scale-102 
+                       transform transition-all duration-300 cursor-pointer"
+          >
+            <span className="feature-icon-wrapper text-xl min-w-[2.5rem]">
               {suggestion.icon}
             </span>
-            <span className="text-sm text-gray-600 group-hover:text-gray-900 transition-colors">
+            <span className="feature-description text-sm font-medium">
               {suggestion.text}
             </span>
-          </div>
-        </button>
-      ))}
+          </button>
+        ))}
+      </div>
     </div>
   );
 }
