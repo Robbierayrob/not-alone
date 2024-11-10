@@ -1,6 +1,8 @@
 "use client";
 
-import { FormEvent, useRef, useEffect } from 'react';
+import { FormEvent, useRef, useEffect, useState } from 'react';
+import ProfileSettingsModal from './ProfileSettingsModal';
+import SupportModal from './SupportModal';
 
 interface ChatBoxProps {
   messages: Array<{role: string, content: string}>;
@@ -10,13 +12,15 @@ interface ChatBoxProps {
   onSubmit: (e: FormEvent) => void;
 }
 
-export default function ChatBox({
+export default function ChatBox({ 
   messages,
   input,
   isLoading,
   onInputChange,
   onSubmit
 }: ChatBoxProps) {
+  const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
+  const [isSupportModalOpen, setIsSupportModalOpen] = useState(false);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -61,6 +65,7 @@ export default function ChatBox({
               <button 
                 type="button"
                 aria-label="Profile settings"
+                onClick={() => setIsProfileModalOpen(true)}
                 className="p-2.5 md:p-3 rounded-lg bg-white shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 hover:border-primary/20 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary/20"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 md:w-7 md:h-7 text-gray-600">
@@ -70,6 +75,7 @@ export default function ChatBox({
               <button 
                 type="button"
                 aria-label="Get support"
+                onClick={() => setIsSupportModalOpen(true)}
                 className="p-2.5 md:p-3 rounded-lg bg-white shadow-sm hover:shadow-md transition-all duration-300 border border-gray-100 hover:border-primary/20 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-primary/20"
               >
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 md:w-7 md:h-7 text-gray-600">
@@ -96,6 +102,14 @@ export default function ChatBox({
           </form>
         </div>
       </div>
+      <ProfileSettingsModal 
+        isOpen={isProfileModalOpen}
+        onClose={() => setIsProfileModalOpen(false)}
+      />
+      <SupportModal
+        isOpen={isSupportModalOpen}
+        onClose={() => setIsSupportModalOpen(false)}
+      />
     </div>
   );
 }
