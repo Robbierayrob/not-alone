@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState } from 'react';
-import { createPortal } from 'react-dom';
 
 interface Suggestion {
   id: string;
@@ -76,7 +75,7 @@ export default function SuggestionCards({
 
   if (!isVisible) return null;
 
-  const suggestionContent = (
+  return (
     <div className={`fixed w-full max-w-xl mx-auto bottom-32 transition-all duration-300 ease-in-out
       ${isSidebarOpen && isProfileSidebarOpen ? 'ml-[266px]' : 
         isSidebarOpen || isProfileSidebarOpen ? 'ml-[134px]' : 
@@ -107,7 +106,4 @@ export default function SuggestionCards({
     </div>
   );
 
-  return typeof document !== 'undefined' 
-    ? createPortal(suggestionContent, document.body) 
-    : null;
 }
