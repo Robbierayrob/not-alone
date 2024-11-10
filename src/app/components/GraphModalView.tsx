@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
+import NodeDetailsModal from './NodeDetailsModal';
 
 const ForceGraph2D = dynamic(() => import('react-force-graph-2d'), {
   ssr: false
@@ -28,6 +29,7 @@ interface GraphModalViewProps {
 export default function GraphModalView({ graphData }: GraphModalViewProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [dimensions, setDimensions] = useState({ width: 800, height: 600 });
+  const [selectedNode, setSelectedNode] = useState<any>(null);
 
   useEffect(() => {
     const updateDimensions = () => {
@@ -46,6 +48,11 @@ export default function GraphModalView({ graphData }: GraphModalViewProps) {
 
   return (
     <div ref={containerRef} className="w-full h-full bg-white relative flex items-center justify-center">
+      <NodeDetailsModal 
+        isOpen={!!selectedNode}
+        onClose={() => setSelectedNode(null)}
+        nodeData={selectedNode}
+      />
       {typeof window !== 'undefined' && <ForceGraph2D
         graphData={graphData}
         width={dimensions.width}
@@ -58,6 +65,7 @@ export default function GraphModalView({ graphData }: GraphModalViewProps) {
         linkDirectionalParticleSpeed={0.005}
         centerAt={{ x: 0, y: 0 }}
         zoom={1.5}
+        onNodeClick={(node: any) => setSelectedNode(node)}
         nodeCanvasObject={(node: any, ctx, globalScale) => {
           const label = node.name;
           const fontSize = 14/globalScale;
