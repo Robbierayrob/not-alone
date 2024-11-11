@@ -110,6 +110,15 @@ export default function ChatBox({
               </div>
             );
           })}
+          {isLoading && (
+            <div className="message assistant-message inline-flex animate-slide-in">
+              <div className="typing-indicator">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 
