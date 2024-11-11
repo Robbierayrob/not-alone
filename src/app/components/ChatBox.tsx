@@ -58,11 +58,11 @@ export default function ChatBox({
         className="message-container py-4 relative z-[1] flex flex-col h-[calc(100vh-180px)] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent hover:scrollbar-thumb-gray-400 transition-colors mx-auto w-full max-w-5xl"
       >
         {messages.length === 0 && (
-          <div className={`absolute inset-0 flex items-center justify-center
-            ${isSidebarOpen ? 'ml-[280px]' : ''} 
-            ${isProfileSidebarOpen ? 'mr-[280px]' : ''} 
-            ${isGraphViewOpen ? 'mr-[50%]' : ''}`}>
-            <div className="w-full max-w-2xl px-6 md:px-12 transition-all duration-300">
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className={`w-full max-w-2xl px-6 md:px-12 transition-all duration-300
+              ${isSidebarOpen ? 'transform -translate-x-[140px]' : ''} 
+              ${isProfileSidebarOpen ? 'transform translate-x-[-140px]' : ''} 
+              ${isGraphViewOpen ? 'transform translate-x-[-25%]' : ''}`}>
               <WelcomeMessage 
                 isSidebarOpen={isSidebarOpen}
                 isProfileSidebarOpen={isProfileSidebarOpen}
