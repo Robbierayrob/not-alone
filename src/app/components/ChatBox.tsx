@@ -37,18 +37,22 @@ export default function ChatBox({
   const prevMessagesLengthRef = useRef(messages.length);
 
   useEffect(() => {
-    if (messages.length > prevMessagesLengthRef.current && lastMessageRef.current) {
+    if (messages.length > prevMessagesLengthRef.current && lastMessageRef.current && messagesContainerRef.current) {
       lastMessageRef.current.scrollIntoView({
         behavior: 'smooth',
         block: 'start'
       });
-      // Add a small offset after scrolling to start
+      
+      // Wait for the initial scroll to complete then adjust
       setTimeout(() => {
-        window.scrollBy({
-          top: -40,
-          behavior: 'smooth'
-        });
-      }, 0);
+        if (messagesContainerRef.current) {
+          const currentScroll = messagesContainerRef.current.scrollTop;
+          messagesContainerRef.current.scrollTo({
+            top: currentScroll - 40,
+            behavior: 'smooth'
+          });
+        }
+      }, 100); // Slight delay to ensure initial scroll completes
     }
     prevMessagesLengthRef.current = messages.length;
   }, [messages.length]);
