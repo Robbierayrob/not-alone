@@ -308,9 +308,23 @@ export default function DiaryPage() {
               isSidebarOpen={isSidebarOpen}
               isProfileSidebarOpen={isProfileSidebarOpen}
               isGraphViewOpen={isGraphViewOpen}
-              onSuggestionClick={(text) => {
-                setInput(text);
-                handleSubmit(new Event('submit') as any);
+              onSuggestionClick={async (text) => {
+                const userMessage = { role: 'user', content: text };
+                setMessages(prev => [...prev, userMessage]);
+                setShowSuggestions(false);
+                setIsLoading(true);
+
+                try {
+                  const data = await apiService.sendMessage(text, currentChatId);
+                  if (data.result?.message) {
+                    const aiMessage = data.result.message;
+                    setMessages(prev => [...prev, { role: 'assistant', content: aiMessage }]);
+                  }
+                } catch (error) {
+                  console.error('Error:', error);
+                } finally {
+                  setIsLoading(false);
+                }
               }}
             />
           </div>
