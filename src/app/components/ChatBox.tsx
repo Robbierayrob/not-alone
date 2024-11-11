@@ -58,21 +58,26 @@ export default function ChatBox({
         className="message-container py-4 relative z-[1] flex flex-col h-[calc(100vh-180px)] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent hover:scrollbar-thumb-gray-400 transition-colors mx-auto w-full max-w-5xl"
       >
         {messages.length === 0 && (
-          <div className="absolute inset-0 flex flex-col">
-            <WelcomeMessage 
-              isSidebarOpen={isSidebarOpen}
-              isProfileSidebarOpen={isProfileSidebarOpen}
-              isGraphViewOpen={isGraphViewOpen}
-              onSuggestionClick={onSuggestionClick}
-            />
-            <div className="absolute bottom-40 left-0 right-0">
-              <SuggestionCards
-                isVisible={true}
+          <div className={`absolute inset-0 flex flex-col transition-all duration-300 
+            ${isSidebarOpen ? 'ml-[280px]' : ''} 
+            ${isProfileSidebarOpen ? 'mr-[280px]' : ''} 
+            ${isGraphViewOpen ? 'mr-[50%]' : ''}`}>
+            <div className="flex-1 flex flex-col justify-center">
+              <WelcomeMessage 
                 isSidebarOpen={isSidebarOpen}
                 isProfileSidebarOpen={isProfileSidebarOpen}
                 isGraphViewOpen={isGraphViewOpen}
                 onSuggestionClick={onSuggestionClick}
               />
+              <div className="mt-8">
+                <SuggestionCards
+                  isVisible={true}
+                  isSidebarOpen={isSidebarOpen}
+                  isProfileSidebarOpen={isProfileSidebarOpen}
+                  isGraphViewOpen={isGraphViewOpen}
+                  onSuggestionClick={onSuggestionClick}
+                />
+              </div>
             </div>
           </div>
         )}
