@@ -64,20 +64,21 @@ export default function ChatBox({
               ${isProfileSidebarOpen ? 'mr-[280px]' : ''} 
               ${isGraphViewOpen ? 'mr-[50%]' : ''}`}>
               <div className="max-w-2xl mx-auto">
-              <WelcomeMessage 
-                isSidebarOpen={isSidebarOpen}
-                isProfileSidebarOpen={isProfileSidebarOpen}
-                isGraphViewOpen={isGraphViewOpen}
-                onSuggestionClick={onSuggestionClick}
-              />
-              <div className="mt-12">
-                <SuggestionCards
-                  isVisible={true}
+                <WelcomeMessage 
                   isSidebarOpen={isSidebarOpen}
                   isProfileSidebarOpen={isProfileSidebarOpen}
                   isGraphViewOpen={isGraphViewOpen}
                   onSuggestionClick={onSuggestionClick}
                 />
+                <div className="mt-12">
+                  <SuggestionCards
+                    isVisible={true}
+                    isSidebarOpen={isSidebarOpen}
+                    isProfileSidebarOpen={isProfileSidebarOpen}
+                    isGraphViewOpen={isGraphViewOpen}
+                    onSuggestionClick={onSuggestionClick}
+                  />
+                </div>
               </div>
             </div>
           </div>
