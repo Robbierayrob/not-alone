@@ -48,7 +48,7 @@ export default function ChatBox({
         if (messagesContainerRef.current) {
           const currentScroll = messagesContainerRef.current.scrollTop;
           messagesContainerRef.current.scrollTo({
-            top: currentScroll - 40,
+            top: currentScroll - 1,
             behavior: 'smooth'
           });
         }
