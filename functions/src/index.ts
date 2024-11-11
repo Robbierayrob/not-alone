@@ -25,13 +25,13 @@ const model = vertex.preview.getGenerativeModel({
  *        message
  * @returns {Promise<ChatResponse>} The AI generated response
  */
-export const processChat = functions.https.onCall(async (data: ChatRequest): Promise<ChatResponse> => {
-  const { message } = data;
+export const processChat = functions.https.onCall(async (request: functions.https.CallableRequest): Promise<ChatResponse> => {
+  const { message } = request.data as ChatRequest;
 
   try {
     const result = await model.generateContent(message);
     const response = await result.response;
-    const aiResponse = response.text();
+    const aiResponse = response.candidates[0].content.parts[0].text;
 
     return {
       message: aiResponse,
