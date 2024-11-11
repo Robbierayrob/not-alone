@@ -55,14 +55,14 @@ export default function ChatBox({
     <div className="flex flex-col h-full">
       <div 
         ref={messagesContainerRef}
-        className="message-container py-4 relative z-[1] flex flex-col h-[calc(100vh-180px)] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent hover:scrollbar-thumb-gray-400 transition-colors mx-auto w-full max-w-5xl"
+        className={`message-container py-4 relative z-[1] flex flex-col h-[calc(100vh-180px)] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent hover:scrollbar-thumb-gray-400 transition-colors mx-auto w-full max-w-5xl
+          ${isSidebarOpen ? 'ml-[280px]' : ''} 
+          ${isProfileSidebarOpen ? 'mr-[280px]' : ''} 
+          ${isGraphViewOpen ? 'mr-[50%]' : ''}`}
       >
         {messages.length === 0 && (
           <div className="absolute inset-0 flex items-center justify-center">
-            <div className={`w-full transition-all duration-300 px-6 md:px-12
-              ${isSidebarOpen ? 'ml-[280px]' : ''} 
-              ${isProfileSidebarOpen ? 'mr-[280px]' : ''} 
-              ${isGraphViewOpen ? 'mr-[50%]' : ''}`}>
+            <div className="w-full transition-all duration-300 px-6 md:px-12">
               <div className="max-w-2xl mx-auto">
                 <WelcomeMessage 
                   isSidebarOpen={isSidebarOpen}
