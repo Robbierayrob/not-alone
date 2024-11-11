@@ -55,25 +55,22 @@ export default function ChatBox({
     <div className="flex flex-col h-full">
       <div 
         ref={messagesContainerRef}
-        className={`message-container py-4 relative z-[1] flex flex-col h-[calc(100vh-180px)] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent hover:scrollbar-thumb-gray-400 transition-colors mx-auto w-full max-w-5xl
-          ${isSidebarOpen ? 'pl-[280px]' : ''} 
-          ${isProfileSidebarOpen ? 'pr-[280px]' : ''} 
-          ${isGraphViewOpen ? 'pr-[50%]' : ''}`}
+        className="message-container py-4 relative z-[1] flex flex-col h-[calc(100vh-180px)] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent hover:scrollbar-thumb-gray-400 transition-colors mx-auto w-full max-w-5xl"
       >
         {messages.length === 0 && (
-          <div className={`absolute inset-0 flex flex-col transition-all duration-300 
-            ${isSidebarOpen ? 'ml-[280px]' : ''} 
-            ${isProfileSidebarOpen ? 'mr-[280px]' : ''} 
-            ${isGraphViewOpen ? 'mr-[50%]' : ''}
-            px-4 md:px-8`}>
-            <div className="flex-1 flex flex-col justify-center max-w-3xl mx-auto w-full">
+          <div className="absolute inset-0 flex items-center justify-center">
+            <div className={`w-full transition-all duration-300 px-6 md:px-12
+              ${isSidebarOpen ? 'ml-[280px]' : ''} 
+              ${isProfileSidebarOpen ? 'mr-[280px]' : ''} 
+              ${isGraphViewOpen ? 'mr-[50%]' : ''}`}>
+              <div className="max-w-2xl mx-auto">
               <WelcomeMessage 
                 isSidebarOpen={isSidebarOpen}
                 isProfileSidebarOpen={isProfileSidebarOpen}
                 isGraphViewOpen={isGraphViewOpen}
                 onSuggestionClick={onSuggestionClick}
               />
-              <div className="mt-8">
+              <div className="mt-12">
                 <SuggestionCards
                   isVisible={true}
                   isSidebarOpen={isSidebarOpen}
