@@ -31,8 +31,12 @@ export const processChat = functions.https.onCall(async (request: functions.http
   try {
     const result = await model.generateContent(message);
     const response = await result.response;
-    const aiResponse = response.candidates[0].content.parts[0].text;
+    
+    if (!response.candidates?.[0]?.content?.parts?.[0]?.text) {
+      throw new functions.https.HttpsError('internal', 'Invalid response format from AI model');
+    }
 
+    const aiResponse = response.candidates[0].content.parts[0].text;
     return {
       message: aiResponse,
     };
