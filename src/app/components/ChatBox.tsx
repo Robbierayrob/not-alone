@@ -40,8 +40,15 @@ export default function ChatBox({
     if (messages.length > prevMessagesLengthRef.current && lastMessageRef.current) {
       lastMessageRef.current.scrollIntoView({
         behavior: 'smooth',
-        block: 'center'
+        block: 'start'
       });
+      // Add a small offset after scrolling to start
+      setTimeout(() => {
+        window.scrollBy({
+          top: 20,
+          behavior: 'smooth'
+        });
+      }, 0);
     }
     prevMessagesLengthRef.current = messages.length;
   }, [messages.length]);
