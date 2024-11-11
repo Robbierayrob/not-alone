@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { auth } from '../firebase/config';
 import { signOut } from 'firebase/auth';
 import { createPortal } from 'react-dom';
@@ -12,6 +12,20 @@ interface ProfileSettingsModalProps {
 
 export default function ProfileSettingsModal({ isOpen, onClose }: ProfileSettingsModalProps) {
   const modalRef = useRef<HTMLDivElement>(null);
+  const [photoURL, setPhotoURL] = useState<string | null>(null);
+  const [displayName, setDisplayName] = useState<string | null>(null);
+  const [email, setEmail] = useState<string | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const user = auth.currentUser;
+    if (user) {
+      setPhotoURL(user.photoURL);
+      setDisplayName(user.displayName);
+      setEmail(user.email);
+      setUserId(user.uid);
+    }
+  }, [isOpen]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -50,49 +64,57 @@ export default function ProfileSettingsModal({ isOpen, onClose }: ProfileSetting
         </div>
 
         <div className="space-y-6">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Name</label>
-            <input
-              type="text"
-              className="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary"
-              placeholder="Your name"
-            />
+          {/* Profile Picture */}
+          <div className="flex justify-center">
+            {photoURL ? (
+              <img 
+                src={photoURL} 
+                alt="Profile" 
+                className="w-24 h-24 rounded-full border-4 border-primary shadow-lg"
+              />
+            ) : (
+              <div className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+              </div>
+            )}
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Email</label>
-            <input
-              type="email"
-              className="w-full p-3 border border-gray-200 rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary"
-              placeholder="your@email.com"
-            />
+          {/* Display Name */}
+          <div className="bg-gray-50 p-4 rounded-lg">
+            <label className="block text-sm font-medium text-gray-700 mb-1">Display Name</label>
+            <p className="text-lg font-medium text-gray-900">{displayName || 'Not set'}</p>
           </div>
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Preferences</label>
-            <div className="space-y-2">
-              <label className="flex items-center">
-                <input type="checkbox" className="rounded text-primary focus:ring-primary" />
-                <span className="ml-2 text-sm text-gray-600">Enable notifications</span>
-              </label>
-              <label className="flex items-center">
-                <input type="checkbox" className="rounded text-primary focus:ring-primary" />
-                <span className="ml-2 text-sm text-gray-600">Dark mode</span>
-              </label>
-            </div>
+          {/* Email */}
+          <div className="bg-gray-50 p-4 rounded-lg">
+            <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+            <p className="text-lg font-medium text-gray-900">{email || 'Not set'}</p>
           </div>
 
-          <div className="space-y-3">
-            <button
-              className="w-full bg-primary text-white py-3 rounded-lg hover:bg-opacity-90 transition-colors"
-            >
-              Save Changes
-            </button>
-            
+          {/* User ID */}
+          <div className="bg-gray-50 p-4 rounded-lg">
+            <label className="block text-sm font-medium text-gray-700 mb-1">User ID</label>
+            <p className="text-sm font-mono text-gray-500 break-all">{userId || 'Not available'}</p>
+          </div>
+
+          {/* Account Type */}
+          <div className="bg-gray-50 p-4 rounded-lg">
+            <label className="block text-sm font-medium text-gray-700 mb-1">Account Type</label>
+            <p className="text-lg font-medium text-gray-900">
+              {auth.currentUser?.providerData[0]?.providerId === 'google.com' ? 'Google Account' : 'Email Account'}
+            </p>
+          </div>
+
+          <div className="pt-4">
             <button
               onClick={() => signOut(auth)}
-              className="w-full bg-red-500 text-white py-3 rounded-lg hover:bg-opacity-90 transition-colors"
+              className="w-full bg-red-500 text-white py-3 rounded-lg hover:bg-opacity-90 transition-colors flex items-center justify-center gap-2"
             >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
+              </svg>
               Sign Out
             </button>
           </div>
