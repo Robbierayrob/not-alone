@@ -38,14 +38,23 @@ export default function ChatBox({
   const prevMessagesLengthRef = useRef(messages.length);
 
   useEffect(() => {
-    if (messages.length > prevMessagesLengthRef.current && secondLastMessageRef.current) {
-      // Only scroll for messages longer than 400 characters
+    if (messages.length > prevMessagesLengthRef.current) {
       const lastMessage = messages[messages.length - 1];
-      if (lastMessage && lastMessage.content.length > 400) {
-        secondLastMessageRef.current.scrollIntoView({
+      
+      if (lastMessage.role === 'user' && lastMessageRef.current) {
+        // Always scroll to user messages
+        lastMessageRef.current.scrollIntoView({
           behavior: 'smooth',
-          block: 'start'
+          block: 'end'
         });
+      } else if (lastMessage.role === 'assistant' && secondLastMessageRef.current) {
+        // Only scroll for assistant messages longer than 400 characters
+        if (lastMessage.content.length > 400) {
+          secondLastMessageRef.current.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+        }
       }
     }
     prevMessagesLengthRef.current = messages.length;
