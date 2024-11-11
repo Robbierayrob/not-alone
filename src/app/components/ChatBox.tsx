@@ -37,9 +37,11 @@ export default function ChatBox({
   const prevMessagesLengthRef = useRef(messages.length);
 
   useEffect(() => {
-    if (messages.length > prevMessagesLengthRef.current && messagesContainerRef.current) {
-      const container = messagesContainerRef.current;
-      container.scrollTop = container.scrollHeight;
+    if (messages.length > prevMessagesLengthRef.current && lastMessageRef.current) {
+      lastMessageRef.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'start'
+      });
     }
     prevMessagesLengthRef.current = messages.length;
   }, [messages.length]);
@@ -75,7 +77,8 @@ export default function ChatBox({
             return (
               <>
                 <div 
-                  key={index} 
+                  key={index}
+                  ref={isLastMessage ? lastMessageRef : undefined}
                   className={`message inline-flex max-w-[85%] animate-slide-in ${
                     message.role === 'user' 
                       ? 'user-message ml-auto bg-primary text-white rounded-2xl rounded-tr-sm px-4 py-2 shadow-sm' 
