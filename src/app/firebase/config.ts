@@ -1,7 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth } from "firebase/auth";
-import { getVertexAI, getGenerativeModel } from "firebase/vertexai"; 
+import { getVertexAI, getGenerativeModel } from "@google-cloud/vertexai";
 
 // Validate environment variables
 if (!process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID) {
@@ -29,5 +29,5 @@ console.log('Firebase config:', {
 const app = initializeApp(firebaseConfig);
 const analytics = typeof window !== 'undefined' ? getAnalytics(app) : null;
 export const auth = getAuth(app);
-export const vertexAI = getVertexAI(firebaseApp, { location: 'australia-southeast1' });
+export const vertexAI = getVertexAI(app, { location: 'australia-southeast1' });
 export const model = getGenerativeModel(vertexAI, { model: "gemini-1.5-flash-002" });
