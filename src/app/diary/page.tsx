@@ -205,6 +205,16 @@ export default function DiaryPage() {
     setIsGraphModalOpen(!isGraphModalOpen);
   }
 
+  // If user is not authenticated, only show the auth modal
+  if (!user) {
+    return (
+      <AuthModal 
+        isOpen={isAuthModalOpen} 
+        onClose={() => setIsAuthModalOpen(false)} 
+      />
+    );
+  }
+
   return (
     <main>
       <div className="h-screen flex relative">
