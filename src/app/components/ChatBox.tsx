@@ -34,28 +34,15 @@ export default function ChatBox({
   const [isSupportModalOpen, setIsSupportModalOpen] = useState(false);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
   const lastMessageRef = useRef<HTMLDivElement>(null);
+  const secondLastMessageRef = useRef<HTMLDivElement>(null);
   const prevMessagesLengthRef = useRef(messages.length);
 
   useEffect(() => {
-    if (messages.length > prevMessagesLengthRef.current && lastMessageRef.current) {
-      // First scroll the message into view
-      lastMessageRef.current.scrollIntoView({
+    if (messages.length > prevMessagesLengthRef.current && secondLastMessageRef.current) {
+      secondLastMessageRef.current.scrollIntoView({
         behavior: 'smooth',
-        block: 'start'
+        block: 'end'
       });
-
-      // Then add a small offset after the scroll completes
-      const addOffset = () => {
-        if (lastMessageRef.current) {
-          window.scrollBy({
-            top: 20,
-            behavior: 'smooth'
-          });
-        }
-      };
-
-      // Wait for the initial scroll animation to complete
-      setTimeout(addOffset, 300);
     }
     prevMessagesLengthRef.current = messages.length;
   }, [messages.length]);
@@ -92,7 +79,7 @@ export default function ChatBox({
               <>
                 <div 
                   key={index}
-                  ref={isLastMessage ? lastMessageRef : undefined}
+                  ref={isLastMessage ? lastMessageRef : (index === messages.length - 2 ? secondLastMessageRef : undefined)}
                   className={`message inline-flex max-w-[85%] animate-slide-in ${
                     message.role === 'user' 
                       ? 'user-message ml-auto bg-primary text-white rounded-2xl rounded-tr-sm px-4 py-2 shadow-sm' 
