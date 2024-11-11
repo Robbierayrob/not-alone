@@ -6,7 +6,7 @@ import { VertexAI } from '@google-cloud/vertexai';
 admin.initializeApp();
 
 // Initialize Vertex AI
-const vertex = new VertexAI({project: 'your-project-id', location: 'us-central1'});
+const vertex = new VertexAI({project: process.env.GOOGLE_CLOUD_PROJECT, location: 'us-central1'});
 const model = vertex.preview.getGenerativeModel({
   model: "gemini-1.5-flash-002"
 });
