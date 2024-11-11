@@ -37,11 +37,9 @@ export default function ChatBox({
   const prevMessagesLengthRef = useRef(messages.length);
 
   useEffect(() => {
-    if (messages.length > prevMessagesLengthRef.current) {
-      lastMessageRef.current?.scrollIntoView({
-        behavior: 'smooth',
-        block: 'start',
-      });
+    if (messages.length > prevMessagesLengthRef.current && messagesContainerRef.current) {
+      const container = messagesContainerRef.current;
+      container.scrollTop = container.scrollHeight;
     }
     prevMessagesLengthRef.current = messages.length;
   }, [messages.length]);
@@ -92,13 +90,6 @@ export default function ChatBox({
                     </ReactMarkdown>
                   </div>
                 </div>
-                {isLastMessage && (
-                  <div 
-                    ref={lastMessageRef}
-                    className="h-24"
-                    aria-hidden="true"
-                  />
-                )}
               </>
             );
           })}
