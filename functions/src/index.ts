@@ -21,7 +21,8 @@ const model = vertex.preview.getGenerativeModel({
 
 /**
  * Processes a chat message through Vertex AI and returns the AI response
- * @param {functions.https.CallableRequest<ChatRequest>} data - The request data containing the message
+ * @param {functions.https.CallableRequest<ChatRequest>} data - The request data containing the 
+ *        message
  * @returns {Promise<ChatResponse>} The AI generated response
  */
 export const processChat = functions.https.onCall(async (data: ChatRequest): Promise<ChatResponse> => {
