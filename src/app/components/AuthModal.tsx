@@ -7,7 +7,10 @@ import {
   createUserWithEmailAndPassword, 
   signInWithEmailAndPassword,
   GoogleAuthProvider,
-  signInWithPopup
+  signInWithPopup,
+  setPersistence,
+  browserLocalPersistence,
+  onAuthStateChanged
 } from 'firebase/auth';
 
 interface AuthModalProps {
@@ -27,6 +30,9 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
     setError('');
     
     try {
+      // Set persistence to LOCAL (survives browser restarts)
+      await setPersistence(auth, browserLocalPersistence);
+      
       if (isSignUp) {
         await createUserWithEmailAndPassword(auth, email, password);
         onClose();
@@ -63,6 +69,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
 
   const handleGoogleSignIn = async () => {
     try {
+      await setPersistence(auth, browserLocalPersistence);
       const provider = new GoogleAuthProvider();
       await signInWithPopup(auth, provider);
       onClose();

@@ -20,19 +20,51 @@ export default function DiaryPage() {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [user, setUser] = useState<any>(null);
   
-  // Check authentication status
+  // Check authentication status and session timeout
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
       if (user) {
-        setUser(user);
-        setIsAuthModalOpen(false);
+        // Get the user's last activity timestamp from localStorage
+        const lastActivity = localStorage.getItem('lastActivityTime');
+        const currentTime = Date.now();
+        const SESSION_TIMEOUT = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+
+        if (lastActivity && (currentTime - parseInt(lastActivity)) > SESSION_TIMEOUT) {
+          // Session has expired
+          await auth.signOut();
+          setUser(null);
+          setIsAuthModalOpen(true);
+          localStorage.removeItem('lastActivityTime');
+        } else {
+          // Update last activity time
+          localStorage.setItem('lastActivityTime', currentTime.toString());
+          setUser(user);
+          setIsAuthModalOpen(false);
+        }
       } else {
         setUser(null);
         setIsAuthModalOpen(true);
       }
     });
 
-    return () => unsubscribe();
+    // Update activity timestamp on user interaction
+    const updateActivity = () => {
+      if (auth.currentUser) {
+        localStorage.setItem('lastActivityTime', Date.now().toString());
+      }
+    };
+
+    // Add event listeners for user activity
+    window.addEventListener('mousemove', updateActivity);
+    window.addEventListener('keypress', updateActivity);
+    window.addEventListener('click', updateActivity);
+
+    return () => {
+      unsubscribe();
+      window.removeEventListener('mousemove', updateActivity);
+      window.removeEventListener('keypress', updateActivity);
+      window.removeEventListener('click', updateActivity);
+    };
   }, []);
 
   // State management
