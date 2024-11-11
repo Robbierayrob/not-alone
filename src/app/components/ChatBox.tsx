@@ -77,7 +77,6 @@ export default function ChatBox({
             return (
             <div 
               key={index} 
-              ref={isLastMessage ? lastMessageRef : null}
               className={`message inline-flex max-w-[85%] animate-slide-in ${
                 message.role === 'user' 
                   ? 'user-message ml-auto bg-primary text-white rounded-2xl rounded-tr-sm px-4 py-2 shadow-sm' 
@@ -92,6 +91,13 @@ export default function ChatBox({
                 </ReactMarkdown>
               </div>
             </div>
+            {isLastMessage && (
+              <div 
+                ref={lastMessageRef}
+                className="h-24" // This creates padding space below the last message
+                aria-hidden="true"
+              />
+            )}
           )})}
         </div>
       </div>
