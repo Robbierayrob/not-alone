@@ -8,8 +8,7 @@ import GraphModal from '../components/GraphModal';
 import ChatHistorySidebar from '../components/ChatHistorySidebar';
 import ProfileSidebar from '../components/ProfileSidebar';
 import ChatBox from '../components/ChatBox';
-import SuggestionCards from '../components/SuggestionCards';
-import WelcomeMessage from '../components/WelcomeMessage';
+
 
 
 export default function DiaryPage() {
