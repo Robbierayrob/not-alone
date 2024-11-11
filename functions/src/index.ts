@@ -1,14 +1,26 @@
-import * as functions from "firebase-functions";
 import * as admin from "firebase-admin";
-import { VertexAI } from "@google-cloud/vertexai";
+import { getChats, createNewChat, deleteChat, processChat } from "./chat";
+import { getSuggestions } from "./suggestions";
 
-// Types
-interface ChatMessage {
+// Initialize Firebase Admin
+admin.initializeApp();
+
+// Export all functions
+export {
+  getChats,
+  createNewChat,
+  deleteChat,
+  processChat,
+  getSuggestions
+};
+
+// Export types
+export interface ChatMessage {
   role: string;
   content: string;
 }
 
-interface Chat {
+export interface Chat {
   id: string;
   title: string;
   createdAt: string;
@@ -16,7 +28,7 @@ interface Chat {
   userId?: string;
 }
 
-interface GraphNode {
+export interface GraphNode {
   id: string;
   name: string;
   val: number;
@@ -24,13 +36,13 @@ interface GraphNode {
   details?: Record<string, unknown>;
 }
 
-interface GraphLink {
+export interface GraphLink {
   source: string;
   target: string;
   details?: Record<string, unknown>;
 }
 
-interface GraphData {
+export interface GraphData {
   nodes: GraphNode[];
   links: GraphLink[];
   metadata?: {
@@ -39,21 +51,11 @@ interface GraphData {
   };
 }
 
-interface Suggestion {
+export interface Suggestion {
   id: string;
   text: string;
   icon: string;
 }
-
-// Initialize Firebase Admin and services
-admin.initializeApp();
-const db = admin.firestore();
-
-// Initialize Vertex AI
-const vertexAI = new VertexAI({
-  project: process.env.GOOGLE_CLOUD_PROJECT,
-  location: "us-central1",
-});
 
 /**
  * Retrieves all chats for the authenticated user
