@@ -1,6 +1,14 @@
 import * as functions from 'firebase-functions';
 import { VertexAI } from '@google-cloud/vertexai';
 
+interface ChatRequest {
+  message: string;
+}
+
+interface ChatResponse {
+  message: string;
+}
+
 // Initialize Vertex AI
 const vertex = new VertexAI({
   project: process.env.GOOGLE_CLOUD_PROJECT || 'notalone-de4fc',
@@ -12,9 +20,11 @@ const model = vertex.preview.getGenerativeModel({
 });
 
 /**
- * Simple chat endpoint that processes messages through Vertex AI
+ * Processes a chat message through Vertex AI and returns the AI response
+ * @param {functions.https.CallableRequest<ChatRequest>} data - The request data containing the message
+ * @returns {Promise<ChatResponse>} The AI generated response
  */
-export const processChat = functions.https.onCall(async (data) => {
+export const processChat = functions.https.onCall(async (data: ChatRequest): Promise<ChatResponse> => {
   const { message } = data;
 
   try {
