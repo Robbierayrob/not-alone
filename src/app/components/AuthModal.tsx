@@ -56,7 +56,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
           setError('Password should be at least 6 characters long.');
           break;
         default:
-          setError('Please Sign up, or Please try again.');
+          setError('Incorrect email or password. Please try again or create an account if you're new.');
       }
     }
   };
