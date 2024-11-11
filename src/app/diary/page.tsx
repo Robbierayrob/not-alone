@@ -198,24 +198,25 @@ export default function DiaryPage() {
     setIsLoading(true);
 
     try {
-      const response = await fetch('http://localhost:3001/api/chat', {
+      const response = await fetch('https://processchat-qpos73qvxq-uc.a.run.app', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({
-          message: input,
-          chatId: currentChatId
+          data: {
+            message: input,
+            chatId: currentChatId
+          }
         }),
       });
 
       const data = await response.json();
       
       if (response.ok) {
-        setMessages(prev => [...prev, { role: 'assistant', content: data.message }]);
-        if (data.graphData) {
-          setGraphData(data.graphData);
-        }
+        const aiMessage = data.result.message;
+        setMessages(prev => [...prev, { role: 'assistant', content: aiMessage }]);
+        // Note: graphData handling removed as it's now handled by separate function
       } else {
         console.error('Error:', data.error);
       }
