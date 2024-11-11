@@ -59,7 +59,7 @@ export default function ChatBox({
       >
         {messages.length === 0 && (
           <div className="flex-1 flex items-center justify-center">
-            <div className={`w-full max-w-2xl transition-all duration-300
+            <div className={`w-full max-w-2xl px-4 transition-all duration-300 flex flex-col items-center
               ${isSidebarOpen ? 'ml-[280px]' : ''} 
               ${isProfileSidebarOpen ? 'mr-[280px]' : ''} 
               ${isGraphViewOpen ? 'mr-[50%]' : ''}`}>
