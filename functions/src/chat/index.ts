@@ -1,7 +1,7 @@
-import * as functions from "firebase-functions";
-import * as admin from "firebase-admin";
-import { processRelationshipData, updateGraphData, getGraphData } from "../relationships";
-import { VertexAI } from "@google-cloud/vertexai";
+import * as functions from 'firebase-functions';
+import * as admin from 'firebase-admin';
+import { processRelationshipData, updateGraphData, getGraphData } from '../relationships';
+import { VertexAI } from '@google-cloud/vertexai';
 
 // Initialize Vertex AI
 const vertexAI = new VertexAI({
@@ -104,7 +104,7 @@ export const processChat = functions.https.onCall(async (data, context) => {
 
     // Initialize Gemini chat
     const model = vertexAI.getGenerativeModel({ model: "gemini-1.5-flash-002" });
-    const systemPrompt = `You are an AI assistant focused on helping users improve their relationships and personal growth...`; // Your existing system prompt
+    const systemPrompt = 'You are an AI assistant focused on helping users improve their relationships and personal growth...'; // Your existing system prompt
 
     const geminiChat = model.startChat({
       history: history.length > 0 ? history.map(msg => ({

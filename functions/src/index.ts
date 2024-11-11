@@ -1,18 +1,12 @@
-import * as admin from "firebase-admin";
-import { getChats, createNewChat, deleteChat, processChat } from "./chat";
-import { getSuggestions } from "./suggestions";
+import * as admin from 'firebase-admin';
+import { getChats, createNewChat, deleteChat, processChat } from './chat';
+import { getSuggestions } from './suggestions';
 
 // Initialize Firebase Admin
 admin.initializeApp();
 
-// Export all functions
-export {
-  getChats,
-  createNewChat,
-  deleteChat,
-  processChat,
-  getSuggestions
-};
+// Export functions
+export { getChats, createNewChat, deleteChat, processChat, getSuggestions };
 
 // Export types
 export interface ChatMessage {

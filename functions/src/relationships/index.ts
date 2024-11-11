@@ -1,6 +1,6 @@
-import * as functions from "firebase-functions";
-import * as admin from "firebase-admin";
-import { VertexAI } from "@google-cloud/vertexai";
+import * as functions from 'firebase-functions';
+import * as admin from 'firebase-admin';
+import { VertexAI } from '@google-cloud/vertexai';
 
 const vertexAI = new VertexAI({
   project: process.env.GOOGLE_CLOUD_PROJECT,
@@ -8,19 +8,19 @@ const vertexAI = new VertexAI({
 });
 
 export async function processRelationshipData(message: string, history: any[]) {
-  const relationshipPrompt = `
-    Analyze the following conversation for relationship information:
-    ${history.map(msg => `${msg.role}: ${msg.content}`).join('\n')}
-    Current message: ${message}
-    
-    Extract and structure the following information:
-    1. People mentioned (names, ages, gender, descriptions)
-    2. Relationships between people
-    3. Interactions or events between people
-    4. Emotional states or sentiments
-    
-    Return the data in a structured format matching our graph schema.
-  `;
+  const relationshipPrompt = [
+    'Analyze the following conversation for relationship information:',
+    history.map(msg => `${msg.role}: ${msg.content}`).join('\n'),
+    `Current message: ${message}`,
+    '',
+    'Extract and structure the following information:',
+    '1. People mentioned (names, ages, gender, descriptions)',
+    '2. Relationships between people',
+    '3. Interactions or events between people',
+    '4. Emotional states or sentiments',
+    '',
+    'Return the data in a structured format matching our graph schema.'
+  ].join('\n');
 
   try {
     const model = vertexAI.getGenerativeModel({ model: "gemini-1.5-flash-002" });
