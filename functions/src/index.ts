@@ -1,14 +1,16 @@
 import * as admin from 'firebase-admin';
-import { getChats, createNewChat, deleteChat, processChat } from './chat';
-import { getSuggestions } from './suggestions';
+import * as functions from 'firebase-functions';
+import { VertexAI } from '@google-cloud/vertexai';
 
 // Initialize Firebase Admin
 admin.initializeApp();
 
-// Export functions
-export { getChats, createNewChat, deleteChat, processChat, getSuggestions };
+// Initialize Vertex AI
+const vertex = new VertexAI({project: 'your-project-id', location: 'us-central1'});
+const model = vertex.preview.getGenerativeModel({
+  model: "gemini-1.5-flash-002"
+});
 
-// Export types
 export interface ChatMessage {
   role: string;
   content: string;
@@ -323,13 +325,24 @@ export const getSuggestions = functions.https.onCall(async (data, context) => {
     throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated');
   }
 
-  return {
-    suggestions: [
-      { id: '1', text: 'How can I improve communication?', icon: '💭' },
-      { id: '2', text: 'Help me resolve a conflict', icon: '🤝' },
-      { id: '3', text: 'Understanding my emotions', icon: '❤️' },
-      { id: '4', text: 'Building trust in relationships', icon: '🔒' }
-    ],
-    timestamp: new Date().toISOString()
-  };
+  try {
+    const prompt = `Generate 4 conversation starter suggestions for a relationship advice chatbot. 
+    Each suggestion should be focused on personal growth and relationships.
+    Format the response as a JSON array with objects containing:
+    - id (string)
+    - text (the suggestion, max 50 chars)
+    - icon (a single relevant emoji)`;
+
+    const result = await model.generateContent(prompt);
+    const response = await result.response;
+    const suggestions = JSON.parse(response.text());
+
+    return {
+      suggestions,
+      timestamp: new Date().toISOString()
+    };
+  } catch (error) {
+    console.error('Error generating suggestions:', error);
+    throw new functions.https.HttpsError('internal', 'Error generating suggestions');
+  }
 });
