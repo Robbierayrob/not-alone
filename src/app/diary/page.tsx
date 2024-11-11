@@ -11,6 +11,7 @@ import GraphModal from '../components/GraphModal';
 import ChatHistorySidebar from '../components/ChatHistorySidebar';
 import ProfileSidebar from '../components/ProfileSidebar';
 import ChatBox from '../components/ChatBox';
+import AuthModal from '../components/AuthModal';
 
 
 
