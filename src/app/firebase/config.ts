@@ -29,5 +29,5 @@ console.log('Firebase config:', {
 const app = initializeApp(firebaseConfig);
 const analytics = typeof window !== 'undefined' ? getAnalytics(app) : null;
 export const auth = getAuth(app);
-export const vertexAI = getVertexAI(app);
+export const vertexAI = getVertexAI(firebaseApp, { location: 'australia-southeast1' });
 export const model = getGenerativeModel(vertexAI, { model: "gemini-1.5-flash-002" });
