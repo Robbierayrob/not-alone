@@ -45,7 +45,7 @@ export default function ChatBox({
       // Add a small offset after scrolling to start
       setTimeout(() => {
         window.scrollBy({
-          top: -20,  // negative value to move upward
+          top: -40,
           behavior: 'smooth'
         });
       }, 0);
