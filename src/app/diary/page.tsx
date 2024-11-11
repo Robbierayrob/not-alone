@@ -16,6 +16,7 @@ import AuthModal from '../components/AuthModal';
 
 
 
+
 export default function DiaryPage() {
   const router = useRouter();
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
