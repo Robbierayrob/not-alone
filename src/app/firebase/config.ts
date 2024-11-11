@@ -1,7 +1,7 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth } from "firebase/auth";
-import { getVertexAI, getGenerativeModel } from "@google-cloud/vertexai";
+import { getVertexAI, getGenerativeModel } from "firebase/vertexai";
 
 // Validate environment variables
 if (!process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID) {
