@@ -1,6 +1,98 @@
+@import url('https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;600&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.welcome-message-container {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 60vh;
+}
+
+.welcome-message {
+  font-family: 'IBM Plex Sans', sans-serif;
+  text-align: center;
+  padding: 2rem;
+  transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+  transform: translateY(-2rem);
+}
+
+.welcome-title {
+  color: var(--primary);
+  font-size: 2.5rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  opacity: 0;
+  transform: translateY(20px);
+  text-shadow: 0 0 30px rgba(255, 20, 147, 0.2);
+  animation: 
+    titleAnimation 1s cubic-bezier(0.4, 0, 0.2, 1) forwards,
+    titleGlow 3s ease-in-out infinite;
+}
+
+.welcome-subtitle {
+  color: #666;
+  font-size: 1.2rem;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: subtitleAnimation 1s cubic-bezier(0.4, 0, 0.2, 1) 0.3s forwards;
+}
+
+@keyframes titleAnimation {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes subtitleAnimation {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes titleGlow {
+  0%, 100% {
+    text-shadow: 0 0 5px rgba(255, 20, 147, 0.2);
+  }
+  50% {
+    text-shadow: 0 0 0px rgba(255, 20, 147, 0.4);
+  }
+}
+
+@keyframes fadeSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes gentleFloat {
+  0%, 100% {
+    transform: translate(-50%, -50%);
+  }
+  50% {
+    transform: translate(-50%, -53%);
+  }
+}
+
+@keyframes glowPulse {
+  0%, 100% {
+    text-shadow: 0 0 20px rgba(255, 20, 147, 0.1);
+  }
+  50% {
+    text-shadow: 0 0 30px rgba(255, 20, 147, 0.2);
+  }
+}
 
 :root {
   --background: #ffffff;
@@ -428,4 +520,23 @@ body {
 
 .animate-slide-in {
   animation: slideIn 0.3s ease-out forwards;
+}
+
+@keyframes suggestionsAppear {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  50% {
+    opacity: 0.5;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-suggestions-appear {
+  animation: suggestionsAppear 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
 }

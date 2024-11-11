@@ -1,6 +1,8 @@
 "use client";
 
 import { FormEvent, useRef, useEffect, useState, useCallback } from 'react';
+import WelcomeMessage from './WelcomeMessage';
+import SuggestionCards from './SuggestionCards';
 import ReactMarkdown from 'react-markdown';
 import ProfileSettingsModal from './ProfileSettingsModal';
 import SupportModal from './SupportModal';
@@ -11,6 +13,10 @@ interface ChatBoxProps {
   isLoading: boolean;
   onInputChange: (value: string) => void;
   onSubmit: (e: FormEvent) => void;
+  isSidebarOpen: boolean;
+  isProfileSidebarOpen: boolean;
+  isGraphViewOpen: boolean;
+  onSuggestionClick: (text: string) => void;
 }
 
 export default function ChatBox({ 
@@ -18,59 +24,83 @@ export default function ChatBox({
   input,
   isLoading,
   onInputChange,
-  onSubmit
+  onSubmit,
+  isSidebarOpen,
+  isProfileSidebarOpen,
+  isGraphViewOpen,
+  onSuggestionClick
 }: ChatBoxProps) {
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [isSupportModalOpen, setIsSupportModalOpen] = useState(false);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const lastMessageRef = useRef<HTMLDivElement>(null);
+  const secondLastMessageRef = useRef<HTMLDivElement>(null);
+  const prevMessagesLengthRef = useRef(messages.length);
 
-  const scrollToNewMessage = useCallback(() => {
-    if (messagesEndRef.current) {
-      messagesEndRef.current.scrollIntoView({ 
-        behavior: 'smooth', 
-        block: 'end',
-        inline: 'nearest'
-      });
+  useEffect(() => {
+    if (messages.length > prevMessagesLengthRef.current && secondLastMessageRef.current) {
+      // Only scroll for messages longer than 200 characters
+      const lastMessage = messages[messages.length - 1];
+      if (lastMessage && lastMessage.content.length > 200) {
+        secondLastMessageRef.current.scrollIntoView({
+          behavior: 'smooth',
+          block: 'end'
+        });
+      }
     }
-  }, []);
-
-  // Scroll to bottom on initial load
-  useEffect(() => {
-    const timer = setTimeout(scrollToNewMessage, 100);
-    return () => clearTimeout(timer);
-  }, []);
-
-  useEffect(() => {
-    scrollToNewMessage();
-  }, [messages, scrollToNewMessage]);
+    prevMessagesLengthRef.current = messages.length;
+  }, [messages.length, messages]);
 
   return (
     <div className="flex flex-col h-full">
       <div 
         ref={messagesContainerRef}
-        className="message-container py-4 relative z-[1] flex flex-col h-[calc(100vh-180px)] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent hover:scrollbar-thumb-gray-400 transition-colors"
+        className="message-container py-4 relative z-[1] flex flex-col h-[calc(100vh-180px)] overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent hover:scrollbar-thumb-gray-400 transition-colors mx-auto w-full max-w-5xl"
       >
-        <div className="w-full flex flex-col space-y-4 px-4">
-          {messages.map((message, index) => (
-            <div 
-              key={index} 
-              className={`message inline-flex max-w-[85%] animate-slide-in ${
-                message.role === 'user' 
-                  ? 'user-message ml-auto bg-primary text-white rounded-2xl rounded-tr-sm px-4 py-2 shadow-sm' 
-                  : 'assistant-message bg-gray-100 rounded-2xl rounded-tl-sm px-4 py-2 shadow-sm'
-              }`}
-            >
-              <div className={`prose prose-sm md:prose-base max-w-none break-words ${
-                message.role === 'user' ? 'prose-invert' : ''
-              } ${message.role === 'assistant' ? 'typing-animation' : ''}`}>
-                <ReactMarkdown>
-                  {message.content}
-                </ReactMarkdown>
-              </div>
+        {messages.length === 0 && (
+          <div className="absolute inset-0 flex flex-col">
+            <WelcomeMessage 
+              isSidebarOpen={isSidebarOpen}
+              isProfileSidebarOpen={isProfileSidebarOpen}
+              isGraphViewOpen={isGraphViewOpen}
+              onSuggestionClick={onSuggestionClick}
+            />
+            <div className="absolute bottom-40 left-0 right-0">
+              <SuggestionCards
+                isVisible={true}
+                isSidebarOpen={isSidebarOpen}
+                isProfileSidebarOpen={isProfileSidebarOpen}
+                isGraphViewOpen={isGraphViewOpen}
+                onSuggestionClick={onSuggestionClick}
+              />
             </div>
-          ))}
-          <div ref={messagesEndRef} className="h-1" />
+          </div>
+        )}
+        <div className="w-full flex flex-col space-y-4 px-4">
+          {messages.map((message, index) => {
+            const isLastMessage = index === messages.length - 1;
+            return (
+              <>
+                <div 
+                  key={index}
+                  ref={isLastMessage ? lastMessageRef : (index === messages.length - 2 ? secondLastMessageRef : undefined)}
+                  className={`message inline-flex max-w-[85%] animate-slide-in ${
+                    message.role === 'user' 
+                      ? 'user-message ml-auto bg-primary text-white rounded-2xl rounded-tr-sm px-4 py-2 shadow-sm' 
+                      : 'assistant-message bg-gray-100 rounded-2xl rounded-tl-sm px-4 py-2 shadow-sm'
+                  }`}
+                >
+                  <div className={`prose prose-sm md:prose-base max-w-none break-words ${
+                    message.role === 'user' ? 'prose-invert' : ''
+                  } ${message.role === 'assistant' ? 'typing-animation' : ''}`}>
+                    <ReactMarkdown>
+                      {message.content}
+                    </ReactMarkdown>
+                  </div>
+                </div>
+              </>
+            );
+          })}
         </div>
       </div>
 
