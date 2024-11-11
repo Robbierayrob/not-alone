@@ -59,10 +59,10 @@ export default function ChatBox({
       >
         {messages.length === 0 && (
           <div className="absolute inset-0 flex items-center justify-center">
-            <div className={`w-full max-w-2xl px-6 md:px-12 transition-all duration-300
-              ${isSidebarOpen ? 'transform -translate-x-[140px]' : ''} 
-              ${isProfileSidebarOpen ? 'transform translate-x-[-140px]' : ''} 
-              ${isGraphViewOpen ? 'transform translate-x-[-25%]' : ''}`}>
+            <div className={`w-full max-w-2xl px-6 md:px-12 transition-all duration-300 
+              ${isSidebarOpen ? 'ml-[140px]' : ''} 
+              ${isProfileSidebarOpen ? 'mr-[140px]' : ''} 
+              ${isGraphViewOpen ? 'mr-[25%]' : ''}`}>
               <WelcomeMessage 
                 isSidebarOpen={isSidebarOpen}
                 isProfileSidebarOpen={isProfileSidebarOpen}
