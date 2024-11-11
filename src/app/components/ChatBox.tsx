@@ -39,12 +39,12 @@ export default function ChatBox({
 
   useEffect(() => {
     if (messages.length > prevMessagesLengthRef.current && secondLastMessageRef.current) {
-      // Only scroll for messages longer than 200 characters
+      // Only scroll for messages longer than 400 characters
       const lastMessage = messages[messages.length - 1];
-      if (lastMessage && lastMessage.content.length > 200) {
+      if (lastMessage && lastMessage.content.length > 400) {
         secondLastMessageRef.current.scrollIntoView({
           behavior: 'smooth',
-          block: 'end'
+          block: 'start'
         });
       }
     }
