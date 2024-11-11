@@ -1,6 +1,9 @@
 'use client';
 
-import { useState, FormEvent, useRef, useEffect, useMemo } from 'react';
+import { useState, FormEvent, useRef, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { onAuthStateChanged } from 'firebase/auth';
+import { auth } from '../firebase/config';
 import DeleteConfirmationModal from '../components/DeleteConfirmationModal';
 import GraphView from '../components/GraphView';
 import GraphSidebar from '../components/GraphSidebar';
@@ -12,6 +15,25 @@ import ChatBox from '../components/ChatBox';
 
 
 export default function DiaryPage() {
+  const router = useRouter();
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [user, setUser] = useState<any>(null);
+  
+  // Check authentication status
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUser(user);
+        setIsAuthModalOpen(false);
+      } else {
+        setUser(null);
+        setIsAuthModalOpen(true);
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
   // State management
   const [messages, setMessages] = useState<Array<{role: string, content: string}>>([]);
   const [showSuggestions, setShowSuggestions] = useState(true);

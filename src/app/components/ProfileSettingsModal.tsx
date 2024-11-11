@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useRef } from 'react';
+import { auth } from '../firebase/config';
+import { signOut } from 'firebase/auth';
 import { createPortal } from 'react-dom';
 
 interface ProfileSettingsModalProps {
@@ -80,11 +82,20 @@ export default function ProfileSettingsModal({ isOpen, onClose }: ProfileSetting
             </div>
           </div>
 
-          <button
-            className="w-full bg-primary text-white py-3 rounded-lg hover:bg-opacity-90 transition-colors"
-          >
-            Save Changes
-          </button>
+          <div className="space-y-3">
+            <button
+              className="w-full bg-primary text-white py-3 rounded-lg hover:bg-opacity-90 transition-colors"
+            >
+              Save Changes
+            </button>
+            
+            <button
+              onClick={() => signOut(auth)}
+              className="w-full bg-red-500 text-white py-3 rounded-lg hover:bg-opacity-90 transition-colors"
+            >
+              Sign Out
+            </button>
+          </div>
         </div>
       </div>
     </div>,
