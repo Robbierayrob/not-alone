@@ -4,6 +4,7 @@ import { useState, FormEvent, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../firebase/config';
+import { apiService } from '../services/api';
 import DeleteConfirmationModal from '../components/DeleteConfirmationModal';
 import GraphView from '../components/GraphView';
 import GraphSidebar from '../components/GraphSidebar';
@@ -87,17 +88,7 @@ export default function DiaryPage() {
   useEffect(() => {
     const fetchGraphData = async () => {
       try {
-        const response = await fetch('http://localhost:3001/api/chat', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            message: '',
-            chatId: currentChatId
-          }),
-        });
-        const data = await response.json();
+        const data = await apiService.fetchGraphData(currentChatId);
         if (data.graphData) {
           setGraphData(data.graphData);
         }
@@ -129,27 +120,16 @@ export default function DiaryPage() {
   // Load chat history
   const loadChats = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/chats');
-      const data = await response.json();
+      const data = await apiService.loadChats();
       setChats(data);
     } catch (error) {
       console.error('Error loading chats:', error);
     }
   };
 
-  // Create new chat
   const deleteChat = async (chatId: string) => {
     try {
-      const response = await fetch(`http://localhost:3001/api/chats/${chatId}`, {
-        method: 'DELETE'
-      });
-      
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      
-      const data = await response.json();
-      
+      const data = await apiService.deleteChat(chatId);
       if (currentChatId === chatId) {
         setCurrentChatId('default-chat');
         setMessages([]);
@@ -157,17 +137,14 @@ export default function DiaryPage() {
       setChats(data.chats);
       setDeleteConfirmation(null);
     } catch (error) {
-      console.error('Error deleting chat:', error instanceof Error ? error.message : String(error));
+      console.error('Error deleting chat:', error);
       setDeleteConfirmation(null);
     }
   };
 
   const createNewChat = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/chats/new', {
-        method: 'POST'
-      });
-      const data = await response.json();
+      const data = await apiService.createNewChat();
       setCurrentChatId(data.chatId);
       setMessages([]);
       loadChats();
@@ -198,27 +175,10 @@ export default function DiaryPage() {
     setIsLoading(true);
 
     try {
-      const response = await fetch('https://processchat-qpos73qvxq-uc.a.run.app', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          data: {
-            message: input,
-            chatId: currentChatId
-          }
-        }),
-      });
-
-      const data = await response.json();
-      
-      if (response.ok) {
+      const data = await apiService.sendMessage(input, currentChatId);
+      if (data.result?.message) {
         const aiMessage = data.result.message;
         setMessages(prev => [...prev, { role: 'assistant', content: aiMessage }]);
-        // Note: graphData handling removed as it's now handled by separate function
-      } else {
-        console.error('Error:', data.error);
       }
     } catch (error) {
       console.error('Error:', error);
