@@ -29,12 +29,35 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
     try {
       if (isSignUp) {
         await createUserWithEmailAndPassword(auth, email, password);
+        onClose();
       } else {
         await signInWithEmailAndPassword(auth, email, password);
+        onClose();
       }
-      onClose();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'An error occurred');
+      const errorCode = err instanceof Error && 'code' in err ? (err as any).code : '';
+      
+      switch (errorCode) {
+        case 'auth/email-already-in-use':
+          setError('An account with this email already exists. Please sign in instead.');
+          setIsSignUp(false);
+          break;
+        case 'auth/user-not-found':
+          setError('No account found with this email. Please sign up instead.');
+          setIsSignUp(true);
+          break;
+        case 'auth/wrong-password':
+          setError('Incorrect password. Please try again.');
+          break;
+        case 'auth/invalid-email':
+          setError('Please enter a valid email address.');
+          break;
+        case 'auth/weak-password':
+          setError('Password should be at least 6 characters long.');
+          break;
+        default:
+          setError('An error occurred. Please try again.');
+      }
     }
   };
 
