@@ -40,7 +40,7 @@ export default function ChatBox({
     if (messages.length > prevMessagesLengthRef.current && lastMessageRef.current) {
       lastMessageRef.current.scrollIntoView({
         behavior: 'smooth',
-        block: 'start'
+        block: 'center'
       });
     }
     prevMessagesLengthRef.current = messages.length;
