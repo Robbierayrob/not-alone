@@ -39,7 +39,7 @@ export default function AuthModal({ isOpen, onClose }: AuthModalProps) {
       
       switch (errorCode) {
         case 'auth/email-already-in-use':
-          setError('This email is already associated with a Google account. Please sign in with Google instead.');
+          setError('An account with this email already exists. Please sign in instead.');
           setIsSignUp(false);
           break;
         case 'auth/user-not-found':
