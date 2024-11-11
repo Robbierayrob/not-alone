@@ -1,34 +1,64 @@
-/**
- * Import function triggers from their respective submodules:
- *
- * import {onCall} from "firebase-functions/v2/https";
- * import {onDocumentWritten} from "firebase-functions/v2/firestore";
- *
- * See a full list of supported triggers at https://firebase.google.com/docs/functions
- */
+import * as functions from "firebase-functions";
+import * as admin from "firebase-admin";
+import { VertexAI } from "@google-cloud/vertexai";
 
-import {onRequest} from "firebase-functions/v2/https";
-import * as logger from "firebase-functions/logger";
+// Types
+interface ChatMessage {
+  role: string;
+  content: string;
+}
 
-// Start writing functions
-// https://firebase.google.com/docs/functions/typescript
+interface Chat {
+  id: string;
+  title: string;
+  createdAt: string;
+  messages: ChatMessage[];
+  userId?: string;
+}
 
-// export const helloWorld = onRequest((request, response) => {
-//   logger.info("Hello logs!", {structuredData: true});
-//   response.send("Hello from Firebase!");
-// });
-import * as functions from 'firebase-functions';
-import * as admin from 'firebase-admin';
-import { GoogleGenerativeAI } from '@google/generative-ai';
+interface GraphNode {
+  id: string;
+  name: string;
+  val: number;
+  color?: string;
+  details?: Record<string, unknown>;
+}
 
-// Initialize Firebase Admin
+interface GraphLink {
+  source: string;
+  target: string;
+  details?: Record<string, unknown>;
+}
+
+interface GraphData {
+  nodes: GraphNode[];
+  links: GraphLink[];
+  metadata?: {
+    lastUpdated: string;
+    version: string;
+  };
+}
+
+interface Suggestion {
+  id: string;
+  text: string;
+  icon: string;
+}
+
+// Initialize Firebase Admin and services
 admin.initializeApp();
-
 const db = admin.firestore();
-const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-// Chat history functions
-export const getAllChats = functions.https.onCall(async (data, context) => {
+// Initialize Vertex AI
+const vertexAI = new VertexAI({
+  project: process.env.GOOGLE_CLOUD_PROJECT,
+  location: "us-central1",
+});
+
+/**
+ * Retrieves all chats for the authenticated user
+ */
+export const getChats = functions.https.onCall(async (data, context) => {
   if (!context.auth) {
     throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated');
   }
