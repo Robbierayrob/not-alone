@@ -6,23 +6,67 @@ import { VertexAI } from '@google-cloud/vertexai';
 admin.initializeApp();
 
 // Initialize Vertex AI
-const vertex = new VertexAI({project: "notalone-de4fc", location: 'australia-southeast1'});
-const model = vertex.preview.getGenerativeModel({
-  model: "gemini-1.5-flash-002"
+const vertex = new VertexAI({
+  project: process.env.GOOGLE_CLOUD_PROJECT || 'notalone-de4fc',
+  location: 'australia-southeast1'
 });
 
-export interface ChatMessage {
-  role: string;
-  content: string;
-}
+const model = vertex.preview.getGenerativeModel({
+  model: 'gemini-1.5-flash-002'
+});
 
-export interface Chat {
-  id: string;
-  title: string;
-  createdAt: string;
-  messages: ChatMessage[];
-  userId?: string;
-}
+// Initialize Firestore
+const db = admin.firestore();
+
+export const processChat = functions.https.onCall(async (data, context) => {
+  if (!context.auth) {
+    throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated');
+  }
+
+  const { message, chatId } = data;
+
+  try {
+    // Get or create chat document
+    const chatRef = db.collection('chats').doc(chatId);
+    const chat = await chatRef.get();
+
+    if (!chat.exists) {
+      await chatRef.set({
+        userId: context.auth.uid,
+        createdAt: admin.firestore.FieldValue.serverTimestamp(),
+        messages: []
+      });
+    }
+
+    // Get chat history
+    const chatData = chat.exists ? chat.data() : { messages: [] };
+    const history = chatData?.messages || [];
+
+    // Generate AI response
+    const result = await model.generateContent(message);
+    const response = await result.response;
+    const aiResponse = response.text();
+
+    // Update chat history
+    const updatedHistory = [
+      ...history,
+      { role: 'user', content: message },
+      { role: 'assistant', content: aiResponse }
+    ];
+
+    await chatRef.update({
+      messages: updatedHistory
+    });
+
+    return {
+      message: aiResponse,
+      chatId
+    };
+  } catch (error) {
+    console.error('Error processing chat:', error);
+    throw new functions.https.HttpsError('internal', 'Error processing chat');
+  }
+});
 
 export interface GraphNode {
   id: string;
