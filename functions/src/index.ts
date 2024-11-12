@@ -35,6 +35,9 @@ interface ChatHistory {
  * @return {Promise<ChatHistory[]>} Array of chat history messages
  */
 async function loadChatHistory(sessionId: string): Promise<ChatHistory[]> {
+  if (!sessionId) {
+    throw new Error('Session ID is required');
+  }
   const chatDoc = await firestore.collection('chatSessions').doc(sessionId).get();
   return chatDoc.exists ? chatDoc.data()?.history || [] : [];
 }
@@ -46,6 +49,9 @@ async function loadChatHistory(sessionId: string): Promise<ChatHistory[]> {
  * @return {Promise<void>}
  */
 async function saveChatHistory(sessionId: string, history: ChatHistory[]) {
+  if (!sessionId) {
+    throw new Error('Session ID is required');
+  }
   await firestore.collection('chatSessions').doc(sessionId).set({
     history,
     updatedAt: admin.firestore.FieldValue.serverTimestamp(),
@@ -96,6 +102,9 @@ export const processChat = functions.https.onCall(async (request) => {
 
     // Load existing chat history from Firestore
     const sessionId = request.data.sessionId || request.auth.uid;
+    if (!sessionId) {
+      throw new functions.https.HttpsError('invalid-argument', 'Session ID is required');
+    }
     const chatHistory = await loadChatHistory(sessionId);
 
     // Start chat session with loaded history
