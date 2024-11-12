@@ -14,7 +14,8 @@ export const apiService = {
         },
         body: JSON.stringify({
           data: {
-            message
+            message,
+            sessionId: token // Pass the token as sessionId
           },
         }),
       });

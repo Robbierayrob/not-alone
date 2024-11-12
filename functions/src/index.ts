@@ -125,9 +125,14 @@ export const processChat = functions.https.onCall(async (request) => {
   try {
     const startTime = Date.now();
 
-    // Use auth.uid as the session ID
-    const sessionId = request.auth.uid;
-    console.log('Using auth UID as session ID:', sessionId);
+    // Get sessionId from request data or fall back to auth uid
+    const sessionId = request.data.sessionId || request.auth?.uid;
+    console.log('Using session ID:', sessionId);
+    
+    if (!sessionId) {
+      throw new functions.https.HttpsError('invalid-argument', 'Session ID is required');
+    }
+    
     const chatHistory = await loadChatHistory(sessionId);
 
     // Start chat session with loaded history
