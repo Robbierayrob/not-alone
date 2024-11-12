@@ -21,16 +21,30 @@ const model = vertex.preview.getGenerativeModel({
 
 const firestore = admin.firestore();
 
+/**
+ * Represents the structure of a chat message in the history
+ */
 interface ChatHistory {
   role: string;
   parts: Array<{text: string}>;
 }
 
+/**
+ * Loads chat history from Firestore for a given session
+ * @param {string} sessionId - The unique identifier for the chat session
+ * @returns {Promise<ChatHistory[]>} Array of chat history messages
+ */
 async function loadChatHistory(sessionId: string): Promise<ChatHistory[]> {
   const chatDoc = await firestore.collection('chatSessions').doc(sessionId).get();
   return chatDoc.exists ? chatDoc.data()?.history || [] : [];
 }
 
+/**
+ * Saves chat history to Firestore
+ * @param {string} sessionId - The unique identifier for the chat session
+ * @param {ChatHistory[]} history - Array of chat messages to save
+ * @returns {Promise<void>}
+ */
 async function saveChatHistory(sessionId: string, history: ChatHistory[]) {
   await firestore.collection('chatSessions').doc(sessionId).set({
     history,
