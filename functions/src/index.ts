@@ -17,6 +17,15 @@ const chatSessions = new Map<string, {
   history: Array<{role: string, parts: Array<{text: string}>}>;
 }>();
 
+import * as functions from 'firebase-functions';
+import { VertexAI } from '@google-cloud/vertexai';
+import * as admin from 'firebase-admin';
+
+// Ensure Firebase Admin is initialized
+if (admin.apps.length === 0) {
+  admin.initializeApp();
+}
+
 export const processChat = functions.https.onCall(async (request) => {
   console.log('🚀 Incoming request:', {
     auth: request.auth ? 'Authenticated' : 'Not authenticated',
@@ -130,6 +139,23 @@ export const processChat = functions.https.onCall(async (request) => {
     };
 
     console.log('📤 Sending response:', finalResponse);
+    // Attempt to save chat history
+    try {
+      const saveChatHistoryFunction = functions.httpsCallable('saveChatHistory');
+      await saveChatHistoryFunction({
+        userId,
+        chatId: sessionChatId,
+        messages: [
+          { role: 'user', content: message, timestamp: new Date().toISOString() },
+          { role: 'model', content: aiResponse, timestamp: new Date().toISOString() }
+        ],
+        timestamp: new Date().toISOString()
+      });
+    } catch (saveError) {
+      console.error('❌ Failed to save chat history:', saveError);
+      // Non-critical error, so we'll continue with the main response
+    }
+
     return { result: finalResponse };
 
   } catch (error) {
