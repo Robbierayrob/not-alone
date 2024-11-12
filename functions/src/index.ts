@@ -100,9 +100,8 @@ export const processChat = functions.https.onCall(async (request) => {
             totalChunks: chunks.length
           });
           
-          // Yield each chunk without returning early
-          functions.logger.log('Yielding chunk:', chunkText);
-          yield { result: { result: { chunk: chunkText } } };
+          // Return each chunk immediately
+          return { result: { result: { chunk: chunkText } } };
         } else {
           console.log('Invalid chunk format:', chunk);
         }
