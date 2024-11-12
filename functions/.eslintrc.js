@@ -34,5 +34,6 @@ module.exports = {
     "linebreak-style": 0,  // Disable linebreak-style checks
     "padded-blocks": 0,    // Disable padded-blocks checks
     "no-trailing-spaces": 0, // Disable trailing spaces checks
+    "arrow-parens": ["error", "always"], // Require parentheses around arrow function arguments
   },
 };
