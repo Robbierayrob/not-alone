@@ -1,13 +1,15 @@
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 import { VertexAI } from '@google-cloud/vertexai';
+import * as fs from 'fs';
+import * as path from 'path';
 
-// Initialize Firebase Admin SDK
 // Initialize Firebase Admin SDK
 if (!admin.apps.length) {
   if (process.env.NODE_ENV === 'development') {
     try {
-      const serviceAccount = require('../../config/serviceAccount.json');
+      const serviceAccountPath = path.resolve(__dirname, '../../config/serviceAccount.json');
+      const serviceAccount = JSON.parse(fs.readFileSync(serviceAccountPath, 'utf8'));
       admin.initializeApp({
         credential: admin.credential.cert(serviceAccount),
       });
