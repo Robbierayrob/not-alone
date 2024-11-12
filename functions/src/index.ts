@@ -11,11 +11,6 @@ const model = vertex.preview.getGenerativeModel({
   model: 'gemini-1.5-flash-002',
 });
 
-interface ChatMessage {
-  role: 'user' | 'model';
-  parts: Array<{ text: string }>;
-}
-
 export const processChat = functions.https.onCall(async (request) => {
   console.log('🚀 Incoming request:', {
     auth: request.auth ? 'Authenticated' : 'Not authenticated',
@@ -35,42 +30,27 @@ export const processChat = functions.https.onCall(async (request) => {
   }
 
   try {
-    const { message, history = [] } = request.data;
-    
+    const { message } = request.data;
     const userId = request.auth.uid;
+    
     console.log('📥 Processing request:', {
       messageLength: message.length,
-      historyLength: history.length,
       userId,
     });
 
-    // Start chat session with history if provided
-    console.log('🔄 Chat history:', history);
-    
-    const chat = model.startChat({
-      history: history as ChatMessage[],
-      generationConfig: {
-        maxOutputTokens: 1000,
-      },
-    });
-
     console.log('💬 Sending message to Gemini:', message);
-
-    // Send message and get streaming response
-    const result = await chat.sendMessage(message);
+    
+    const result = await model.generateContent(message);
     const response = await result.response;
 
     console.log('📊 Raw Gemini response:', response);
 
-    if (!response?.candidates?.[0]?.content) {
+    if (!response?.candidates?.[0]?.content?.parts?.[0]?.text) {
       console.error('❌ Invalid AI response structure:', response);
       throw new functions.https.HttpsError('internal', 'Invalid response from AI model');
     }
 
-    const aiResponse = response.candidates[0].content.parts
-      .map(part => part.text)
-      .join(' ')
-      .trim();
+    const aiResponse = response.candidates[0].content.parts[0].text;
 
     console.log('✅ Processed response:', {
       responseLength: aiResponse.length,
