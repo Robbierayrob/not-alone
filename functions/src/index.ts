@@ -4,7 +4,21 @@ import { VertexAI } from '@google-cloud/vertexai';
 
 // Initialize Firebase Admin SDK
 // Initialize Firebase Admin SDK
-admin.initializeApp();
+if (!admin.apps.length) {
+  if (process.env.NODE_ENV === 'development') {
+    try {
+      const serviceAccount = require('../../config/serviceAccount.json');
+      admin.initializeApp({
+        credential: admin.credential.cert(serviceAccount),
+      });
+    } catch (error) {
+      console.error('Failed to load service account:', error);
+      throw new Error('Service account configuration is required for local development');
+    }
+  } else {
+    admin.initializeApp();
+  }
+}
 
 
 // Initialize Vertex AI
