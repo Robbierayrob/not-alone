@@ -1,4 +1,4 @@
-import * as functions from 'firebase-functions';
+import * as functions from 'firebase-functions/v2';
 import * as admin from 'firebase-admin';
 
 // Initialize Firestore if not already initialized
@@ -23,17 +23,22 @@ interface ChatInteractionResponse {
  * @param {functions.https.CallableRequest<ChatInteractionRequest>} request - The request data containing the message and user ID
  * @returns {Promise<void>}
  */
-exports.storeChatInteraction = functions.https.onCall(async (request): Promise<void> => {
+exports.storeChatInteraction = functions.https.onCall(async (event): Promise<void> => {
   // Check if the user is authenticated
-  if (!request.auth) {
+  if (!event.auth) {
     throw new functions.https.HttpsError('unauthenticated', 'The function must be called while authenticated.');
   }
 
-  const { message, userId } = request.data as ChatInteractionRequest;
+  const { message, userId } = event.data as ChatInteractionRequest;
 
   try {
     // Call the existing processChat function to get the AI response
-    const processChat = functions.httpsCallable('processChat');
+    const processChat = functions.https.onCall(async (processEvent) => {
+      // This is a mock implementation. You'll need to adjust based on your actual processChat function
+      const processedMessage = await admin.firestore().collection('functions').doc('processChat').get();
+      return processedMessage.data();
+    });
+
     const chatResponse = await processChat({ message });
 
     // Prepare the interaction data for Firestore
