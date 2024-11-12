@@ -22,7 +22,7 @@ const firestore = admin.firestore();
 export interface ChatRequest {
   message: string;
   userId: string;
-  sessionId?: string;  // Optional session ID for chat continuity
+  sessionId?: string; // Optional session ID for chat continuity
 }
 
 export interface ChatResponse {
