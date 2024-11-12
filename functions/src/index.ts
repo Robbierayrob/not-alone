@@ -75,26 +75,32 @@ export const processChat = functions.https.onCall(async (request) => {
 
     console.log('💬 Sending message to Gemini:', message);
     
-    const result = await chat.sendMessage(message, {
-      stream: true
-    });
+    const result = await chat.sendMessageStream(message);
 
     let aiResponse = '';
     const chunks = [];
 
     console.log('🔄 Starting stream processing');
-    for await (const chunk of result.stream) {
-      if (chunk.candidates?.[0]?.content?.parts?.[0]?.text) {
-        const chunkText = chunk.candidates[0].content.parts[0].text;
-        chunks.push(chunkText);
-        aiResponse += chunkText;
-        
-        // Send chunk immediately
-        console.log('📦 Sending chunk:', {
-          chunkLength: chunkText.length,
-          totalLength: aiResponse.length
-        });
+    try {
+      for await (const chunk of result.stream) {
+        if (chunk?.candidates?.[0]?.content?.parts?.[0]?.text) {
+          const chunkText = chunk.candidates[0].content.parts[0].text;
+          chunks.push(chunkText);
+          aiResponse += chunkText;
+          
+          // Send chunk immediately
+          console.log('📦 Sending chunk:', {
+            chunkLength: chunkText.length,
+            totalLength: aiResponse.length
+          });
+        }
       }
+    } catch (streamError) {
+      console.error('Stream processing error:', streamError);
+      throw new functions.https.HttpsError(
+        'internal',
+        'Error processing response stream'
+      );
     }
 
     console.log('✅ Stream complete:', {
