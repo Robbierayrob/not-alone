@@ -32,5 +32,7 @@ module.exports = {
     'indent': ['error', 2],
     'max-len': ['error', { 'code': 200 }],
     'object-curly-spacing': ['error', 'always'],
+    'comma-dangle': ['error', 'always-multiline'],
+    'linebreak-style': ['error', 'unix'],
   },
 };

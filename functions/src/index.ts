@@ -19,12 +19,12 @@ const model = vertex.preview.getGenerativeModel({
 
 const firestore = admin.firestore();
 
-interface ChatRequest {
+export interface ChatRequest {
   message: string;
   userId: string;
 }
 
-interface ChatResponse {
+export interface ChatResponse {
   message: string;
   userMessage: string;
 }
@@ -61,7 +61,7 @@ export const processChat = functions.https.onCall(async (request) => {
         userId: request.auth.uid,
         userMessage: message,
         aiResponse,
-        timestamp: admin.firestore.FieldValue.serverTimestamp()
+        timestamp: admin.firestore.FieldValue.serverTimestamp(),
       });
     } catch (storageError) {
       console.error('Failed to store chat interaction:', storageError);
@@ -69,7 +69,7 @@ export const processChat = functions.https.onCall(async (request) => {
     }
 
     return {
-      message: aiResponse
+      message: aiResponse,
     };
 
   } catch (error) {
