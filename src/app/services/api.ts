@@ -1,22 +1,25 @@
 export const API_BASE_URL = 'http://localhost:3001';
 export const CLOUD_FUNCTION_URL = 'https://processchat-qpos73qvxq-uc.a.run.app';
+export const LOCAL_FUNCTION_URL = 'http://127.0.0.1:5001/notalone-de4fc/us-central1/processChat';
 
 export const apiService = {
   // Chat related API calls
-  async sendMessage(message: string, chatId: string) {
+  async sendMessage(message: string, chatId: string, token: string) {
     try {
-      const response = await fetch(CLOUD_FUNCTION_URL, {
+      const response = await fetch(LOCAL_FUNCTION_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}` // Include the token in the headers
         },
         body: JSON.stringify({
           data: {
             message,
             chatId
-          }
+          },
         }),
       });
+
       return await response.json();
     } catch (error) {
       console.error('Error sending message:', error);
