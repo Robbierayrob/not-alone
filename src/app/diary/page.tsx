@@ -177,8 +177,12 @@ export default function DiaryPage() {
 
     try {
       const data = await apiService.sendMessage(input, user.accessToken);
-      if (data.message) {
-        setMessages(prev => [...prev, { role: 'assistant', content: data.message }]);
+      console.log('Diary page received API response:', data);
+      if (data && data.message) {
+        const aiMessage = { role: 'assistant', content: data.message };
+        setMessages(prev => [...prev, aiMessage]);
+      } else {
+        console.error('Invalid response format:', data);
       }
     } catch (error) {
       console.error('Error:', error);
@@ -315,8 +319,12 @@ export default function DiaryPage() {
 
                 try {
                   const data = await apiService.sendMessage(text, user.accessToken);
-                  if (data.message) {
-                    setMessages(prev => [...prev, { role: 'assistant', content: data.message }]);
+                  console.log('Suggestion click received API response:', data);
+                  if (data && data.message) {
+                    const aiMessage = { role: 'assistant', content: data.message };
+                    setMessages(prev => [...prev, aiMessage]);
+                  } else {
+                    console.error('Invalid response format:', data);
                   }
                 } catch (error) {
                   console.error('Error:', error);

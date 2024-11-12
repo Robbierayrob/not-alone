@@ -65,7 +65,7 @@ export const processChat = functions.https.onCall(async (request) => {
     };
 
     console.log('📤 Sending final response:', finalResponse);
-    return finalResponse;
+    return { result: finalResponse };
 
   } catch (error) {
     console.error('💥 Chat processing error:', error);

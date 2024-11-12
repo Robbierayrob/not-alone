@@ -30,11 +30,13 @@ export const apiService = {
       }
 
       const result = await response.json();
+      console.log('API received response:', result);
+      // Cloud Functions wrap the response in a 'result' object
       return {
-        message: result.data.message,
-        userMessage: result.data.userMessage,
-        timestamp: new Date(result.data.timestamp),
-        userId: result.data.userId,
+        message: result.result.message,
+        userMessage: result.result.userMessage,
+        timestamp: new Date(result.result.timestamp),
+        userId: result.result.userId,
       };
     } catch (error) {
       console.error('Error sending message:', error);
