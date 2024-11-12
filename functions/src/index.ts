@@ -35,7 +35,8 @@ interface ChatResponse {
  * @param {functions.https.CallableContext} context - The context of the function call
  * @returns {Promise<ChatResponse>} The AI generated response with user message
  */
-export const processChat = functions.https.onCall(async (data, context): Promise<ChatResponse> => {
+export const processChat = functions.https.onCall(async (request: functions.https.CallableRequest<ChatRequest>): Promise<ChatResponse> => {
+  const { data, context } = request;
   // Enhanced logging for tracking function calls
   console.info('Processing chat interaction', { 
     userId: context.auth?.uid, 
