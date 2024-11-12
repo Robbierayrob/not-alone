@@ -4,11 +4,9 @@ import { VertexAI } from '@google-cloud/vertexai';
 
 // Initialize Firebase Admin SDK
 if (!admin.apps.length) {
-  admin.initializeApp({
-    projectId: process.env.GOOGLE_CLOUD_PROJECT || 'notalone-de4fc',
-    credential: admin.credential.applicationDefault(),
-  });
+  admin.initializeApp();
 }
+
 
 // Initialize Vertex AI
 const vertex = new VertexAI({
