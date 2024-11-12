@@ -177,28 +177,56 @@ export default function DiaryPage() {
     setInput('');
     setIsLoading(true);
 
-    try {
-      const result = await apiService.sendMessage(input, user.accessToken, currentChatId !== 'default-chat' ? currentChatId : undefined);
-      
-      // Check if result contains an error message
-      if (result.error) {
+    const sendMessageWithRetry = async (message: string, retries = 7) => {
+      try {
+        const result = await apiService.sendMessage(
+          message, 
+          user.accessToken, 
+          currentChatId !== 'default-chat' ? currentChatId : undefined
+        );
+        
+        // Check if result contains an error message
+        if (result.error) {
+          if (result.error.includes('Too many requests') && retries > 0) {
+            // Wait 1 second and retry
+            await new Promise(resolve => setTimeout(resolve, 1000));
+            return sendMessageWithRetry(message, retries - 1);
+          }
+          
+          setMessages(prev => [...prev, { 
+            role: 'system', 
+            content: result.error 
+          }]);
+          return null;
+        }
+        
+        return result;
+      } catch (error: unknown) {
+        if (retries > 0) {
+          // Wait 1 second and retry
+          await new Promise(resolve => setTimeout(resolve, 1000));
+          return sendMessageWithRetry(message, retries - 1);
+        }
+        
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+        console.error('Error:', errorMessage);
         setMessages(prev => [...prev, { 
           role: 'system', 
-          content: result.error 
+          content: `Sorry, an error occurred after multiple attempts: ${errorMessage}. Please try again later.` 
         }]);
-      } else {
+        return null;
+      }
+    };
+
+    try {
+      const result = await sendMessageWithRetry(input);
+      
+      if (result) {
         setMessages(prev => [...prev, { role: 'assistant', content: result.message }]);
         if (currentChatId === 'default-chat') {
           setCurrentChatId(result.chatId);
         }
       }
-    } catch (error: unknown) {
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-      console.error('Error:', errorMessage);
-      setMessages(prev => [...prev, { 
-        role: 'system', 
-        content: `Sorry, an error occurred: ${errorMessage}. Please try again.` 
-      }]);
     } finally {
       setIsLoading(false);
     }
