@@ -28,7 +28,7 @@ interface ChatResponse {
  * @param {functions.https.CallableRequest<ChatRequest>} request - The request data containing the message
  * @returns {Promise<ChatResponse>} The AI generated response
  */
-exports.processChat = functions.https.onCall(async (request): Promise<ChatResponse> => {
+export const processChat = functions.https.onCall(async (request): Promise<ChatResponse> => {
   // Check if the user is authenticated
   if (!request.auth) {
     throw new functions.https.HttpsError('unauthenticated', 'The function must be called while authenticated.');
