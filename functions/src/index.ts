@@ -1,4 +1,4 @@
-import * as functions from 'firebase-functions';
+import { onCall } from 'firebase-functions/v2/https';
 import * as admin from 'firebase-admin';
 import { VertexAI } from '@google-cloud/vertexai';
 
@@ -35,7 +35,7 @@ interface ChatResponse {
  * @param {functions.https.CallableContext} context - The context of the function call
  * @returns {Promise<ChatResponse>} The AI generated response with user message
  */
-export const processChat = functions.https.onCall(async (data: ChatRequest, context: functions.https.CallableContext): Promise<ChatResponse> => {
+export const processChat = onCall<ChatRequest, ChatResponse>(async (request) => {
   // Enhanced logging for tracking function calls
   console.info('Processing chat interaction', { 
     userId: context.auth?.uid, 
@@ -43,12 +43,12 @@ export const processChat = functions.https.onCall(async (data: ChatRequest, cont
   });
 
   // Check if the user is authenticated
-  if (!context.auth) {
+  if (!request.auth) {
     console.warn('Unauthenticated access attempt');
-    throw new functions.https.HttpsError('unauthenticated', 'The function must be called while authenticated.');
+    throw new Error('The function must be called while authenticated.');
   }
 
-  const { message, userId } = data as ChatRequest;
+  const { message, userId } = request.data;
 
   try {
     // Generate AI response
@@ -87,7 +87,7 @@ export const processChat = functions.https.onCall(async (data: ChatRequest, cont
   } catch (error) {
     console.error('Comprehensive chat processing error', { 
       error, 
-      userId: context.auth.uid, 
+      userId: request.auth.uid,
       message 
     });
     throw new functions.https.HttpsError('internal', 'Comprehensive error processing chat interaction');
