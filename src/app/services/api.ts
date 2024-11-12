@@ -32,6 +32,15 @@ export const apiService = {
       if (!response.ok) {
         const errorData = await response.json();
         console.error('❌ API error:', errorData);
+        
+        // Special handling for 429 Too Many Requests
+        if (response.status === 429) {
+          return {
+            error: "Too many requests. Please wait a moment and try again.",
+            message: null
+          };
+        }
+        
         throw new Error(errorData.error?.message || 'Failed to send message');
       }
 
@@ -42,6 +51,15 @@ export const apiService = {
       return data.result.result;
     } catch (error) {
       console.error('Error sending message:', error);
+      
+      // Handle 429 error specifically
+      if (error instanceof Error && error.message.includes('429')) {
+        return {
+          error: "Too many requests. Please wait a moment and try again.",
+          message: null
+        };
+      }
+      
       throw error instanceof Error ? error : new Error('Failed to send message');
     }
   },

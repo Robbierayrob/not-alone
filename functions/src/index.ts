@@ -134,6 +134,15 @@ export const processChat = functions.https.onCall(async (request) => {
 
   } catch (error) {
     console.error('💥 Chat processing error:', error);
+    
+    // Specific handling for 429 Too Many Requests
+    if (error instanceof Error && error.message.includes('429')) {
+      throw new functions.https.HttpsError(
+        'resource-exhausted', 
+        'Too many requests. Please try again later.'
+      );
+    }
+    
     throw new functions.https.HttpsError(
       'internal',
       error instanceof Error ? error.message : 'Error processing chat'

@@ -179,12 +179,26 @@ export default function DiaryPage() {
 
     try {
       const result = await apiService.sendMessage(input, user.accessToken, currentChatId !== 'default-chat' ? currentChatId : undefined);
-      setMessages(prev => [...prev, { role: 'assistant', content: result.message }]);
-      if (currentChatId === 'default-chat') {
-        setCurrentChatId(result.chatId);
+      
+      // Check if result contains an error message
+      if (result.error) {
+        setMessages(prev => [...prev, { 
+          role: 'system', 
+          content: result.error 
+        }]);
+      } else {
+        setMessages(prev => [...prev, { role: 'assistant', content: result.message }]);
+        if (currentChatId === 'default-chat') {
+          setCurrentChatId(result.chatId);
+        }
       }
     } catch (error: unknown) {
-      console.error('Error:', error instanceof Error ? error.message : 'Unknown error');
+      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+      console.error('Error:', errorMessage);
+      setMessages(prev => [...prev, { 
+        role: 'system', 
+        content: `Sorry, an error occurred: ${errorMessage}. Please try again.` 
+      }]);
     } finally {
       setIsLoading(false);
     }
