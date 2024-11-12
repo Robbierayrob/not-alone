@@ -22,11 +22,25 @@ const firestore = admin.firestore();
 export interface ChatRequest {
   message: string;
   userId: string;
+  sessionId?: string;  // Optional session ID for chat continuity
 }
 
 export interface ChatResponse {
   message: string;
   userMessage: string;
+  timestamp: FirebaseFirestore.Timestamp;
+}
+
+interface ChatInteraction {
+  userId: string;
+  userMessage: string;
+  aiResponse: string;
+  timestamp: FirebaseFirestore.FieldValue;
+  sessionId?: string;
+  metadata?: {
+    modelVersion: string;
+    processingTime?: number;
+  };
 }
 
 /**
@@ -45,6 +59,8 @@ export const processChat = functions.https.onCall(async (request) => {
   const { message } = request.data;
 
   try {
+    const startTime = Date.now();
+
     // Generate AI response
     const result = await model.generateContent(message);
     const response = await result.response;
@@ -54,15 +70,25 @@ export const processChat = functions.https.onCall(async (request) => {
     }
 
     const aiResponse = response.candidates[0].content.parts[0].text;
+    const processingTime = Date.now() - startTime;
+
+    // Prepare chat interaction data
+    const chatInteraction: ChatInteraction = {
+      userId: request.auth.uid,
+      userMessage: message,
+      aiResponse,
+      timestamp: admin.firestore.FieldValue.serverTimestamp(),
+      sessionId: request.data.sessionId,
+      metadata: {
+        modelVersion: 'gemini-1.5-flash-002',
+        processingTime,
+      },
+    };
 
     // Store chat interaction in Firestore
     try {
-      await firestore.collection('chatInteractions').add({
-        userId: request.auth.uid,
-        userMessage: message,
-        aiResponse,
-        timestamp: admin.firestore.FieldValue.serverTimestamp(),
-      });
+      const docRef = await firestore.collection('chatInteractions').add(chatInteraction);
+      console.log(`Chat interaction stored with ID: ${docRef.id}`);
     } catch (storageError) {
       console.error('Failed to store chat interaction:', storageError);
       // Non-critical error, continue with response
@@ -70,6 +96,8 @@ export const processChat = functions.https.onCall(async (request) => {
 
     return {
       message: aiResponse,
+      userMessage: message,
+      timestamp: admin.firestore.Timestamp.now(),
     };
 
   } catch (error) {
