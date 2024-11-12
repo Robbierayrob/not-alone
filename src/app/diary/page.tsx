@@ -185,13 +185,23 @@ export default function DiaryPage() {
       setMessages(prev => [...prev, aiMessage]);
       
       let accumulatedContent = '';
-      for await (const chunk of response.stream()) {
-        accumulatedContent += chunk;
-        setMessages(prev => prev.map((msg, idx) => 
-          idx === prev.length - 1 
-            ? { ...msg, content: accumulatedContent }
-            : msg
-        ));
+      try {
+        for await (const chunk of response.stream()) {
+          accumulatedContent += chunk;
+          setMessages(prev => {
+            const newMessages = [...prev];
+            const lastMessage = newMessages[newMessages.length - 1];
+            if (lastMessage.role === 'assistant') {
+              lastMessage.content = accumulatedContent;
+              lastMessage.isTyping = true;
+            }
+            return newMessages;
+          });
+          // Add a small delay to create a more natural typing effect
+          await new Promise(resolve => setTimeout(resolve, 50));
+        }
+      } catch (error) {
+        console.error('Error processing stream:', error);
       }
       
       // Remove typing indicator when done
@@ -318,13 +328,30 @@ export default function DiaryPage() {
               opacity: 1;
               transition: opacity 0.2s;
             }
-            .typing-animation::after {
+            .cursor-blink::after {
               content: '▋';
               display: inline-block;
+              margin-left: 2px;
               animation: cursor-blink 1s step-start infinite;
             }
             @keyframes cursor-blink {
               50% { opacity: 0; }
+            }
+            .message {
+              transition: all 0.2s ease-out;
+            }
+            .message.animate-slide-in {
+              animation: slideIn 0.3s ease-out forwards;
+            }
+            @keyframes slideIn {
+              from {
+                opacity: 0;
+                transform: translateY(10px);
+              }
+              to {
+                opacity: 1;
+                transform: translateY(0);
+              }
             }
           `}</style>
 

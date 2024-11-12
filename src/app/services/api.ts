@@ -49,8 +49,10 @@ export const apiService = {
             const chunk = new TextDecoder().decode(value);
             try {
               const result = JSON.parse(chunk);
-              if (result.result?.chunks?.[0]) {
-                yield result.result.chunks[0];
+              if (result.result?.chunks) {
+                for (const chunkText of result.result.chunks) {
+                  yield chunkText;
+                }
               }
             } catch (e) {
               console.warn('Error parsing chunk:', e);
