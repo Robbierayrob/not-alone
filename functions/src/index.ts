@@ -1,4 +1,4 @@
-import { onCall } from 'firebase-functions/v2/https';
+import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 import { VertexAI } from '@google-cloud/vertexai';
 
@@ -35,20 +35,14 @@ interface ChatResponse {
  * @param {functions.https.CallableContext} context - The context of the function call
  * @returns {Promise<ChatResponse>} The AI generated response with user message
  */
-export const processChat = onCall<ChatRequest, ChatResponse>(async (request) => {
+export const processChat = functions.https.onCall(async (request) => {
   // Enhanced logging for tracking function calls
-  console.info('Processing chat interaction', { 
-    userId: context.auth?.uid, 
-    timestamp: new Date().toISOString() 
-  });
-
   // Check if the user is authenticated
   if (!request.auth) {
-    console.warn('Unauthenticated access attempt');
-    throw new Error('The function must be called while authenticated.');
+    throw new functions.https.HttpsError('unauthenticated', 'The function must be called while authenticated.');
   }
 
-  const { message, userId } = request.data;
+  const { message } = request.data;
 
   try {
     // Generate AI response
@@ -56,7 +50,6 @@ export const processChat = onCall<ChatRequest, ChatResponse>(async (request) => 
     const response = await result.response;
 
     if (!response.candidates?.[0]?.content?.parts?.[0]?.text) {
-      console.error('Invalid AI response format', { message });
       throw new functions.https.HttpsError('internal', 'Invalid response format from AI model');
     }
 
@@ -65,31 +58,22 @@ export const processChat = onCall<ChatRequest, ChatResponse>(async (request) => 
     // Store chat interaction in Firestore
     try {
       await firestore.collection('chatInteractions').add({
-        userId,
+        userId: request.auth.uid,
         userMessage: message,
         aiResponse,
         timestamp: admin.firestore.FieldValue.serverTimestamp()
       });
     } catch (storageError) {
-      console.error('Failed to store chat interaction', { 
-        error: storageError, 
-        userId, 
-        message 
-      });
-      // Non-critical error, we'll still return the AI response
+      console.error('Failed to store chat interaction:', storageError);
+      // Non-critical error, continue with response
     }
 
     return {
-      message: aiResponse,
-      userMessage: message
+      message: aiResponse
     };
 
   } catch (error) {
-    console.error('Comprehensive chat processing error', { 
-      error, 
-      userId: request.auth.uid,
-      message 
-    });
-    throw new functions.https.HttpsError('internal', 'Comprehensive error processing chat interaction');
+    console.error('Error processing chat:', error);
+    throw new functions.https.HttpsError('internal', 'Error processing chat');
   }
 });
