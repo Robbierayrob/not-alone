@@ -30,14 +30,14 @@ export interface ChatRequest {
 export interface ChatResponse {
   message: string;
   userMessage: string;
-  timestamp: FirebaseFirestore.Timestamp;
+  timestamp: Date;
 }
 
 interface ChatInteraction {
   userId: string;
   userMessage: string;
   aiResponse: string;
-  timestamp: admin.firestore.Timestamp;
+  timestamp: Date;
   sessionId?: string;
   metadata?: {
     modelVersion: string;
@@ -79,7 +79,7 @@ export const processChat = functions.https.onCall(async (request) => {
       userId: request.auth.uid,
       userMessage: message,
       aiResponse,
-      timestamp: admin.firestore.Timestamp.fromDate(new Date()),
+      timestamp: new Date(),
       sessionId: request.data.sessionId,
       metadata: {
         modelVersion: 'gemini-1.5-flash-002',
@@ -99,7 +99,7 @@ export const processChat = functions.https.onCall(async (request) => {
     return {
       message: aiResponse,
       userMessage: message,
-      timestamp: admin.firestore.Timestamp.now(),
+      timestamp: new Date(),
     };
 
   } catch (error) {
