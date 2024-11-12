@@ -7,7 +7,11 @@ if (!admin.apps.length) {
   if (process.env.NODE_ENV === 'development') {
     import('./config/serviceAccount.json').then((serviceAccount) => {
       admin.initializeApp({
-        credential: admin.credential.cert(serviceAccount.default),
+        credential: admin.credential.cert({
+          projectId: serviceAccount.default.project_id,
+          clientEmail: serviceAccount.default.client_email,
+          privateKey: serviceAccount.default.private_key,
+        }),
       });
     });
   } else {
