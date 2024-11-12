@@ -177,7 +177,7 @@ export default function DiaryPage() {
     setInput('');
     setIsLoading(true);
 
-    const sendMessageWithRetry = async (message: string, retries = 7) => {
+    const sendMessageWithRetry = async (message: string, retries = 3) => {
       try {
         const result = await apiService.sendMessage(
           message, 
@@ -188,8 +188,8 @@ export default function DiaryPage() {
         // Check if result contains an error message
         if (result.error) {
           if (result.error.includes('Too many requests') && retries > 0) {
-            // Wait 1 second and retry
-            await new Promise(resolve => setTimeout(resolve, 1000));
+            // Wait 5 seconds and retry
+            await new Promise(resolve => setTimeout(resolve, 5000));
             return sendMessageWithRetry(message, retries - 1);
           }
           
@@ -203,8 +203,8 @@ export default function DiaryPage() {
         return result;
       } catch (error: unknown) {
         if (retries > 0) {
-          // Wait 1 second and retry
-          await new Promise(resolve => setTimeout(resolve, 1000));
+          // Wait 5 seconds and retry
+          await new Promise(resolve => setTimeout(resolve, 5000));
           return sendMessageWithRetry(message, retries - 1);
         }
         

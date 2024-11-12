@@ -54,6 +54,15 @@ export default function ChatBox({
           block: 'end'
         });
       }
+
+      // Always ensure loading animation is visible if it exists
+      const loadingElement = document.querySelector('.typing-indicator');
+      if (loadingElement) {
+        loadingElement.scrollIntoView({
+          behavior: 'smooth',
+          block: 'nearest'
+        });
+      }
     }
     prevMessagesLengthRef.current = messages.length;
   }, [messages.length, messages]);
