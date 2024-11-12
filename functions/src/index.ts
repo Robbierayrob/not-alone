@@ -19,6 +19,9 @@ const model = vertex.preview.getGenerativeModel({
   model: 'gemini-1.5-flash-002',
 });
 
+// Initialize chat history storage
+const chatHistoryCache = new Map<string, Array<{role: string, parts: Array<{text: string}>}>>();
+
 const firestore = admin.firestore();
 
 export interface ChatRequest {
@@ -63,15 +66,37 @@ export const processChat = functions.https.onCall(async (request) => {
   try {
     const startTime = Date.now();
 
-    // Generate AI response
-    const result = await model.generateContent(message);
-    const response = await result.response;
+    // Get or create chat history
+    const sessionId = request.data.sessionId || request.auth.uid;
+    if (!chatHistoryCache.has(sessionId)) {
+      chatHistoryCache.set(sessionId, []);
+    }
+    const chatHistory = chatHistoryCache.get(sessionId)!;
 
+    // Start or continue chat session
+    const chat = model.startChat({
+      history: chatHistory,
+      generationConfig: {
+        maxOutputTokens: 1000,
+      },
+    });
+
+    // Send message and get response
+    const result = await chat.sendMessage(message);
+    const response = await result.response;
+    
     if (!response.candidates?.[0]?.content?.parts?.[0]?.text) {
       throw new functions.https.HttpsError('internal', 'Invalid response format from AI model');
     }
 
     const aiResponse = response.candidates[0].content.parts[0].text;
+
+    // Update chat history
+    chatHistory.push(
+      { role: 'user', parts: [{ text: message }] },
+      { role: 'model', parts: [{ text: aiResponse }] }
+    );
+    chatHistoryCache.set(sessionId, chatHistory);
     const processingTime = Date.now() - startTime;
 
     // Prepare chat interaction data
