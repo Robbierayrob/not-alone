@@ -19,10 +19,24 @@ const model = vertex.preview.getGenerativeModel({
   model: 'gemini-1.5-flash-002',
 });
 
-// Initialize chat history storage
-const chatHistoryCache = new Map<string, Array<{role: string, parts: Array<{text: string}>}>>();
-
 const firestore = admin.firestore();
+
+interface ChatHistory {
+  role: string;
+  parts: Array<{text: string}>;
+}
+
+async function loadChatHistory(sessionId: string): Promise<ChatHistory[]> {
+  const chatDoc = await firestore.collection('chatSessions').doc(sessionId).get();
+  return chatDoc.exists ? chatDoc.data()?.history || [] : [];
+}
+
+async function saveChatHistory(sessionId: string, history: ChatHistory[]) {
+  await firestore.collection('chatSessions').doc(sessionId).set({
+    history,
+    updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+  }, { merge: true });
+}
 
 export interface ChatRequest {
   message: string;
@@ -66,14 +80,11 @@ export const processChat = functions.https.onCall(async (request) => {
   try {
     const startTime = Date.now();
 
-    // Get or create chat history
+    // Load existing chat history from Firestore
     const sessionId = request.data.sessionId || request.auth.uid;
-    if (!chatHistoryCache.has(sessionId)) {
-      chatHistoryCache.set(sessionId, []);
-    }
-    const chatHistory = chatHistoryCache.get(sessionId)!;
+    const chatHistory = await loadChatHistory(sessionId);
 
-    // Start or continue chat session
+    // Start chat session with loaded history
     const chat = model.startChat({
       history: chatHistory,
       generationConfig: {
@@ -96,7 +107,9 @@ export const processChat = functions.https.onCall(async (request) => {
       { role: 'user', parts: [{ text: message }] },
       { role: 'model', parts: [{ text: aiResponse }] }
     );
-    chatHistoryCache.set(sessionId, chatHistory);
+
+    // Save updated history to Firestore
+    await saveChatHistory(sessionId, chatHistory);
     const processingTime = Date.now() - startTime;
 
     // Prepare chat interaction data
