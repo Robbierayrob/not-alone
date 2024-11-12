@@ -178,27 +178,28 @@ export default function DiaryPage() {
     setIsLoading(true);
 
     try {
-      const data = await apiService.sendMessage(input, user.accessToken, currentChatId);
-      console.log('Diary page received API response:', data);
+      const response = await apiService.sendMessage(input, user.accessToken, currentChatId);
       
-      // Initialize an empty assistant message
-      const aiMessage = { role: 'assistant', content: '' };
+      // Initialize an empty assistant message with typing indicator
+      const aiMessage = { role: 'assistant', content: '', isTyping: true };
       setMessages(prev => [...prev, aiMessage]);
       
-      // Update the message content with each chunk
-      if (data.chunks) {
-        let accumulatedContent = '';
-        for (const chunk of data.chunks) {
-          accumulatedContent += chunk;
-          setMessages(prev => prev.map((msg, idx) => 
-            idx === prev.length - 1 
-              ? { ...msg, content: accumulatedContent }
-              : msg
-          ));
-        }
-      } else {
-        console.error('Invalid response format:', data);
+      let accumulatedContent = '';
+      for await (const chunk of response.stream()) {
+        accumulatedContent += chunk;
+        setMessages(prev => prev.map((msg, idx) => 
+          idx === prev.length - 1 
+            ? { ...msg, content: accumulatedContent }
+            : msg
+        ));
       }
+      
+      // Remove typing indicator when done
+      setMessages(prev => prev.map((msg, idx) => 
+        idx === prev.length - 1 
+          ? { ...msg, isTyping: false }
+          : msg
+      ));
     } catch (error) {
       console.error('Error:', error);
     } finally {
@@ -311,6 +312,22 @@ export default function DiaryPage() {
             </button>
           </div>
   
+          {/* Add typing animation styles */}
+          <style jsx global>{`
+            .typing-animation {
+              opacity: 1;
+              transition: opacity 0.2s;
+            }
+            .typing-animation::after {
+              content: '▋';
+              display: inline-block;
+              animation: cursor-blink 1s step-start infinite;
+            }
+            @keyframes cursor-blink {
+              50% { opacity: 0; }
+            }
+          `}</style>
+
           {/* Pulsating Circle */}
           <div className={`absolute inset-0 flex items-center justify-center pointer-events-none transition-opacity duration-300 ${isLoading ? 'opacity-100' : 'opacity-30'}`}>
             <div className="pulsating-circle"></div>

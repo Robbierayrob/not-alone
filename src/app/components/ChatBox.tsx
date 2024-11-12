@@ -102,7 +102,7 @@ export default function ChatBox({
               >
                 <div className={`prose prose-sm md:prose-base max-w-none break-words ${
                   message.role === 'user' ? 'prose-invert' : ''
-                } ${message.role === 'assistant' ? 'typing-animation' : ''}`}>
+                } ${message.role === 'assistant' && message.isTyping ? 'typing-animation' : ''}`}>
                   <ReactMarkdown>
                     {message.content}
                   </ReactMarkdown>

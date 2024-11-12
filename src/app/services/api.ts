@@ -40,35 +40,23 @@ export const apiService = {
         throw new Error('No response body reader available');
       }
 
-      const chunks: string[] = [];
-      let completeMessage = '';
-
-      while (true) {
-        const { done, value } = await reader.read();
-        if (done) break;
-
-        // Convert the Uint8Array to string
-        const chunk = new TextDecoder().decode(value);
-        try {
-          const result = JSON.parse(chunk);
-          if (result.result?.chunks?.[0]) {
-            chunks.push(result.result.chunks[0]);
-            completeMessage += result.result.chunks[0];
-          }
-        } catch (e) {
-          console.warn('Error parsing chunk:', e);
-        }
-      }
-
-      console.log('✅ API received complete response');
-      
       return {
-        message: completeMessage,
-        userMessage: message,
-        timestamp: new Date().toISOString(),
-        userId: null,
-        chatId: chatId,
-        chunks: chunks
+        stream: async function* () {
+          while (true) {
+            const { done, value } = await reader.read();
+            if (done) break;
+
+            const chunk = new TextDecoder().decode(value);
+            try {
+              const result = JSON.parse(chunk);
+              if (result.result?.chunks?.[0]) {
+                yield result.result.chunks[0];
+              }
+            } catch (e) {
+              console.warn('Error parsing chunk:', e);
+            }
+          }
+        }
       };
     } catch (error) {
       console.error('Error sending message:', error);
