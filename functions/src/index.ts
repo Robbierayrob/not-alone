@@ -101,7 +101,7 @@ export const processChat = functions.https.onCall(async (request) => {
           });
           
           // Return each chunk immediately
-          return { result: { chunk: chunkText } };
+          return { result: { result: { chunk: chunkText } } };
         } else {
           console.log('Invalid chunk format:', chunk);
         }

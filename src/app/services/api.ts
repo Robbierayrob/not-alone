@@ -53,9 +53,9 @@ export const apiService = {
               const result = JSON.parse(chunk);
               console.log('API parsed result:', result);
               
-              if (result.result?.chunk) {
-                console.log('Yielding chunk:', result.result.chunk);
-                yield result.result.chunk;
+              if (result.result?.result?.chunk) {
+                console.log('Yielding chunk:', result.result.result.chunk);
+                yield result.result.result.chunk;
               } else {
                 console.warn('No chunk found in result:', result);
               }
