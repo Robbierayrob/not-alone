@@ -4,7 +4,7 @@ export const LOCAL_FUNCTION_URL = 'http://127.0.0.1:5001/notalone-de4fc/us-centr
 
 export const apiService = {
   // Chat related API calls
-  async sendMessage(message: string, sessionId: string, token: string) {
+  async sendMessage(message: string, token: string) {
     try {
       const response = await fetch(LOCAL_FUNCTION_URL, {
         method: 'POST',
@@ -14,8 +14,7 @@ export const apiService = {
         },
         body: JSON.stringify({
           data: {
-            message,
-            sessionId
+            message
           },
         }),
       });

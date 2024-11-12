@@ -3,26 +3,8 @@ import * as admin from 'firebase-admin';
 import { VertexAI } from '@google-cloud/vertexai';
 
 // Initialize Firebase Admin SDK
-if (!admin.apps.length) {
-  if (process.env.NODE_ENV === 'development') {
-    // Initialize synchronously to ensure admin is ready before functions
-    Promise.resolve().then(async () => {
-      const serviceAccount = await import('../../config/serviceAccount.json');
-      admin.initializeApp({
-        credential: admin.credential.cert({
-          projectId: serviceAccount.default.project_id,
-          clientEmail: serviceAccount.default.client_email,
-          privateKey: serviceAccount.default.private_key,
-        }),
-      });
-    }).catch(error => {
-      console.error('Failed to initialize Firebase Admin:', error);
-      process.exit(1);
-    });
-  } else {
-    admin.initializeApp();
-  }
-}
+// Initialize Firebase Admin SDK
+admin.initializeApp();
 
 
 // Initialize Vertex AI
@@ -127,16 +109,9 @@ export const processChat = functions.https.onCall(async (request) => {
   try {
     const startTime = Date.now();
 
-    // Ensure we have a valid session ID
-    let sessionId = request.data.sessionId;
-    if (!sessionId && request.auth.uid) {
-      sessionId = request.auth.uid;
-      console.log('Using auth UID as session ID:', sessionId);
-    }
-    
-    if (!sessionId) {
-      throw new functions.https.HttpsError('invalid-argument', 'No valid session ID found. Please provide a sessionId or ensure user is authenticated.');
-    }
+    // Use auth.uid as the session ID
+    const sessionId = request.auth.uid;
+    console.log('Using auth UID as session ID:', sessionId);
     const chatHistory = await loadChatHistory(sessionId);
 
     // Start chat session with loaded history
