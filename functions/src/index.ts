@@ -91,20 +91,32 @@ interface ChatInteraction {
  */
 export const processChat = functions.https.onCall(async (request) => {
   // Enhanced logging for tracking function calls
+  console.log('Processing chat request:', JSON.stringify(request.data));
+
   // Check if the user is authenticated
   if (!request.auth) {
     throw new functions.https.HttpsError('unauthenticated', 'The function must be called while authenticated.');
   }
 
-  const { message } = request.data;
+  // Validate request data
+  if (!request.data || !request.data.message) {
+    throw new functions.https.HttpsError('invalid-argument', 'Message is required');
+  }
 
+  const { message } = request.data;
+  
   try {
     const startTime = Date.now();
 
-    // Load existing chat history from Firestore
-    const sessionId = request.data.sessionId || request.auth.uid;
+    // Ensure we have a valid session ID
+    let sessionId = request.data.sessionId;
+    if (!sessionId && request.auth.uid) {
+      sessionId = request.auth.uid;
+      console.log('Using auth UID as session ID:', sessionId);
+    }
+    
     if (!sessionId) {
-      throw new functions.https.HttpsError('invalid-argument', 'Session ID is required');
+      throw new functions.https.HttpsError('invalid-argument', 'No valid session ID found. Please provide a sessionId or ensure user is authenticated.');
     }
     const chatHistory = await loadChatHistory(sessionId);
 
