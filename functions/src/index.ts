@@ -47,7 +47,16 @@ export const processChat = functions.https.onCall(async (request) => {
     if (!chat) {
       console.log('🆕 Creating new chat session:', chatId);
       chat = await model.startChat({
-        context: "You are a relationship counselor AI assistant. Help users understand and improve their relationships.",
+        history: [
+          {
+            role: "user",
+            parts: [{ text: "You are a relationship counselor AI assistant. Help users understand and improve their relationships." }]
+          },
+          {
+            role: "assistant", 
+            parts: [{ text: "I understand my role as a relationship counselor AI assistant. I'm here to help users explore and improve their relationships." }]
+          }
+        ],
         examples: [{
           input: { content: "Tell me about my relationships" },
           output: { content: "I'd be happy to help you explore and understand your relationships. What specific aspects would you like to discuss?" }
