@@ -11,8 +11,11 @@ const model = vertex.preview.getGenerativeModel({
   model: 'gemini-1.5-flash-002',
 });
 
-// Store chat sessions
-const chatSessions = new Map();
+// Store chat sessions with explicit history tracking
+const chatSessions = new Map<string, {
+  chat: any;
+  history: Array<{role: string, parts: Array<{text: string}>}>;
+}>();
 
 export const processChat = functions.https.onCall(async (request) => {
   console.log('🚀 Incoming request:', {
@@ -47,38 +50,52 @@ export const processChat = functions.https.onCall(async (request) => {
     });
 
     // Get or create chat session
-    let chat = chatSessions.get(sessionChatId);
-    if (!chat) {
+    let chatSession = chatSessions.get(sessionChatId);
+    if (!chatSession) {
       console.log('🆕 Creating new chat session:', sessionChatId);
-      chat = await model.startChat({
-        history: [
-          {
-            role: "user",
-            parts: [{ text: "You are a relationship counselor AI assistant. Help users understand and improve their relationships." }]
-          },
-          {
-            role: "assistant", 
-            parts: [{ text: "I understand my role as a relationship counselor AI assistant. I'm here to help users explore and improve their relationships." }]
-          },
-          {
-            role: "user",
-            parts: [{ text: "Tell me about my relationships" }]
-          },
-          {
-            role: "assistant",
-            parts: [{ text: "I'd be happy to help you explore and understand your relationships. What specific aspects would you like to discuss?" }]
-          }
-        ]
-      });
-      chatSessions.set(sessionChatId, chat);
+      const initialHistory = [
+        {
+          role: "user",
+          parts: [{ text: "You are a relationship counselor AI assistant. Help users understand and improve their relationships." }]
+        },
+        {
+          role: "assistant", 
+          parts: [{ text: "I understand my role as a relationship counselor AI assistant. I'm here to help users explore and improve their relationships." }]
+        },
+        {
+          role: "user",
+          parts: [{ text: "Tell me about my relationships" }]
+        },
+        {
+          role: "assistant",
+          parts: [{ text: "I'd be happy to help you explore and understand your relationships. What specific aspects would you like to discuss?" }]
+        }
+      ];
+
+      const chat = await model.startChat({ history: initialHistory });
+      
+      chatSession = {
+        chat,
+        history: initialHistory
+      };
+      
+      chatSessions.set(sessionChatId, chatSession);
+      
       console.log('📝 Chat session created:', {
         chatId: sessionChatId,
-        sessionExists: chatSessions.has(chatId)
+        sessionExists: chatSessions.has(sessionChatId)
       });
     }
 
+    const chat = chatSession.chat;
+    const history = chatSession.history;
+
     console.log('💬 Sending message to Gemini:', message);
     
+    // Update history with current user message
+    const userMessagePart = { role: "user", parts: [{ text: message }] };
+    history.push(userMessagePart);
+
     const result = await chat.sendMessage(message);
     const response = result.response;
     
@@ -87,6 +104,17 @@ export const processChat = functions.https.onCall(async (request) => {
     }
 
     const aiResponse = response.candidates[0].content.parts[0].text;
+    
+    // Update history with AI response
+    const aiResponsePart = { role: "model", parts: [{ text: aiResponse }] };
+    history.push(aiResponsePart);
+
+    // Log the current chat history for debugging
+    console.log('📚 Current Chat History:', {
+      chatId: sessionChatId,
+      historyLength: history.length,
+      lastMessages: history.slice(-4)  // Show last 4 messages
+    });
     
     console.log('✅ Response received:', {
       responseLength: aiResponse.length,
