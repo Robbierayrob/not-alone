@@ -4,26 +4,34 @@ export const LOCAL_FUNCTION_URL = 'http://127.0.0.1:5001/notalone-de4fc/us-centr
 
 export const apiService = {
   // Chat related API calls
-  async sendMessage(message: string, chatId: string, token: string) {
+  async sendMessage(message: string, sessionId: string, token: string) {
     try {
       const response = await fetch(LOCAL_FUNCTION_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}` // Include the token in the headers
+          'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({
           data: {
             message,
-            chatId
+            sessionId
           },
         }),
       });
 
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error?.message || 'Failed to send message');
+      }
+
       return await response.json();
     } catch (error) {
       console.error('Error sending message:', error);
-      throw error;
+      if (error instanceof Error) {
+        throw new Error(`Failed to send message: ${error.message}`);
+      }
+      throw new Error('Failed to send message');
     }
   },
 
