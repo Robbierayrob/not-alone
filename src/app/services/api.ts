@@ -35,12 +35,8 @@ export const apiService = {
         throw new Error(errorData.error?.message || 'Failed to send message');
       }
 
-      const data = await response.json();
-      return {
-        message: data?.result?.message || '',
-        timestamp: data?.result?.timestamp,
-        userMessage: data?.result?.userMessage
-      };
+      const { result } = await response.json();
+      return result;
     } catch (error) {
       console.error('Error sending message:', error);
       throw error instanceof Error ? error : new Error('Failed to send message');
