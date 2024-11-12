@@ -1,5 +1,9 @@
 import * as functions from 'firebase-functions';
+import * as admin from 'firebase-admin';
 import { VertexAI } from '@google-cloud/vertexai';
+
+// Initialize Firebase Admin SDK
+admin.initializeApp();
 
 // Initialize Vertex AI
 const vertex = new VertexAI({
