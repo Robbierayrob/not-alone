@@ -37,10 +37,11 @@ export const processChat = functions.https.onCall(async (request) => {
   try {
     const { message, history = [] } = request.data;
     
+    const userId = request.auth.uid;
     console.log('📥 Processing request:', {
       messageLength: message.length,
       historyLength: history.length,
-      userId: request.auth.uid,
+      userId,
     });
 
     // Start chat session with history if provided
@@ -80,6 +81,7 @@ export const processChat = functions.https.onCall(async (request) => {
       message: aiResponse,
       userMessage: message,
       timestamp: new Date().toISOString(),
+      userId,
     };
 
     console.log('📤 Sending final response:', finalResponse);

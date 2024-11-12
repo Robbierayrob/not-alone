@@ -31,9 +31,10 @@ export const apiService = {
 
       const result = await response.json();
       return {
-        message: result.message,
-        userMessage: result.userMessage,
-        timestamp: new Date(result.timestamp)
+        message: result.data.message,
+        userMessage: result.data.userMessage,
+        timestamp: new Date(result.data.timestamp),
+        userId: result.data.userId,
       };
     } catch (error) {
       console.error('Error sending message:', error);
