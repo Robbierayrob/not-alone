@@ -34,10 +34,10 @@ exports.storeChatInteraction = functions.https.onCall(async (event): Promise<Cha
 
   try {
     // Call the processChat function to get the AI response
-    const chatResponse = await processChat({ 
-      data: { message },
-      context: { auth: event.auth }
-    });
+    const chatResponse = await processChat(
+      { message },
+      { auth: event.auth }
+    );
 
     // Prepare the interaction data for Firestore
     const interactionData: ChatInteractionResponse = {
