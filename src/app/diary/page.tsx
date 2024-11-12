@@ -176,10 +176,9 @@ export default function DiaryPage() {
     setIsLoading(true);
 
     try {
-      const data = await apiService.sendMessage(input, currentChatId);
-      if (data.result?.message) {
-        const aiMessage = data.result.message;
-        setMessages(prev => [...prev, { role: 'assistant', content: aiMessage }]);
+      const data = await apiService.sendMessage(input, user.accessToken);
+      if (data.message) {
+        setMessages(prev => [...prev, { role: 'assistant', content: data.message }]);
       }
     } catch (error) {
       console.error('Error:', error);
@@ -315,10 +314,9 @@ export default function DiaryPage() {
                 setIsLoading(true);
 
                 try {
-                  const data = await apiService.sendMessage(text, currentChatId);
-                  if (data.result?.message) {
-                    const aiMessage = data.result.message;
-                    setMessages(prev => [...prev, { role: 'assistant', content: aiMessage }]);
+                  const data = await apiService.sendMessage(text, user.accessToken);
+                  if (data.message) {
+                    setMessages(prev => [...prev, { role: 'assistant', content: data.message }]);
                   }
                 } catch (error) {
                   console.error('Error:', error);
