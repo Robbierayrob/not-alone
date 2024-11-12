@@ -24,7 +24,7 @@ export const apiService = {
         body: JSON.stringify({
           data: {
             message,
-            chatId: chatId || `chat-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+            chatId: chatId || undefined
           },
         }),
       });

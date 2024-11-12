@@ -33,7 +33,9 @@ export const processChat = functions.https.onCall(async (request) => {
   }
 
   try {
-    const { message, chatId = `chat-${Date.now()}-${Math.random().toString(36).substr(2, 9)}` } = request.data;
+    const { message, chatId } = request.data;
+    // Generate new chat ID only if one wasn't provided
+    const sessionChatId = chatId || `chat-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
     const userId = request.auth.uid;
     
     console.log('📝 Using chat ID:', chatId);
@@ -45,9 +47,9 @@ export const processChat = functions.https.onCall(async (request) => {
     });
 
     // Get or create chat session
-    let chat = chatSessions.get(chatId);
+    let chat = chatSessions.get(sessionChatId);
     if (!chat) {
-      console.log('🆕 Creating new chat session:', chatId);
+      console.log('🆕 Creating new chat session:', sessionChatId);
       chat = await model.startChat({
         history: [
           {
@@ -68,9 +70,9 @@ export const processChat = functions.https.onCall(async (request) => {
           }
         ]
       });
-      chatSessions.set(chatId, chat);
+      chatSessions.set(sessionChatId, chat);
       console.log('📝 Chat session created:', {
-        chatId,
+        chatId: sessionChatId,
         sessionExists: chatSessions.has(chatId)
       });
     }
@@ -96,7 +98,7 @@ export const processChat = functions.https.onCall(async (request) => {
       userMessage: message,
       timestamp: new Date().toISOString(),
       userId,
-      chatId
+      chatId: sessionChatId
     };
 
     console.log('📤 Sending response:', finalResponse);
