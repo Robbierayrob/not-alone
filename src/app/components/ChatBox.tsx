@@ -41,8 +41,14 @@ export default function ChatBox({
     if (messages.length > prevMessagesLengthRef.current) {
       const lastMessage = messages[messages.length - 1];
       
-      if (lastMessageRef.current) {
-        // Always scroll to the last message, regardless of role or length
+      if (lastMessage.content.length >= 400 && secondLastMessageRef.current) {
+        // Scroll to second last message for long messages
+        secondLastMessageRef.current.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      } else if (lastMessageRef.current) {
+        // Default scroll to last message
         lastMessageRef.current.scrollIntoView({
           behavior: 'smooth',
           block: 'end'
