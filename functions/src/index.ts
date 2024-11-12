@@ -76,7 +76,7 @@ export const processChat = functions.https.onCall(async (request) => {
 
     // Prepare chat interaction data
     const chatInteraction: ChatInteraction = {
-      userId: request.auth.uid,
+      userId: request.auth?.uid || 'anonymous', // Provide a fallback value
       userMessage: message,
       aiResponse,
       timestamp: new Date(),
@@ -86,6 +86,11 @@ export const processChat = functions.https.onCall(async (request) => {
         processingTime,
       },
     };
+
+    // Validate required fields before storage
+    if (!chatInteraction.userId || !chatInteraction.userMessage || !chatInteraction.aiResponse) {
+      throw new Error('Missing required fields for chat interaction');
+    }
 
     // Store chat interaction in Firestore
     try {
