@@ -1,1 +1,10 @@
-{}
+{
+  "vertex": {
+    "project": "notalone-de4fc",
+    "location": "australia-southeast1",
+    "model": "gemini-1.5-flash-002"
+  },
+  "environment": {
+    "mode": "development"
+  }
+}
