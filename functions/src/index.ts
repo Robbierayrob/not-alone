@@ -6,6 +6,7 @@ import { VertexAI } from '@google-cloud/vertexai';
 if (!admin.apps.length) {
   admin.initializeApp({
     projectId: process.env.GOOGLE_CLOUD_PROJECT || 'notalone-de4fc',
+    credential: admin.credential.applicationDefault(),
   });
 }
 
@@ -52,9 +53,12 @@ async function saveChatHistory(sessionId: string, history: ChatHistory[]) {
   if (!sessionId) {
     throw new Error('Session ID is required');
   }
+  
+  const timestamp = admin.firestore.Timestamp.now();
+  
   await firestore.collection('chatSessions').doc(sessionId).set({
     history,
-    updatedAt: admin.firestore.FieldValue.serverTimestamp(),
+    updatedAt: timestamp,
   }, { merge: true });
 }
 
