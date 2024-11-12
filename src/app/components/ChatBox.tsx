@@ -41,20 +41,12 @@ export default function ChatBox({
     if (messages.length > prevMessagesLengthRef.current) {
       const lastMessage = messages[messages.length - 1];
       
-      if (lastMessage.role === 'user' && lastMessageRef.current) {
-        // Always scroll to user messages
+      if (lastMessageRef.current) {
+        // Always scroll to the last message, regardless of role or length
         lastMessageRef.current.scrollIntoView({
           behavior: 'smooth',
           block: 'end'
         });
-      } else if (lastMessage.role === 'assistant' && secondLastMessageRef.current) {
-        // Only scroll for assistant messages longer than 400 characters
-        if (lastMessage.content.length > 400) {
-          secondLastMessageRef.current.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
-          });
-        }
       }
     }
     prevMessagesLengthRef.current = messages.length;
