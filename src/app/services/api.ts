@@ -15,7 +15,7 @@ export const apiService = {
         body: JSON.stringify({
           data: {
             message,
-            sessionId: token // Pass the token as sessionId
+            sessionId: token || undefined // Only pass if token exists
           },
         }),
       });

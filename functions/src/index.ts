@@ -67,11 +67,9 @@ async function saveChatHistory(sessionId: string, history: ChatHistory[]) {
     throw new Error('Session ID is required');
   }
   
-  const timestamp = admin.firestore.Timestamp.now();
-  
   await firestore.collection('chatSessions').doc(sessionId).set({
     history,
-    updatedAt: timestamp,
+    updatedAt: new Date(),
   }, { merge: true });
 }
 
@@ -189,11 +187,11 @@ export const processChat = functions.https.onCall(async (request) => {
       userId: request.auth?.uid || 'anonymous',
       userMessage: message,
       aiResponse,
-      timestamp: admin.firestore.Timestamp.now(),
+      timestamp: new Date(),
       metadata: {
         modelVersion: 'gemini-1.5-flash-002',
         processingTime,
-        createdAt: admin.firestore.Timestamp.now(),
+        createdAt: new Date(),
       },
     };
 
@@ -219,7 +217,7 @@ export const processChat = functions.https.onCall(async (request) => {
     return {
       message: aiResponse,
       userMessage: message,
-      timestamp: admin.firestore.Timestamp.now().toDate(),
+      timestamp: new Date(),
     };
 
   } catch (error) {
