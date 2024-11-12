@@ -30,7 +30,7 @@ module.exports = {
     'quotes': ['error', 'single'],
     'import/no-unresolved': 0,
     'indent': ['error', 2],
-    'max-len': ['error', { 'code': 150 }],
+    'max-len': ['error', { 'code': 200 }],
     'object-curly-spacing': ['error', 'always'],
   },
 };
