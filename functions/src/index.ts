@@ -55,12 +55,16 @@ export const processChat = functions.https.onCall(async (request) => {
           {
             role: "assistant", 
             parts: [{ text: "I understand my role as a relationship counselor AI assistant. I'm here to help users explore and improve their relationships." }]
+          },
+          {
+            role: "user",
+            parts: [{ text: "Tell me about my relationships" }]
+          },
+          {
+            role: "assistant",
+            parts: [{ text: "I'd be happy to help you explore and understand your relationships. What specific aspects would you like to discuss?" }]
           }
-        ],
-        examples: [{
-          input: { content: "Tell me about my relationships" },
-          output: { content: "I'd be happy to help you explore and understand your relationships. What specific aspects would you like to discuss?" }
-        }]
+        ]
       });
       chatSessions.set(chatId, chat);
       console.log('📝 Chat session created:', {
