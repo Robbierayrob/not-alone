@@ -34,12 +34,15 @@ exports.storeChatInteraction = functions.https.onCall(async (event): Promise<Cha
 
   try {
     // Call the processChat function to get the AI response
-    const chatResponse = await processChat({ data: { message } });
+    const chatResponse = await processChat({ 
+      data: { message },
+      context: { auth: event.auth }
+    });
 
     // Prepare the interaction data for Firestore
     const interactionData: ChatInteractionResponse = {
       userMessage: message,
-      aiResponse: chatResponse.message
+      aiResponse: chatResponse.message || ''
     };
 
     // Store the interaction in Firestore
