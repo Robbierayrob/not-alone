@@ -24,17 +24,17 @@ interface ChatInteractionResponse {
  * @param {functions.https.CallableRequest<ChatInteractionRequest>} request - The request data containing the message and user ID
  * @returns {Promise<ChatInteractionResponse>}
  */
-exports.storeChatInteraction = functions.https.onCall(async (event): Promise<ChatInteractionResponse> => {
+exports.storeChatInteraction = functions.https.onCall(async (data, context): Promise<ChatInteractionResponse> => {
   // Check if the user is authenticated
-  if (!event.auth) {
+  if (!context.auth) {
     throw new functions.https.HttpsError('unauthenticated', 'The function must be called while authenticated.');
   }
 
-  const { message, userId } = event.data as ChatInteractionRequest;
+  const { message, userId } = data as ChatInteractionRequest;
 
   try {
     // Call the processChat function to get the AI response
-    const chatResponse = await processChat({ message }, { auth: event.auth });
+    const chatResponse = await processChat(data, context);
 
     // Prepare the interaction data for Firestore
     const interactionData: ChatInteractionResponse = {
