@@ -32,5 +32,6 @@ module.exports = {
     "object-curly-spacing": ["error", "always"],
     "comma-dangle": ["error", "always-multiline"],
     "linebreak-style": 0,  // Disable linebreak-style checks
+    "padded-blocks": 0,    // Disable padded-blocks checks
   },
 };
