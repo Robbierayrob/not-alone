@@ -3,9 +3,10 @@ import * as admin from 'firebase-admin';
 import { VertexAI } from '@google-cloud/vertexai';
 
 // Initialize Firebase Admin SDK
-const initializeApp = async () => {
-  if (!admin.apps.length) {
-    if (process.env.NODE_ENV === 'development') {
+if (!admin.apps.length) {
+  if (process.env.NODE_ENV === 'development') {
+    // Initialize synchronously to ensure admin is ready before functions
+    Promise.resolve().then(async () => {
       const serviceAccount = await import('../../config/serviceAccount.json');
       admin.initializeApp({
         credential: admin.credential.cert({
@@ -14,14 +15,14 @@ const initializeApp = async () => {
           privateKey: serviceAccount.default.private_key,
         }),
       });
-    } else {
-      admin.initializeApp();
-    }
+    }).catch(error => {
+      console.error('Failed to initialize Firebase Admin:', error);
+      process.exit(1);
+    });
+  } else {
+    admin.initializeApp();
   }
-};
-
-// Initialize admin before exporting functions
-await initializeApp();
+}
 
 
 // Initialize Vertex AI
