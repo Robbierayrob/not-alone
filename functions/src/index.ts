@@ -78,7 +78,7 @@ export const processChat = functions.https.onCall(async (request) => {
     const result = await chat.sendMessageStream(message);
 
     let aiResponse = '';
-    const chunks = [];
+    const chunks: string[] = [];
 
     console.log('🔄 Starting stream processing');
     try {

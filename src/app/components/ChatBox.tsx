@@ -8,7 +8,7 @@ import ProfileSettingsModal from './ProfileSettingsModal';
 import SupportModal from './SupportModal';
 
 interface ChatBoxProps {
-  messages: Array<{role: string, content: string}>;
+  messages: Array<{role: string, content: string, isTyping?: boolean}>;
   input: string;
   isLoading: boolean;
   onInputChange: (value: string) => void;

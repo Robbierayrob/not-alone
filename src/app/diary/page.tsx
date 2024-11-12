@@ -70,7 +70,7 @@ export default function DiaryPage() {
   }, []);
 
   // State management
-  const [messages, setMessages] = useState<Array<{role: string, content: string}>>([]);
+  const [messages, setMessages] = useState<Array<{role: string, content: string, isTyping?: boolean}>>([]);
   const [showSuggestions, setShowSuggestions] = useState(true);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -222,8 +222,8 @@ export default function DiaryPage() {
           ? { ...msg, isTyping: false }
           : msg
       ));
-    } catch (error) {
-      console.error('Error:', error);
+    } catch (error: unknown) {
+      console.error('Error:', error instanceof Error ? error.message : 'Unknown error');
     } finally {
       setIsLoading(false);
     }
