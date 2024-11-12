@@ -5,10 +5,10 @@ import { VertexAI } from '@google-cloud/vertexai';
 // Initialize Firebase Admin SDK
 if (!admin.apps.length) {
   if (process.env.NODE_ENV === 'development') {
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const serviceAccount = require('./config/serviceAccount.json');
-    admin.initializeApp({
-      credential: admin.credential.cert(serviceAccount),
+    import('./config/serviceAccount.json').then((serviceAccount) => {
+      admin.initializeApp({
+        credential: admin.credential.cert(serviceAccount.default),
+      });
     });
   } else {
     admin.initializeApp();
