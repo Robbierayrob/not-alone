@@ -75,21 +75,19 @@ export const processChat = functions.https.onCall(async (request) => {
 
     console.log('💬 Sending message to Gemini:', message);
     
-    const result = await chat.sendMessage(message, {
-      stream: true
-    });
-
+    const result = await chat.sendMessage(message);
+    const response = result.response;
+    
     let aiResponse = '';
     const chunks = [];
 
-    console.log('🔄 Starting stream processing');
-    for await (const chunk of result.stream) {
-      const chunkText = chunk.candidates[0]?.content?.parts?.[0]?.text || '';
+    console.log('🔄 Processing response');
+    if (response.candidates && response.candidates[0]?.content?.parts) {
+      const chunkText = response.candidates[0].content.parts[0]?.text || '';
       chunks.push(chunkText);
-      aiResponse += chunkText;
-      console.log('📦 Received chunk:', {
-        chunkLength: chunkText.length,
-        totalLength: aiResponse.length
+      aiResponse = chunkText;
+      console.log('📦 Received response:', {
+        length: aiResponse.length
       });
     }
 
