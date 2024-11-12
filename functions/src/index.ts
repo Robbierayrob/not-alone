@@ -74,11 +74,12 @@ interface ChatInteraction {
   userId: string;
   userMessage: string;
   aiResponse: string;
-  timestamp: Date;
+  timestamp: admin.firestore.Timestamp;
   sessionId?: string;
-  metadata?: {
+  metadata: {
     modelVersion: string;
-    processingTime?: number;
+    processingTime: number;
+    createdAt: admin.firestore.Timestamp;
   };
 }
 
@@ -137,13 +138,14 @@ export const processChat = functions.https.onCall(async (request) => {
 
     // Prepare chat interaction data
     const chatInteraction: ChatInteraction = {
-      userId: request.auth?.uid || 'anonymous', // Provide a fallback value
+      userId: request.auth?.uid || 'anonymous',
       userMessage: message,
       aiResponse,
-      timestamp: new Date(),
+      timestamp: admin.firestore.Timestamp.now(),
       metadata: {
         modelVersion: 'gemini-1.5-flash-002',
         processingTime,
+        createdAt: admin.firestore.Timestamp.now(),
       },
     };
 
@@ -169,7 +171,7 @@ export const processChat = functions.https.onCall(async (request) => {
     return {
       message: aiResponse,
       userMessage: message,
-      timestamp: new Date(),
+      timestamp: admin.firestore.Timestamp.now().toDate(),
     };
 
   } catch (error) {
