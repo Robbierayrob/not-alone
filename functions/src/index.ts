@@ -4,7 +4,9 @@ import { VertexAI } from '@google-cloud/vertexai';
 
 // Initialize Firebase Admin SDK
 if (!admin.apps.length) {
-  admin.initializeApp();
+  admin.initializeApp({
+    projectId: process.env.GOOGLE_CLOUD_PROJECT || 'notalone-de4fc',
+  });
 }
 
 // Initialize Vertex AI
@@ -77,7 +79,7 @@ export const processChat = functions.https.onCall(async (request) => {
       userId: request.auth.uid,
       userMessage: message,
       aiResponse,
-      timestamp: admin.firestore.FieldValue.serverTimestamp(),
+      timestamp: admin.firestore.Timestamp.now(),
       sessionId: request.data.sessionId,
       metadata: {
         modelVersion: 'gemini-1.5-flash-002',
