@@ -1,0 +1,617 @@
+[debug] [2024-11-12T21:57:25.801Z] ----------------------------------------------------------------------
+[debug] [2024-11-12T21:57:25.804Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\Rob\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js emulators:start
+[debug] [2024-11-12T21:57:25.804Z] CLI Version:   13.24.2
+[debug] [2024-11-12T21:57:25.805Z] Platform:      win32
+[debug] [2024-11-12T21:57:25.805Z] Node Version:  v20.18.0
+[debug] [2024-11-12T21:57:25.805Z] Time:          Wed Nov 13 2024 08:57:25 GMT+1100 (Australian Eastern Daylight Time)
+[debug] [2024-11-12T21:57:25.805Z] ----------------------------------------------------------------------
+[debug] 
+[debug] [2024-11-12T21:57:25.934Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2024-11-12T21:57:25.935Z] > authorizing via signed-in user (lisakhun58@gmail.com)
+[debug] [2024-11-12T21:57:26.064Z] java version "21.0.5" 2024-10-15 LTS
+
+[debug] [2024-11-12T21:57:26.064Z] Java(TM) SE Runtime Environment (build 21.0.5+9-LTS-239)
+Java HotSpot(TM) 64-Bit Server VM (build 21.0.5+9-LTS-239, mixed mode, sharing)
+
+[debug] [2024-11-12T21:57:26.085Z] Parsed Java major version: 21
+[info] i  emulators: Starting emulators: auth, functions, firestore, extensions {"metadata":{"emulator":{"name":"hub"},"message":"Starting emulators: auth, functions, firestore, extensions"}}
+[debug] [2024-11-12T21:57:26.088Z] Checked if tokens are valid: true, expires at: 1731451302034
+[debug] [2024-11-12T21:57:26.089Z] Checked if tokens are valid: true, expires at: 1731451302034
+[debug] [2024-11-12T21:57:26.090Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/notalone-de4fc [none]
+[debug] [2024-11-12T21:57:26.888Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/notalone-de4fc 200
+[debug] [2024-11-12T21:57:26.888Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/notalone-de4fc {"projectId":"notalone-de4fc","projectNumber":"784029337452","displayName":"NotAlone","name":"projects/notalone-de4fc","resources":{"hostingSite":"notalone-de4fc"},"state":"ACTIVE","etag":"1_570ddbb0-4c2c-4e94-b3b3-0005c847d3e1"}
+[debug] [2024-11-12T21:57:26.904Z] [logging] Logging Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2024-11-12T21:57:26.904Z] [auth] Authentication Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2024-11-12T21:57:26.904Z] [firestore] Firestore Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2024-11-12T21:57:26.904Z] [firestore.websocket] websocket server for firestore only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2024-11-12T21:57:26.904Z] assigned listening specs for emulators {"user":{"hub":[{"address":"127.0.0.1","family":"IPv4","port":4400},{"address":"::1","family":"IPv6","port":4400}],"ui":[{"address":"127.0.0.1","family":"IPv4","port":4000},{"address":"::1","family":"IPv6","port":4000}],"logging":[{"address":"127.0.0.1","family":"IPv4","port":4500}],"auth":[{"address":"127.0.0.1","family":"IPv4","port":9099}],"firestore":[{"address":"127.0.0.1","family":"IPv4","port":8080}],"firestore.websocket":[{"address":"127.0.0.1","family":"IPv4","port":9150}]},"metadata":{"message":"assigned listening specs for emulators"}}
+[debug] [2024-11-12T21:57:26.910Z] [hub] writing locator at C:\Users\Rob\AppData\Local\Temp\hub-notalone-de4fc.json
+[debug] [2024-11-12T21:57:26.919Z] [Extensions] Started Extensions emulator, this is a noop.
+[debug] [2024-11-12T21:57:26.924Z] [functions] Functions Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2024-11-12T21:57:26.924Z] [eventarc] Eventarc Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2024-11-12T21:57:26.924Z] [tasks] Cloud Tasks Emulator only supports listening on one address (127.0.0.1). Not listening on ::1
+[debug] [2024-11-12T21:57:26.924Z] late-assigned ports for functions and eventarc emulators {"user":{"hub":[{"address":"127.0.0.1","family":"IPv4","port":4400},{"address":"::1","family":"IPv6","port":4400}],"ui":[{"address":"127.0.0.1","family":"IPv4","port":4000},{"address":"::1","family":"IPv6","port":4000}],"logging":[{"address":"127.0.0.1","family":"IPv4","port":4500}],"auth":[{"address":"127.0.0.1","family":"IPv4","port":9099}],"firestore":[{"address":"127.0.0.1","family":"IPv4","port":8080}],"firestore.websocket":[{"address":"127.0.0.1","family":"IPv4","port":9150}],"functions":[{"address":"127.0.0.1","family":"IPv4","port":5001}],"eventarc":[{"address":"127.0.0.1","family":"IPv4","port":9299}],"tasks":[{"address":"127.0.0.1","family":"IPv4","port":9499}]},"metadata":{"message":"late-assigned ports for functions and eventarc emulators"}}
+[warn] !  functions: The following emulators are not running, calls to these services from the Functions emulator will affect production: database, hosting, pubsub, storage, dataconnect {"metadata":{"emulator":{"name":"functions"},"message":"The following emulators are not running, calls to these services from the Functions emulator will affect production: \u001b[1mdatabase, hosting, pubsub, storage, dataconnect\u001b[22m"}}
+[debug] [2024-11-12T21:57:26.928Z] defaultcredentials: writing to file C:\Users\Rob\AppData\Roaming\firebase\lisakhun58_gmail_com_application_default_credentials.json
+[debug] [2024-11-12T21:57:26.930Z] Setting GAC to C:\Users\Rob\AppData\Roaming\firebase\lisakhun58_gmail_com_application_default_credentials.json {"metadata":{"emulator":{"name":"functions"},"message":"Setting GAC to C:\\Users\\Rob\\AppData\\Roaming\\firebase\\lisakhun58_gmail_com_application_default_credentials.json"}}
+[debug] [2024-11-12T21:57:26.930Z] Checked if tokens are valid: true, expires at: 1731451302034
+[debug] [2024-11-12T21:57:26.930Z] Checked if tokens are valid: true, expires at: 1731451302034
+[debug] [2024-11-12T21:57:26.931Z] >>> [apiv2][query] GET https://firebase.googleapis.com/v1beta1/projects/notalone-de4fc/adminSdkConfig [none]
+[debug] [2024-11-12T21:57:27.376Z] <<< [apiv2][status] GET https://firebase.googleapis.com/v1beta1/projects/notalone-de4fc/adminSdkConfig 200
+[debug] [2024-11-12T21:57:27.376Z] <<< [apiv2][body] GET https://firebase.googleapis.com/v1beta1/projects/notalone-de4fc/adminSdkConfig {"projectId":"notalone-de4fc","storageBucket":"notalone-de4fc.firebasestorage.app"}
+[debug] [2024-11-12T21:57:27.396Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"firestore"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2024-11-12T21:57:27.396Z] Ignoring unsupported arg: single_project_mode_error {"metadata":{"emulator":{"name":"firestore"},"message":"Ignoring unsupported arg: single_project_mode_error"}}
+[debug] [2024-11-12T21:57:27.396Z] Starting Firestore Emulator with command {"binary":"java","args":["-Dgoogle.cloud_firestore.debug_log_level=FINE","-Duser.language=en","-jar","C:\\Users\\Rob\\.cache\\firebase\\emulators\\cloud-firestore-emulator-v1.19.8.jar","--host","127.0.0.1","--port",8080,"--websocket_port",9150,"--project_id","notalone-de4fc","--rules","C:\\Users\\Rob\\Apps\\not-alone\\firestore.rules","--single_project_mode",true,"--functions_emulator","127.0.0.1:5001"],"optionalArgs":["port","webchannel_port","host","rules","websocket_port","functions_emulator","seed_from_export","project_id","single_project_mode"],"joinArgs":false,"shell":false,"port":8080} {"metadata":{"emulator":{"name":"firestore"},"message":"Starting Firestore Emulator with command {\"binary\":\"java\",\"args\":[\"-Dgoogle.cloud_firestore.debug_log_level=FINE\",\"-Duser.language=en\",\"-jar\",\"C:\\\\Users\\\\Rob\\\\.cache\\\\firebase\\\\emulators\\\\cloud-firestore-emulator-v1.19.8.jar\",\"--host\",\"127.0.0.1\",\"--port\",8080,\"--websocket_port\",9150,\"--project_id\",\"notalone-de4fc\",\"--rules\",\"C:\\\\Users\\\\Rob\\\\Apps\\\\not-alone\\\\firestore.rules\",\"--single_project_mode\",true,\"--functions_emulator\",\"127.0.0.1:5001\"],\"optionalArgs\":[\"port\",\"webchannel_port\",\"host\",\"rules\",\"websocket_port\",\"functions_emulator\",\"seed_from_export\",\"project_id\",\"single_project_mode\"],\"joinArgs\":false,\"shell\":false,\"port\":8080}"}}
+[info] i  firestore: Firestore Emulator logging to firestore-debug.log {"metadata":{"emulator":{"name":"firestore"},"message":"Firestore Emulator logging to \u001b[1mfirestore-debug.log\u001b[22m"}}
+[info] +  firestore: Firestore Emulator UI websocket is running on 9150. {"metadata":{"emulator":{"name":"firestore"},"message":"Firestore Emulator UI websocket is running on 9150."}}
+[debug] [2024-11-12T21:57:36.724Z] Ignoring unsupported arg: auto_download {"metadata":{"emulator":{"name":"ui"},"message":"Ignoring unsupported arg: auto_download"}}
+[debug] [2024-11-12T21:57:36.725Z] Ignoring unsupported arg: port {"metadata":{"emulator":{"name":"ui"},"message":"Ignoring unsupported arg: port"}}
+[debug] [2024-11-12T21:57:36.725Z] Starting Emulator UI with command {"binary":"node","args":["C:\\Users\\Rob\\.cache\\firebase\\emulators\\ui-v1.14.0\\server\\server.mjs"],"optionalArgs":[],"joinArgs":false,"shell":false,"port":4000} {"metadata":{"emulator":{"name":"ui"},"message":"Starting Emulator UI with command {\"binary\":\"node\",\"args\":[\"C:\\\\Users\\\\Rob\\\\.cache\\\\firebase\\\\emulators\\\\ui-v1.14.0\\\\server\\\\server.mjs\"],\"optionalArgs\":[],\"joinArgs\":false,\"shell\":false,\"port\":4000}"}}
+[info] i  ui: Emulator UI logging to ui-debug.log {"metadata":{"emulator":{"name":"ui"},"message":"Emulator UI logging to \u001b[1mui-debug.log\u001b[22m"}}
+[debug] [2024-11-12T21:57:36.881Z] Web / API server started at 127.0.0.1:4000
+ {"metadata":{"emulator":{"name":"ui"},"message":"Web / API server started at 127.0.0.1:4000\n"}}
+[debug] [2024-11-12T21:57:36.882Z] Web / API server started at ::1:4000
+ {"metadata":{"emulator":{"name":"ui"},"message":"Web / API server started at ::1:4000\n"}}
+[debug] [2024-11-12T21:57:36.942Z] [Extensions] Connecting Extensions emulator, this is a noop.
+[info] i  functions: Watching "C:\Users\Rob\Apps\not-alone\functions" for Cloud Functions... {"metadata":{"emulator":{"name":"functions"},"message":"Watching \"C:\\Users\\Rob\\Apps\\not-alone\\functions\" for Cloud Functions..."}}
+[debug] [2024-11-12T21:57:36.949Z] Validating nodejs source
+[debug] [2024-11-12T21:57:37.887Z] > [functions] package.json contents: {
+  "name": "functions",
+  "scripts": {
+    "lint": "eslint --ext .js,.ts .",
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "serve": "npm run build && firebase emulators:start --only functions",
+    "shell": "npm run build && firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "18"
+  },
+  "main": "lib/index.js",
+  "type": "commonjs",
+  "dependencies": {
+    "@google-cloud/vertexai": "^1.9.0",
+    "firebase-admin": "^12.7.0",
+    "firebase-functions": "^6.1.0"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.12.0",
+    "@typescript-eslint/parser": "^5.12.0",
+    "eslint": "^8.9.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-plugin-import": "^2.25.4",
+    "firebase-functions-test": "^3.1.0",
+    "typescript": "^4.9.0"
+  },
+  "private": true
+}
+[debug] [2024-11-12T21:57:37.887Z] Building nodejs source
+[debug] [2024-11-12T21:57:37.888Z] Failed to find version of module node: reached end of search path C:\Users\Rob\Apps\not-alone\functions\node_modules
+[warn] !  functions: Your requested "node" version "18" doesn't match your global version "20". Using node@20 from host. 
+[debug] [2024-11-12T21:57:37.890Z] Could not find functions.yaml. Must use http discovery
+[debug] [2024-11-12T21:57:37.899Z] Found firebase-functions binary at 'C:\Users\Rob\Apps\not-alone\functions\node_modules\.bin\firebase-functions'
+[info] Serving at port 8506
+
+[debug] [2024-11-12T21:57:38.609Z] Got response from /__/functions.yaml {"endpoints":{"processChat":{"availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"concurrency":null,"serviceAccountEmail":null,"vpc":null,"platform":"gcfv2","labels":{},"callableTrigger":{},"entryPoint":"processChat"}},"specVersion":"v1alpha1","requiredAPIs":[],"extensions":{}}
+[debug] [2024-11-12T21:57:42.648Z] defaultcredentials: writing to file C:\Users\Rob\AppData\Roaming\firebase\lisakhun58_gmail_com_application_default_credentials.json
+[debug] [2024-11-12T21:57:42.648Z] Setting GAC to C:\Users\Rob\AppData\Roaming\firebase\lisakhun58_gmail_com_application_default_credentials.json {"metadata":{"emulator":{"name":"functions"},"message":"Setting GAC to C:\\Users\\Rob\\AppData\\Roaming\\firebase\\lisakhun58_gmail_com_application_default_credentials.json"}}
+[info] +  functions: Loaded functions definitions from source: processChat. {"metadata":{"emulator":{"name":"functions"},"message":"Loaded functions definitions from source: processChat."}}
+[info] +  functions[us-central1-processChat]: http function initialized (http://127.0.0.1:5001/notalone-de4fc/us-central1/processChat). {"metadata":{"emulator":{"name":"functions"},"message":"\u001b[1mhttp\u001b[22m function initialized (http://127.0.0.1:5001/notalone-de4fc/us-central1/processChat)."}}
+[debug] [2024-11-12T21:57:42.656Z] Could not find VSCode notification endpoint: FetchError: request to http://localhost:40001/vscode/notify failed, reason: . If you are not running the Firebase Data Connect VSCode extension, this is expected and not an issue.
+[info] 
+┌─────────────────────────────────────────────────────────────┐
+│ ✔  All emulators ready! It is now safe to connect your app. │
+│ i  View Emulator UI at http://127.0.0.1:4000/               │
+└─────────────────────────────────────────────────────────────┘
+
+┌────────────────┬────────────────┬──────────────────────────────────┐
+│ Emulator       │ Host:Port      │ View in Emulator UI              │
+├────────────────┼────────────────┼──────────────────────────────────┤
+│ Authentication │ 127.0.0.1:9099 │ http://127.0.0.1:4000/auth       │
+├────────────────┼────────────────┼──────────────────────────────────┤
+│ Functions      │ 127.0.0.1:5001 │ http://127.0.0.1:4000/functions  │
+├────────────────┼────────────────┼──────────────────────────────────┤
+│ Firestore      │ 127.0.0.1:8080 │ http://127.0.0.1:4000/firestore  │
+├────────────────┼────────────────┼──────────────────────────────────┤
+│ Extensions     │ 127.0.0.1:5001 │ http://127.0.0.1:4000/extensions │
+└────────────────┴────────────────┴──────────────────────────────────┘
+  Emulator Hub running at 127.0.0.1:4400
+  Other reserved ports: 4500, 9150
+┌─────────────────────────┬───────────────┬─────────────────────┐
+│ Extension Instance Name │ Extension Ref │ View in Emulator UI │
+└─────────────────────────┴───────────────┴─────────────────────┘
+Issues? Report them at https://github.com/firebase/firebase-tools/issues and attach the *-debug.log files.
+ 
+[debug] [2024-11-12T21:58:02.026Z] File C:\Users\Rob\Apps\not-alone\functions\tsconfig.eslint.json changed, reloading triggers {"metadata":{"emulator":{"name":"functions"},"message":"File C:\\Users\\Rob\\Apps\\not-alone\\functions\\tsconfig.eslint.json changed, reloading triggers"}}
+[debug] [2024-11-12T21:58:03.040Z] Validating nodejs source
+[debug] [2024-11-12T21:58:03.949Z] > [functions] package.json contents: {
+  "name": "functions",
+  "scripts": {
+    "lint": "eslint --ext .js,.ts .",
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "serve": "npm run build && firebase emulators:start --only functions",
+    "shell": "npm run build && firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "18"
+  },
+  "main": "lib/index.js",
+  "type": "commonjs",
+  "dependencies": {
+    "@google-cloud/vertexai": "^1.9.0",
+    "firebase-admin": "^12.7.0",
+    "firebase-functions": "^6.1.0"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.12.0",
+    "@typescript-eslint/parser": "^5.12.0",
+    "eslint": "^8.9.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-plugin-import": "^2.25.4",
+    "firebase-functions-test": "^3.1.0",
+    "typescript": "^4.9.0"
+  },
+  "private": true
+}
+[debug] [2024-11-12T21:58:03.949Z] Building nodejs source
+[debug] [2024-11-12T21:58:03.949Z] Failed to find version of module node: reached end of search path C:\Users\Rob\Apps\not-alone\functions\node_modules
+[warn] !  functions: Your requested "node" version "18" doesn't match your global version "20". Using node@20 from host. 
+[debug] [2024-11-12T21:58:03.951Z] Could not find functions.yaml. Must use http discovery
+[debug] [2024-11-12T21:58:03.961Z] Found firebase-functions binary at 'C:\Users\Rob\Apps\not-alone\functions\node_modules\.bin\firebase-functions'
+[info] Serving at port 8888
+
+[debug] [2024-11-12T21:58:04.576Z] Got response from /__/functions.yaml {"endpoints":{"processChat":{"availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"concurrency":null,"serviceAccountEmail":null,"vpc":null,"platform":"gcfv2","labels":{},"callableTrigger":{},"entryPoint":"processChat"}},"specVersion":"v1alpha1","requiredAPIs":[],"extensions":{}}
+[debug] [2024-11-12T21:58:08.610Z] defaultcredentials: writing to file C:\Users\Rob\AppData\Roaming\firebase\lisakhun58_gmail_com_application_default_credentials.json
+[debug] [2024-11-12T21:58:08.611Z] Setting GAC to C:\Users\Rob\AppData\Roaming\firebase\lisakhun58_gmail_com_application_default_credentials.json {"metadata":{"emulator":{"name":"functions"},"message":"Setting GAC to C:\\Users\\Rob\\AppData\\Roaming\\firebase\\lisakhun58_gmail_com_application_default_credentials.json"}}
+[info] +  functions: Loaded functions definitions from source: processChat. {"metadata":{"emulator":{"name":"functions"},"message":"Loaded functions definitions from source: processChat."}}
+[debug] [2024-11-12T21:58:18.556Z] File C:\Users\Rob\Apps\not-alone\functions\lib\index.js.map changed, reloading triggers {"metadata":{"emulator":{"name":"functions"},"message":"File C:\\Users\\Rob\\Apps\\not-alone\\functions\\lib\\index.js.map changed, reloading triggers"}}
+[debug] [2024-11-12T21:58:18.559Z] File C:\Users\Rob\Apps\not-alone\functions\lib\index.js changed, reloading triggers {"metadata":{"emulator":{"name":"functions"},"message":"File C:\\Users\\Rob\\Apps\\not-alone\\functions\\lib\\index.js changed, reloading triggers"}}
+[debug] [2024-11-12T21:58:19.567Z] Validating nodejs source
+[debug] [2024-11-12T21:58:20.498Z] > [functions] package.json contents: {
+  "name": "functions",
+  "scripts": {
+    "lint": "eslint --ext .js,.ts .",
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "serve": "npm run build && firebase emulators:start --only functions",
+    "shell": "npm run build && firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "18"
+  },
+  "main": "lib/index.js",
+  "type": "commonjs",
+  "dependencies": {
+    "@google-cloud/vertexai": "^1.9.0",
+    "firebase-admin": "^12.7.0",
+    "firebase-functions": "^6.1.0"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.12.0",
+    "@typescript-eslint/parser": "^5.12.0",
+    "eslint": "^8.9.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-plugin-import": "^2.25.4",
+    "firebase-functions-test": "^3.1.0",
+    "typescript": "^4.9.0"
+  },
+  "private": true
+}
+[debug] [2024-11-12T21:58:20.498Z] Building nodejs source
+[debug] [2024-11-12T21:58:20.498Z] Failed to find version of module node: reached end of search path C:\Users\Rob\Apps\not-alone\functions\node_modules
+[warn] !  functions: Your requested "node" version "18" doesn't match your global version "20". Using node@20 from host. 
+[debug] [2024-11-12T21:58:20.500Z] Could not find functions.yaml. Must use http discovery
+[debug] [2024-11-12T21:58:20.510Z] Found firebase-functions binary at 'C:\Users\Rob\Apps\not-alone\functions\node_modules\.bin\firebase-functions'
+[info] Serving at port 8128
+
+[debug] [2024-11-12T21:58:21.233Z] Got response from /__/functions.yaml {"endpoints":{"processChat":{"availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"concurrency":null,"serviceAccountEmail":null,"vpc":null,"platform":"gcfv2","labels":{},"callableTrigger":{},"entryPoint":"processChat"}},"specVersion":"v1alpha1","requiredAPIs":[],"extensions":{}}
+[debug] [2024-11-12T21:58:25.267Z] defaultcredentials: writing to file C:\Users\Rob\AppData\Roaming\firebase\lisakhun58_gmail_com_application_default_credentials.json
+[debug] [2024-11-12T21:58:25.268Z] Setting GAC to C:\Users\Rob\AppData\Roaming\firebase\lisakhun58_gmail_com_application_default_credentials.json {"metadata":{"emulator":{"name":"functions"},"message":"Setting GAC to C:\\Users\\Rob\\AppData\\Roaming\\firebase\\lisakhun58_gmail_com_application_default_credentials.json"}}
+[info] +  functions: Loaded functions definitions from source: processChat. {"metadata":{"emulator":{"name":"functions"},"message":"Loaded functions definitions from source: processChat."}}
+[debug] [2024-11-12T21:58:33.625Z] >>> [apiv2][query] POST http://127.0.0.1:5001/functions/projects/notalone-de4fc/trigger_multicast [none]
+[debug] [2024-11-12T21:58:33.625Z] >>> [apiv2][body] POST http://127.0.0.1:5001/functions/projects/notalone-de4fc/trigger_multicast {"eventId":"a4168ef1-4883-4422-9c7b-722117f60ab8","eventType":"providers/firebase.auth/eventTypes/user.create","resource":{"name":"projects/notalone-de4fc","service":"firebaseauth.googleapis.com"},"params":{},"timestamp":"2024-11-12T21:58:33.624Z","data":{"uid":"34b2XQAnQgS78q5A6Qeek4Tashl4","email":"chicken.algae.413@example.com","emailVerified":true,"displayName":"Chicken Algae","metadata":{"creationTime":"2024-11-12T21:58:33.623Z","lastSignInTime":"2024-11-12T21:58:33.623Z"},"customClaims":{},"providerData":[{"providerId":"google.com","rawId":"9878074379227360780432902531142499276830","federatedId":"9878074379227360780432902531142499276830","displayName":"Chicken Algae","email":"chicken.algae.413@example.com","screenName":"algae_chicken"}]}}
+[debug] [2024-11-12T21:58:33.636Z] <<< [apiv2][status] POST http://127.0.0.1:5001/functions/projects/notalone-de4fc/trigger_multicast 200
+[debug] [2024-11-12T21:58:33.636Z] <<< [apiv2][body] POST http://127.0.0.1:5001/functions/projects/notalone-de4fc/trigger_multicast {"status":"multicast_acknowledged"}
+[debug] [2024-11-12T21:58:35.317Z] [work-queue] {"queuedWork":["/notalone-de4fc/us-central1/processChat-2024-11-12T21:58:35.317Z"],"queueLength":1,"runningWork":[],"workRunningCount":0}
+[debug] [2024-11-12T21:58:35.317Z] [work-queue] {"queuedWork":[],"queueLength":0,"runningWork":["/notalone-de4fc/us-central1/processChat-2024-11-12T21:58:35.317Z"],"workRunningCount":1}
+[debug] [2024-11-12T21:58:35.318Z] Accepted request OPTIONS /notalone-de4fc/us-central1/processChat --> us-central1-processChat
+[debug] [2024-11-12T21:58:35.320Z] [functions] Runtime ready! Sending request! {"metadata":{"emulator":{"name":"functions"},"message":"[functions] Runtime ready! Sending request!"}}
+[debug] [2024-11-12T21:58:35.321Z] [functions] Got req.url=/notalone-de4fc/us-central1/processChat, mapping to path=/ {"metadata":{"emulator":{"name":"functions"},"message":"[functions] Got req.url=/notalone-de4fc/us-central1/processChat, mapping to path=/"}}
+[debug] [2024-11-12T21:58:35.332Z] [worker-pool] addWorker(us-central1-processChat) {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] addWorker(us-central1-processChat)"}}
+[debug] [2024-11-12T21:58:35.333Z] [worker-pool] Adding worker with key us-central1-processChat, total=1 {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] Adding worker with key us-central1-processChat, total=1"}}
+[debug] [2024-11-12T21:58:36.884Z] [runtime-status] [33232] Resolved module firebase-admin {"declared":true,"installed":true,"version":"12.7.0","resolution":"C:\\Users\\Rob\\Apps\\not-alone\\functions\\node_modules\\firebase-admin\\lib\\index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"[runtime-status] [33232] Resolved module firebase-admin {\"declared\":true,\"installed\":true,\"version\":\"12.7.0\",\"resolution\":\"C:\\\\Users\\\\Rob\\\\Apps\\\\not-alone\\\\functions\\\\node_modules\\\\firebase-admin\\\\lib\\\\index.js\"}"}}
+[debug] [2024-11-12T21:58:36.885Z] [runtime-status] [33232] Resolved module firebase-functions {"declared":true,"installed":true,"version":"6.1.0","resolution":"C:\\Users\\Rob\\Apps\\not-alone\\functions\\node_modules\\firebase-functions\\lib\\v2\\index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"[runtime-status] [33232] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"6.1.0\",\"resolution\":\"C:\\\\Users\\\\Rob\\\\Apps\\\\not-alone\\\\functions\\\\node_modules\\\\firebase-functions\\\\lib\\\\v2\\\\index.js\"}"}}
+[debug] [2024-11-12T21:58:36.885Z] [runtime-status] [33232] Found local functions config: C:\Users\Rob\Apps\not-alone\functions/.runtimeconfig.json {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"[runtime-status] [33232] Found local functions config: C:\\Users\\Rob\\Apps\\not-alone\\functions/.runtimeconfig.json"}}
+[debug] [2024-11-12T21:58:36.885Z] [runtime-status] [33232] Outgoing network have been stubbed. [{"name":"http","status":"mocked"},{"name":"http","status":"mocked"},{"name":"https","status":"mocked"},{"name":"https","status":"mocked"},{"name":"net","status":"mocked"}] {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"[runtime-status] [33232] Outgoing network have been stubbed. [{\"name\":\"http\",\"status\":\"mocked\"},{\"name\":\"http\",\"status\":\"mocked\"},{\"name\":\"https\",\"status\":\"mocked\"},{\"name\":\"https\",\"status\":\"mocked\"},{\"name\":\"net\",\"status\":\"mocked\"}]"}}
+[debug] [2024-11-12T21:58:36.887Z] [runtime-status] [33232] Resolved module firebase-functions {"declared":true,"installed":true,"version":"6.1.0","resolution":"C:\\Users\\Rob\\Apps\\not-alone\\functions\\node_modules\\firebase-functions\\lib\\v2\\index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"[runtime-status] [33232] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"6.1.0\",\"resolution\":\"C:\\\\Users\\\\Rob\\\\Apps\\\\not-alone\\\\functions\\\\node_modules\\\\firebase-functions\\\\lib\\\\v2\\\\index.js\"}"}}
+[debug] [2024-11-12T21:58:37.203Z] [runtime-status] [33232] Checked functions.config() {"config":{"vertex":{"project":"notalone-de4fc","location":"australia-southeast1","model":"gemini-1.5-flash-002"},"environment":{"mode":"development"}}} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"[runtime-status] [33232] Checked functions.config() {\"config\":{\"vertex\":{\"project\":\"notalone-de4fc\",\"location\":\"australia-southeast1\",\"model\":\"gemini-1.5-flash-002\"},\"environment\":{\"mode\":\"development\"}}}"}}
+[debug] [2024-11-12T21:58:37.203Z] [runtime-status] [33232] firebase-functions has been stubbed. {"functionsResolution":{"declared":true,"installed":true,"version":"6.1.0","resolution":"C:\\Users\\Rob\\Apps\\not-alone\\functions\\node_modules\\firebase-functions\\lib\\v2\\index.js"}} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"[runtime-status] [33232] firebase-functions has been stubbed. {\"functionsResolution\":{\"declared\":true,\"installed\":true,\"version\":\"6.1.0\",\"resolution\":\"C:\\\\Users\\\\Rob\\\\Apps\\\\not-alone\\\\functions\\\\node_modules\\\\firebase-functions\\\\lib\\\\v2\\\\index.js\"}}"}}
+[debug] [2024-11-12T21:58:37.204Z] [runtime-status] [33232] Resolved module firebase-functions {"declared":true,"installed":true,"version":"6.1.0","resolution":"C:\\Users\\Rob\\Apps\\not-alone\\functions\\node_modules\\firebase-functions\\lib\\v2\\index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"[runtime-status] [33232] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"6.1.0\",\"resolution\":\"C:\\\\Users\\\\Rob\\\\Apps\\\\not-alone\\\\functions\\\\node_modules\\\\firebase-functions\\\\lib\\\\v2\\\\index.js\"}"}}
+[debug] [2024-11-12T21:58:37.209Z] [runtime-status] [33232] Resolved module firebase-admin {"declared":true,"installed":true,"version":"12.7.0","resolution":"C:\\Users\\Rob\\Apps\\not-alone\\functions\\node_modules\\firebase-admin\\lib\\index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"[runtime-status] [33232] Resolved module firebase-admin {\"declared\":true,\"installed\":true,\"version\":\"12.7.0\",\"resolution\":\"C:\\\\Users\\\\Rob\\\\Apps\\\\not-alone\\\\functions\\\\node_modules\\\\firebase-admin\\\\lib\\\\index.js\"}"}}
+[debug] [2024-11-12T21:58:37.212Z] [runtime-status] [33232] Resolved module firebase-functions {"declared":true,"installed":true,"version":"6.1.0","resolution":"C:\\Users\\Rob\\Apps\\not-alone\\functions\\node_modules\\firebase-functions\\lib\\v2\\index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"[runtime-status] [33232] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"6.1.0\",\"resolution\":\"C:\\\\Users\\\\Rob\\\\Apps\\\\not-alone\\\\functions\\\\node_modules\\\\firebase-functions\\\\lib\\\\v2\\\\index.js\"}"}}
+[debug] [2024-11-12T21:58:37.213Z] [runtime-status] [33232] firebase-admin has been stubbed. {"adminResolution":{"declared":true,"installed":true,"version":"12.7.0","resolution":"C:\\Users\\Rob\\Apps\\not-alone\\functions\\node_modules\\firebase-admin\\lib\\index.js"}} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"[runtime-status] [33232] firebase-admin has been stubbed. {\"adminResolution\":{\"declared\":true,\"installed\":true,\"version\":\"12.7.0\",\"resolution\":\"C:\\\\Users\\\\Rob\\\\Apps\\\\not-alone\\\\functions\\\\node_modules\\\\firebase-admin\\\\lib\\\\index.js\"}}"}}
+[debug] [2024-11-12T21:58:37.304Z] [runtime-status] [33232] Functions runtime initialized. {"cwd":"C:\\Users\\Rob\\Apps\\not-alone\\functions","node_version":"20.18.0"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"[runtime-status] [33232] Functions runtime initialized. {\"cwd\":\"C:\\\\Users\\\\Rob\\\\Apps\\\\not-alone\\\\functions\",\"node_version\":\"20.18.0\"}"}}
+[debug] [2024-11-12T21:58:37.305Z] [runtime-status] [33232] Listening to port: \\?\pipe\fire_emu_f69cc1ae7844ccfb {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"[runtime-status] [33232] Listening to port: \\\\?\\pipe\\fire_emu_f69cc1ae7844ccfb"}}
+[debug] [2024-11-12T21:58:37.315Z] [worker-us-central1-processChat-d1cb888a-bf04-4e39-98df-dbff51cfe247]: IDLE {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"[worker-us-central1-processChat-d1cb888a-bf04-4e39-98df-dbff51cfe247]: IDLE"}}
+[debug] [2024-11-12T21:58:37.315Z] [worker-pool] submitRequest(triggerId=us-central1-processChat) {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] submitRequest(triggerId=us-central1-processChat)"}}
+[info] i  functions: Beginning execution of "us-central1-processChat" {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"Beginning execution of \"us-central1-processChat\""}}
+[debug] [2024-11-12T21:58:37.316Z] [worker-us-central1-processChat-d1cb888a-bf04-4e39-98df-dbff51cfe247]: BUSY {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"[worker-us-central1-processChat-d1cb888a-bf04-4e39-98df-dbff51cfe247]: BUSY"}}
+[debug] [2024-11-12T21:58:37.322Z] Finishing up request with event=pause {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"Finishing up request with event=pause"}}
+[info] i  functions: Finished "us-central1-processChat" in 5.5548ms {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"Finished \"us-central1-processChat\" in 5.5548ms"}}
+[debug] [2024-11-12T21:58:37.323Z] [worker-us-central1-processChat-d1cb888a-bf04-4e39-98df-dbff51cfe247]: IDLE {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"[worker-us-central1-processChat-d1cb888a-bf04-4e39-98df-dbff51cfe247]: IDLE"}}
+[debug] [2024-11-12T21:58:37.323Z] Finishing up request with event=finish {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"Finishing up request with event=finish"}}
+[debug] [2024-11-12T21:58:37.323Z] Finishing up request with event=close {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"Finishing up request with event=close"}}
+[debug] [2024-11-12T21:58:37.324Z] [work-queue] {"queuedWork":[],"queueLength":0,"runningWork":[],"workRunningCount":0}
+[debug] [2024-11-12T21:58:37.326Z] [work-queue] {"queuedWork":["/notalone-de4fc/us-central1/processChat-2024-11-12T21:58:37.326Z"],"queueLength":1,"runningWork":[],"workRunningCount":0}
+[debug] [2024-11-12T21:58:37.326Z] [work-queue] {"queuedWork":[],"queueLength":0,"runningWork":["/notalone-de4fc/us-central1/processChat-2024-11-12T21:58:37.326Z"],"workRunningCount":1}
+[debug] [2024-11-12T21:58:37.326Z] Accepted request POST /notalone-de4fc/us-central1/processChat --> us-central1-processChat
+[debug] [2024-11-12T21:58:37.328Z] [functions] Runtime ready! Sending request! {"metadata":{"emulator":{"name":"functions"},"message":"[functions] Runtime ready! Sending request!"}}
+[debug] [2024-11-12T21:58:37.328Z] [functions] Got req.url=/notalone-de4fc/us-central1/processChat, mapping to path=/ {"metadata":{"emulator":{"name":"functions"},"message":"[functions] Got req.url=/notalone-de4fc/us-central1/processChat, mapping to path=/"}}
+[debug] [2024-11-12T21:58:37.328Z] [worker-pool] submitRequest(triggerId=us-central1-processChat) {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] submitRequest(triggerId=us-central1-processChat)"}}
+[info] i  functions: Beginning execution of "us-central1-processChat" {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"Beginning execution of \"us-central1-processChat\""}}
+[debug] [2024-11-12T21:58:37.329Z] [worker-us-central1-processChat-d1cb888a-bf04-4e39-98df-dbff51cfe247]: BUSY {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"[worker-us-central1-processChat-d1cb888a-bf04-4e39-98df-dbff51cfe247]: BUSY"}}
+[info] >  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"} {"user":{"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"},"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"\u001b[90m> \u001b[39m {\"verifications\":{\"app\":\"MISSING\",\"auth\":\"VALID\"},\"logging.googleapis.com/labels\":{\"firebase-log-type\":\"callable-request-verification\"},\"severity\":\"DEBUG\",\"message\":\"Callable request verification passed\"}"}}
+[warn] !  Google API requested!
+   - URL: "https://oauth2.googleapis.com/token"
+   - Be careful, this may be a production service. {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"Google API requested!\n   - URL: \"https://oauth2.googleapis.com/token\"\n   - Be careful, this may be a production service."}}
+[debug] [2024-11-12T21:58:39.071Z] Finishing up request with event=pause {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"Finishing up request with event=pause"}}
+[info] i  functions: Finished "us-central1-processChat" in 1742.6889ms {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"Finished \"us-central1-processChat\" in 1742.6889ms"}}
+[debug] [2024-11-12T21:58:39.072Z] [worker-us-central1-processChat-d1cb888a-bf04-4e39-98df-dbff51cfe247]: IDLE {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"[worker-us-central1-processChat-d1cb888a-bf04-4e39-98df-dbff51cfe247]: IDLE"}}
+[debug] [2024-11-12T21:58:39.073Z] Finishing up request with event=finish {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"Finishing up request with event=finish"}}
+[debug] [2024-11-12T21:58:39.073Z] Finishing up request with event=close {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"Finishing up request with event=close"}}
+[debug] [2024-11-12T21:58:39.073Z] [work-queue] {"queuedWork":[],"queueLength":0,"runningWork":[],"workRunningCount":0}
+[debug] [2024-11-12T22:00:30.264Z] File C:\Users\Rob\Apps\not-alone\functions\src\index.ts changed, reloading triggers {"metadata":{"emulator":{"name":"functions"},"message":"File C:\\Users\\Rob\\Apps\\not-alone\\functions\\src\\index.ts changed, reloading triggers"}}
+[debug] [2024-11-12T22:00:31.276Z] Validating nodejs source
+[debug] [2024-11-12T22:00:32.227Z] > [functions] package.json contents: {
+  "name": "functions",
+  "scripts": {
+    "lint": "eslint --ext .js,.ts .",
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "serve": "npm run build && firebase emulators:start --only functions",
+    "shell": "npm run build && firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "18"
+  },
+  "main": "lib/index.js",
+  "type": "commonjs",
+  "dependencies": {
+    "@google-cloud/vertexai": "^1.9.0",
+    "firebase-admin": "^12.7.0",
+    "firebase-functions": "^6.1.0"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.12.0",
+    "@typescript-eslint/parser": "^5.12.0",
+    "eslint": "^8.9.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-plugin-import": "^2.25.4",
+    "firebase-functions-test": "^3.1.0",
+    "typescript": "^4.9.0"
+  },
+  "private": true
+}
+[debug] [2024-11-12T22:00:32.228Z] Building nodejs source
+[debug] [2024-11-12T22:00:32.228Z] Failed to find version of module node: reached end of search path C:\Users\Rob\Apps\not-alone\functions\node_modules
+[warn] !  functions: Your requested "node" version "18" doesn't match your global version "20". Using node@20 from host. 
+[debug] [2024-11-12T22:00:32.229Z] Could not find functions.yaml. Must use http discovery
+[debug] [2024-11-12T22:00:32.238Z] Found firebase-functions binary at 'C:\Users\Rob\Apps\not-alone\functions\node_modules\.bin\firebase-functions'
+[info] Serving at port 8677
+
+[debug] [2024-11-12T22:00:33.016Z] Got response from /__/functions.yaml {"endpoints":{"processChat":{"availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"concurrency":null,"serviceAccountEmail":null,"vpc":null,"platform":"gcfv2","labels":{},"callableTrigger":{},"entryPoint":"processChat"}},"specVersion":"v1alpha1","requiredAPIs":[],"extensions":{}}
+[debug] [2024-11-12T22:00:37.042Z] defaultcredentials: writing to file C:\Users\Rob\AppData\Roaming\firebase\lisakhun58_gmail_com_application_default_credentials.json
+[debug] [2024-11-12T22:00:37.043Z] Setting GAC to C:\Users\Rob\AppData\Roaming\firebase\lisakhun58_gmail_com_application_default_credentials.json {"metadata":{"emulator":{"name":"functions"},"message":"Setting GAC to C:\\Users\\Rob\\AppData\\Roaming\\firebase\\lisakhun58_gmail_com_application_default_credentials.json"}}
+[info] +  functions: Loaded functions definitions from source: processChat. {"metadata":{"emulator":{"name":"functions"},"message":"Loaded functions definitions from source: processChat."}}
+[debug] [2024-11-12T22:00:37.044Z] [worker-pool] Shutting down IDLE worker (us-central1-processChat) {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] Shutting down IDLE worker (us-central1-processChat)"}}
+[debug] [2024-11-12T22:00:37.044Z] [worker-us-central1-processChat-d1cb888a-bf04-4e39-98df-dbff51cfe247]: FINISHING {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"[worker-us-central1-processChat-d1cb888a-bf04-4e39-98df-dbff51cfe247]: FINISHING"}}
+[debug] [2024-11-12T22:00:37.058Z] [worker-us-central1-processChat-d1cb888a-bf04-4e39-98df-dbff51cfe247]: exited {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"[worker-us-central1-processChat-d1cb888a-bf04-4e39-98df-dbff51cfe247]: exited"}}
+[debug] [2024-11-12T22:00:37.058Z] [worker-us-central1-processChat-d1cb888a-bf04-4e39-98df-dbff51cfe247]: FINISHED {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"[worker-us-central1-processChat-d1cb888a-bf04-4e39-98df-dbff51cfe247]: FINISHED"}}
+[debug] [2024-11-12T22:00:38.812Z] File C:\Users\Rob\Apps\not-alone\functions\lib\index.js.map changed, reloading triggers {"metadata":{"emulator":{"name":"functions"},"message":"File C:\\Users\\Rob\\Apps\\not-alone\\functions\\lib\\index.js.map changed, reloading triggers"}}
+[debug] [2024-11-12T22:00:38.812Z] File C:\Users\Rob\Apps\not-alone\functions\lib\index.js changed, reloading triggers {"metadata":{"emulator":{"name":"functions"},"message":"File C:\\Users\\Rob\\Apps\\not-alone\\functions\\lib\\index.js changed, reloading triggers"}}
+[debug] [2024-11-12T22:00:39.815Z] Validating nodejs source
+[debug] [2024-11-12T22:00:41.387Z] > [functions] package.json contents: {
+  "name": "functions",
+  "scripts": {
+    "lint": "eslint --ext .js,.ts .",
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "serve": "npm run build && firebase emulators:start --only functions",
+    "shell": "npm run build && firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "18"
+  },
+  "main": "lib/index.js",
+  "type": "commonjs",
+  "dependencies": {
+    "@google-cloud/vertexai": "^1.9.0",
+    "firebase-admin": "^12.7.0",
+    "firebase-functions": "^6.1.0"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.12.0",
+    "@typescript-eslint/parser": "^5.12.0",
+    "eslint": "^8.9.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-plugin-import": "^2.25.4",
+    "firebase-functions-test": "^3.1.0",
+    "typescript": "^4.9.0"
+  },
+  "private": true
+}
+[debug] [2024-11-12T22:00:41.387Z] Building nodejs source
+[debug] [2024-11-12T22:00:41.387Z] Failed to find version of module node: reached end of search path C:\Users\Rob\Apps\not-alone\functions\node_modules
+[warn] !  functions: Your requested "node" version "18" doesn't match your global version "20". Using node@20 from host. 
+[debug] [2024-11-12T22:00:41.388Z] Could not find functions.yaml. Must use http discovery
+[debug] [2024-11-12T22:00:41.396Z] Found firebase-functions binary at 'C:\Users\Rob\Apps\not-alone\functions\node_modules\.bin\firebase-functions'
+[info] Serving at port 8582
+
+[debug] [2024-11-12T22:00:42.020Z] Got response from /__/functions.yaml {"endpoints":{"processChat":{"availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"concurrency":null,"serviceAccountEmail":null,"vpc":null,"platform":"gcfv2","labels":{},"callableTrigger":{},"entryPoint":"processChat"}},"specVersion":"v1alpha1","requiredAPIs":[],"extensions":{}}
+[debug] [2024-11-12T22:00:46.048Z] defaultcredentials: writing to file C:\Users\Rob\AppData\Roaming\firebase\lisakhun58_gmail_com_application_default_credentials.json
+[debug] [2024-11-12T22:00:46.049Z] Setting GAC to C:\Users\Rob\AppData\Roaming\firebase\lisakhun58_gmail_com_application_default_credentials.json {"metadata":{"emulator":{"name":"functions"},"message":"Setting GAC to C:\\Users\\Rob\\AppData\\Roaming\\firebase\\lisakhun58_gmail_com_application_default_credentials.json"}}
+[info] +  functions: Loaded functions definitions from source: processChat. {"metadata":{"emulator":{"name":"functions"},"message":"Loaded functions definitions from source: processChat."}}
+[debug] [2024-11-12T22:01:02.919Z] [work-queue] {"queuedWork":["/notalone-de4fc/us-central1/processChat-2024-11-12T22:01:02.919Z"],"queueLength":1,"runningWork":[],"workRunningCount":0}
+[debug] [2024-11-12T22:01:02.919Z] [work-queue] {"queuedWork":[],"queueLength":0,"runningWork":["/notalone-de4fc/us-central1/processChat-2024-11-12T22:01:02.919Z"],"workRunningCount":1}
+[debug] [2024-11-12T22:01:02.919Z] Accepted request OPTIONS /notalone-de4fc/us-central1/processChat --> us-central1-processChat
+[debug] [2024-11-12T22:01:02.922Z] [functions] Runtime ready! Sending request! {"metadata":{"emulator":{"name":"functions"},"message":"[functions] Runtime ready! Sending request!"}}
+[debug] [2024-11-12T22:01:02.922Z] [functions] Got req.url=/notalone-de4fc/us-central1/processChat, mapping to path=/ {"metadata":{"emulator":{"name":"functions"},"message":"[functions] Got req.url=/notalone-de4fc/us-central1/processChat, mapping to path=/"}}
+[debug] [2024-11-12T22:01:02.922Z] [worker-pool] Cleaned up workers for us-central1-processChat: 1 --> 0 {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] Cleaned up workers for us-central1-processChat: 1 --> 0"}}
+[debug] [2024-11-12T22:01:02.931Z] [worker-pool] addWorker(us-central1-processChat) {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] addWorker(us-central1-processChat)"}}
+[debug] [2024-11-12T22:01:02.931Z] [worker-pool] Adding worker with key us-central1-processChat, total=1 {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] Adding worker with key us-central1-processChat, total=1"}}
+[debug] [2024-11-12T22:01:04.434Z] [runtime-status] [23344] Resolved module firebase-admin {"declared":true,"installed":true,"version":"12.7.0","resolution":"C:\\Users\\Rob\\Apps\\not-alone\\functions\\node_modules\\firebase-admin\\lib\\index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"[runtime-status] [23344] Resolved module firebase-admin {\"declared\":true,\"installed\":true,\"version\":\"12.7.0\",\"resolution\":\"C:\\\\Users\\\\Rob\\\\Apps\\\\not-alone\\\\functions\\\\node_modules\\\\firebase-admin\\\\lib\\\\index.js\"}"}}
+[debug] [2024-11-12T22:01:04.436Z] [runtime-status] [23344] Resolved module firebase-functions {"declared":true,"installed":true,"version":"6.1.0","resolution":"C:\\Users\\Rob\\Apps\\not-alone\\functions\\node_modules\\firebase-functions\\lib\\v2\\index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"[runtime-status] [23344] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"6.1.0\",\"resolution\":\"C:\\\\Users\\\\Rob\\\\Apps\\\\not-alone\\\\functions\\\\node_modules\\\\firebase-functions\\\\lib\\\\v2\\\\index.js\"}"}}
+[debug] [2024-11-12T22:01:04.436Z] [runtime-status] [23344] Found local functions config: C:\Users\Rob\Apps\not-alone\functions/.runtimeconfig.json {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"[runtime-status] [23344] Found local functions config: C:\\Users\\Rob\\Apps\\not-alone\\functions/.runtimeconfig.json"}}
+[debug] [2024-11-12T22:01:04.437Z] [runtime-status] [23344] Outgoing network have been stubbed. [{"name":"http","status":"mocked"},{"name":"http","status":"mocked"},{"name":"https","status":"mocked"},{"name":"https","status":"mocked"},{"name":"net","status":"mocked"}] {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"[runtime-status] [23344] Outgoing network have been stubbed. [{\"name\":\"http\",\"status\":\"mocked\"},{\"name\":\"http\",\"status\":\"mocked\"},{\"name\":\"https\",\"status\":\"mocked\"},{\"name\":\"https\",\"status\":\"mocked\"},{\"name\":\"net\",\"status\":\"mocked\"}]"}}
+[debug] [2024-11-12T22:01:04.437Z] [runtime-status] [23344] Resolved module firebase-functions {"declared":true,"installed":true,"version":"6.1.0","resolution":"C:\\Users\\Rob\\Apps\\not-alone\\functions\\node_modules\\firebase-functions\\lib\\v2\\index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"[runtime-status] [23344] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"6.1.0\",\"resolution\":\"C:\\\\Users\\\\Rob\\\\Apps\\\\not-alone\\\\functions\\\\node_modules\\\\firebase-functions\\\\lib\\\\v2\\\\index.js\"}"}}
+[debug] [2024-11-12T22:01:04.746Z] [runtime-status] [23344] Checked functions.config() {"config":{"vertex":{"project":"notalone-de4fc","location":"australia-southeast1","model":"gemini-1.5-flash-002"},"environment":{"mode":"development"}}} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"[runtime-status] [23344] Checked functions.config() {\"config\":{\"vertex\":{\"project\":\"notalone-de4fc\",\"location\":\"australia-southeast1\",\"model\":\"gemini-1.5-flash-002\"},\"environment\":{\"mode\":\"development\"}}}"}}
+[debug] [2024-11-12T22:01:04.746Z] [runtime-status] [23344] firebase-functions has been stubbed. {"functionsResolution":{"declared":true,"installed":true,"version":"6.1.0","resolution":"C:\\Users\\Rob\\Apps\\not-alone\\functions\\node_modules\\firebase-functions\\lib\\v2\\index.js"}} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"[runtime-status] [23344] firebase-functions has been stubbed. {\"functionsResolution\":{\"declared\":true,\"installed\":true,\"version\":\"6.1.0\",\"resolution\":\"C:\\\\Users\\\\Rob\\\\Apps\\\\not-alone\\\\functions\\\\node_modules\\\\firebase-functions\\\\lib\\\\v2\\\\index.js\"}}"}}
+[debug] [2024-11-12T22:01:04.747Z] [runtime-status] [23344] Resolved module firebase-functions {"declared":true,"installed":true,"version":"6.1.0","resolution":"C:\\Users\\Rob\\Apps\\not-alone\\functions\\node_modules\\firebase-functions\\lib\\v2\\index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"[runtime-status] [23344] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"6.1.0\",\"resolution\":\"C:\\\\Users\\\\Rob\\\\Apps\\\\not-alone\\\\functions\\\\node_modules\\\\firebase-functions\\\\lib\\\\v2\\\\index.js\"}"}}
+[debug] [2024-11-12T22:01:04.753Z] [runtime-status] [23344] Resolved module firebase-admin {"declared":true,"installed":true,"version":"12.7.0","resolution":"C:\\Users\\Rob\\Apps\\not-alone\\functions\\node_modules\\firebase-admin\\lib\\index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"[runtime-status] [23344] Resolved module firebase-admin {\"declared\":true,\"installed\":true,\"version\":\"12.7.0\",\"resolution\":\"C:\\\\Users\\\\Rob\\\\Apps\\\\not-alone\\\\functions\\\\node_modules\\\\firebase-admin\\\\lib\\\\index.js\"}"}}
+[debug] [2024-11-12T22:01:04.756Z] [runtime-status] [23344] Resolved module firebase-functions {"declared":true,"installed":true,"version":"6.1.0","resolution":"C:\\Users\\Rob\\Apps\\not-alone\\functions\\node_modules\\firebase-functions\\lib\\v2\\index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"[runtime-status] [23344] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"6.1.0\",\"resolution\":\"C:\\\\Users\\\\Rob\\\\Apps\\\\not-alone\\\\functions\\\\node_modules\\\\firebase-functions\\\\lib\\\\v2\\\\index.js\"}"}}
+[debug] [2024-11-12T22:01:04.756Z] [runtime-status] [23344] firebase-admin has been stubbed. {"adminResolution":{"declared":true,"installed":true,"version":"12.7.0","resolution":"C:\\Users\\Rob\\Apps\\not-alone\\functions\\node_modules\\firebase-admin\\lib\\index.js"}} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"[runtime-status] [23344] firebase-admin has been stubbed. {\"adminResolution\":{\"declared\":true,\"installed\":true,\"version\":\"12.7.0\",\"resolution\":\"C:\\\\Users\\\\Rob\\\\Apps\\\\not-alone\\\\functions\\\\node_modules\\\\firebase-admin\\\\lib\\\\index.js\"}}"}}
+[debug] [2024-11-12T22:01:04.847Z] [runtime-status] [23344] Functions runtime initialized. {"cwd":"C:\\Users\\Rob\\Apps\\not-alone\\functions","node_version":"20.18.0"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"[runtime-status] [23344] Functions runtime initialized. {\"cwd\":\"C:\\\\Users\\\\Rob\\\\Apps\\\\not-alone\\\\functions\",\"node_version\":\"20.18.0\"}"}}
+[debug] [2024-11-12T22:01:04.848Z] [runtime-status] [23344] Listening to port: \\?\pipe\fire_emu_180c6f671e6a6c9f {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"[runtime-status] [23344] Listening to port: \\\\?\\pipe\\fire_emu_180c6f671e6a6c9f"}}
+[debug] [2024-11-12T22:01:04.915Z] [worker-us-central1-processChat-06e4cc8d-d68c-4915-8d26-4640ff3493f4]: IDLE {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"[worker-us-central1-processChat-06e4cc8d-d68c-4915-8d26-4640ff3493f4]: IDLE"}}
+[debug] [2024-11-12T22:01:04.915Z] [worker-pool] submitRequest(triggerId=us-central1-processChat) {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] submitRequest(triggerId=us-central1-processChat)"}}
+[info] i  functions: Beginning execution of "us-central1-processChat" {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"Beginning execution of \"us-central1-processChat\""}}
+[debug] [2024-11-12T22:01:04.916Z] [worker-us-central1-processChat-06e4cc8d-d68c-4915-8d26-4640ff3493f4]: BUSY {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"[worker-us-central1-processChat-06e4cc8d-d68c-4915-8d26-4640ff3493f4]: BUSY"}}
+[debug] [2024-11-12T22:01:04.920Z] Finishing up request with event=pause {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"Finishing up request with event=pause"}}
+[info] i  functions: Finished "us-central1-processChat" in 4.1736ms {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"Finished \"us-central1-processChat\" in 4.1736ms"}}
+[debug] [2024-11-12T22:01:04.921Z] [worker-us-central1-processChat-06e4cc8d-d68c-4915-8d26-4640ff3493f4]: IDLE {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"[worker-us-central1-processChat-06e4cc8d-d68c-4915-8d26-4640ff3493f4]: IDLE"}}
+[debug] [2024-11-12T22:01:04.921Z] Finishing up request with event=finish {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"Finishing up request with event=finish"}}
+[debug] [2024-11-12T22:01:04.921Z] Finishing up request with event=close {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"Finishing up request with event=close"}}
+[debug] [2024-11-12T22:01:04.921Z] [work-queue] {"queuedWork":[],"queueLength":0,"runningWork":[],"workRunningCount":0}
+[debug] [2024-11-12T22:01:04.923Z] [work-queue] {"queuedWork":["/notalone-de4fc/us-central1/processChat-2024-11-12T22:01:04.923Z"],"queueLength":1,"runningWork":[],"workRunningCount":0}
+[debug] [2024-11-12T22:01:04.923Z] [work-queue] {"queuedWork":[],"queueLength":0,"runningWork":["/notalone-de4fc/us-central1/processChat-2024-11-12T22:01:04.923Z"],"workRunningCount":1}
+[debug] [2024-11-12T22:01:04.923Z] Accepted request POST /notalone-de4fc/us-central1/processChat --> us-central1-processChat
+[debug] [2024-11-12T22:01:04.924Z] [functions] Runtime ready! Sending request! {"metadata":{"emulator":{"name":"functions"},"message":"[functions] Runtime ready! Sending request!"}}
+[debug] [2024-11-12T22:01:04.924Z] [functions] Got req.url=/notalone-de4fc/us-central1/processChat, mapping to path=/ {"metadata":{"emulator":{"name":"functions"},"message":"[functions] Got req.url=/notalone-de4fc/us-central1/processChat, mapping to path=/"}}
+[debug] [2024-11-12T22:01:04.924Z] [worker-pool] submitRequest(triggerId=us-central1-processChat) {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] submitRequest(triggerId=us-central1-processChat)"}}
+[info] i  functions: Beginning execution of "us-central1-processChat" {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"Beginning execution of \"us-central1-processChat\""}}
+[debug] [2024-11-12T22:01:04.925Z] [worker-us-central1-processChat-06e4cc8d-d68c-4915-8d26-4640ff3493f4]: BUSY {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"[worker-us-central1-processChat-06e4cc8d-d68c-4915-8d26-4640ff3493f4]: BUSY"}}
+[info] >  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"} {"user":{"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"},"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"\u001b[90m> \u001b[39m {\"verifications\":{\"app\":\"MISSING\",\"auth\":\"VALID\"},\"logging.googleapis.com/labels\":{\"firebase-log-type\":\"callable-request-verification\"},\"severity\":\"DEBUG\",\"message\":\"Callable request verification passed\"}"}}
+[info] >  🚀 Incoming request: { auth: 'Authenticated', data: { message: 'hello', history: [] } } {"user":"🚀 Incoming request: { auth: 'Authenticated', data: { message: 'hello', history: [] } }","metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"\u001b[90m> \u001b[39m 🚀 Incoming request: { auth: 'Authenticated', data: { message: 'hello', history: [] } }"}}
+[info] >  📥 Processing request: { messageLength: 5, historyLength: 0, userId: undefined } {"user":"📥 Processing request: { messageLength: 5, historyLength: 0, userId: undefined }","metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"\u001b[90m> \u001b[39m 📥 Processing request: { messageLength: 5, historyLength: 0, userId: undefined }"}}
+[info] >  🔄 Chat history: [] {"user":"🔄 Chat history: []","metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"\u001b[90m> \u001b[39m 🔄 Chat history: []"}}
+[info] >  💬 Sending message to Gemini: hello {"user":"💬 Sending message to Gemini: hello","metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"\u001b[90m> \u001b[39m 💬 Sending message to Gemini: hello"}}
+[warn] !  Google API requested!
+   - URL: "https://oauth2.googleapis.com/token"
+   - Be careful, this may be a production service. {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"Google API requested!\n   - URL: \"https://oauth2.googleapis.com/token\"\n   - Be careful, this may be a production service."}}
+[info] >  📊 Raw Gemini response: { {"user":"📊 Raw Gemini response: {","metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"\u001b[90m> \u001b[39m 📊 Raw Gemini response: {"}}
+[info] >    candidates: [ {"user":"  candidates: [","metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"\u001b[90m> \u001b[39m   candidates: ["}}
+[info] >      { {"user":"    {","metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"\u001b[90m> \u001b[39m     {"}}
+[info] >        content: [Object], {"user":"      content: [Object],","metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"\u001b[90m> \u001b[39m       content: [Object],"}}
+[info] >        finishReason: 'STOP', {"user":"      finishReason: 'STOP',","metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"\u001b[90m> \u001b[39m       finishReason: 'STOP',"}}
+[info] >        avgLogprobs: -0.00043960745361718267, {"user":"      avgLogprobs: -0.00043960745361718267,","metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"\u001b[90m> \u001b[39m       avgLogprobs: -0.00043960745361718267,"}}
+[info] >        index: 0 {"user":"      index: 0","metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"\u001b[90m> \u001b[39m       index: 0"}}
+[info] >      } {"user":"    }","metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"\u001b[90m> \u001b[39m     }"}}
+[info] >    ], {"user":"  ],","metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"\u001b[90m> \u001b[39m   ],"}}
+[info] >    usageMetadata: { {"user":"  usageMetadata: {","metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"\u001b[90m> \u001b[39m   usageMetadata: {"}}
+[info] >      promptTokenCount: 1, {"user":"    promptTokenCount: 1,","metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"\u001b[90m> \u001b[39m     promptTokenCount: 1,"}}
+[info] >      candidatesTokenCount: 11, {"user":"    candidatesTokenCount: 11,","metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"\u001b[90m> \u001b[39m     candidatesTokenCount: 11,"}}
+[info] >      totalTokenCount: 12 {"user":"    totalTokenCount: 12","metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"\u001b[90m> \u001b[39m     totalTokenCount: 12"}}
+[info] >    }, {"user":"  },","metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"\u001b[90m> \u001b[39m   },"}}
+[info] >    modelVersion: 'gemini-1.5-flash-002' {"user":"  modelVersion: 'gemini-1.5-flash-002'","metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"\u001b[90m> \u001b[39m   modelVersion: 'gemini-1.5-flash-002'"}}
+[info] >  } {"user":"}","metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"\u001b[90m> \u001b[39m }"}}
+[debug] [2024-11-12T22:01:06.528Z] Finishing up request with event=pause {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"Finishing up request with event=pause"}}
+[info] i  functions: Finished "us-central1-processChat" in 1602.5965999999999ms {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"Finished \"us-central1-processChat\" in 1602.5965999999999ms"}}
+[debug] [2024-11-12T22:01:06.528Z] [worker-us-central1-processChat-06e4cc8d-d68c-4915-8d26-4640ff3493f4]: IDLE {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"[worker-us-central1-processChat-06e4cc8d-d68c-4915-8d26-4640ff3493f4]: IDLE"}}
+[debug] [2024-11-12T22:01:06.528Z] Finishing up request with event=finish {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"Finishing up request with event=finish"}}
+[debug] [2024-11-12T22:01:06.529Z] Finishing up request with event=close {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"Finishing up request with event=close"}}
+[debug] [2024-11-12T22:01:06.529Z] [work-queue] {"queuedWork":[],"queueLength":0,"runningWork":[],"workRunningCount":0}
+[info] >  ✅ Processed response: { responseLength: 38, timestamp: '2024-11-12T22:01:06.518Z' } {"user":"✅ Processed response: { responseLength: 38, timestamp: '2024-11-12T22:01:06.518Z' }","metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"\u001b[90m> \u001b[39m ✅ Processed response: { responseLength: 38, timestamp: '2024-11-12T22:01:06.518Z' }"}}
+[info] >  📤 Sending final response: { {"user":"📤 Sending final response: {","metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"\u001b[90m> \u001b[39m 📤 Sending final response: {"}}
+[info] >    message: 'Hello there! How can I help you today?', {"user":"  message: 'Hello there! How can I help you today?',","metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"\u001b[90m> \u001b[39m   message: 'Hello there! How can I help you today?',"}}
+[info] >    userMessage: 'hello', {"user":"  userMessage: 'hello',","metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"\u001b[90m> \u001b[39m   userMessage: 'hello',"}}
+[info] >    timestamp: '2024-11-12T22:01:06.518Z' {"user":"  timestamp: '2024-11-12T22:01:06.518Z'","metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"\u001b[90m> \u001b[39m   timestamp: '2024-11-12T22:01:06.518Z'"}}
+[info] >  } {"user":"}","metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"\u001b[90m> \u001b[39m }"}}
+[debug] [2024-11-12T22:03:28.091Z] File C:\Users\Rob\Apps\not-alone\functions\src\index.ts changed, reloading triggers {"metadata":{"emulator":{"name":"functions"},"message":"File C:\\Users\\Rob\\Apps\\not-alone\\functions\\src\\index.ts changed, reloading triggers"}}
+[debug] [2024-11-12T22:03:29.101Z] Validating nodejs source
+[debug] [2024-11-12T22:03:30.122Z] > [functions] package.json contents: {
+  "name": "functions",
+  "scripts": {
+    "lint": "eslint --ext .js,.ts .",
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "serve": "npm run build && firebase emulators:start --only functions",
+    "shell": "npm run build && firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "18"
+  },
+  "main": "lib/index.js",
+  "type": "commonjs",
+  "dependencies": {
+    "@google-cloud/vertexai": "^1.9.0",
+    "firebase-admin": "^12.7.0",
+    "firebase-functions": "^6.1.0"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.12.0",
+    "@typescript-eslint/parser": "^5.12.0",
+    "eslint": "^8.9.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-plugin-import": "^2.25.4",
+    "firebase-functions-test": "^3.1.0",
+    "typescript": "^4.9.0"
+  },
+  "private": true
+}
+[debug] [2024-11-12T22:03:30.122Z] Building nodejs source
+[debug] [2024-11-12T22:03:30.122Z] Failed to find version of module node: reached end of search path C:\Users\Rob\Apps\not-alone\functions\node_modules
+[warn] !  functions: Your requested "node" version "18" doesn't match your global version "20". Using node@20 from host. 
+[debug] [2024-11-12T22:03:30.124Z] Could not find functions.yaml. Must use http discovery
+[debug] [2024-11-12T22:03:30.137Z] Found firebase-functions binary at 'C:\Users\Rob\Apps\not-alone\functions\node_modules\.bin\firebase-functions'
+[info] Serving at port 8582
+
+[debug] [2024-11-12T22:03:30.760Z] Got response from /__/functions.yaml {"endpoints":{"processChat":{"availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"concurrency":null,"serviceAccountEmail":null,"vpc":null,"platform":"gcfv2","labels":{},"callableTrigger":{},"entryPoint":"processChat"}},"specVersion":"v1alpha1","requiredAPIs":[],"extensions":{}}
+[debug] [2024-11-12T22:03:34.784Z] defaultcredentials: writing to file C:\Users\Rob\AppData\Roaming\firebase\lisakhun58_gmail_com_application_default_credentials.json
+[debug] [2024-11-12T22:03:34.785Z] Setting GAC to C:\Users\Rob\AppData\Roaming\firebase\lisakhun58_gmail_com_application_default_credentials.json {"metadata":{"emulator":{"name":"functions"},"message":"Setting GAC to C:\\Users\\Rob\\AppData\\Roaming\\firebase\\lisakhun58_gmail_com_application_default_credentials.json"}}
+[info] +  functions: Loaded functions definitions from source: processChat. {"metadata":{"emulator":{"name":"functions"},"message":"Loaded functions definitions from source: processChat."}}
+[debug] [2024-11-12T22:03:34.786Z] [worker-pool] Shutting down IDLE worker (us-central1-processChat) {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] Shutting down IDLE worker (us-central1-processChat)"}}
+[debug] [2024-11-12T22:03:34.786Z] [worker-us-central1-processChat-06e4cc8d-d68c-4915-8d26-4640ff3493f4]: FINISHING {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"[worker-us-central1-processChat-06e4cc8d-d68c-4915-8d26-4640ff3493f4]: FINISHING"}}
+[debug] [2024-11-12T22:03:34.799Z] [worker-us-central1-processChat-06e4cc8d-d68c-4915-8d26-4640ff3493f4]: exited {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"[worker-us-central1-processChat-06e4cc8d-d68c-4915-8d26-4640ff3493f4]: exited"}}
+[debug] [2024-11-12T22:03:34.799Z] [worker-us-central1-processChat-06e4cc8d-d68c-4915-8d26-4640ff3493f4]: FINISHED {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"[worker-us-central1-processChat-06e4cc8d-d68c-4915-8d26-4640ff3493f4]: FINISHED"}}
+[debug] [2024-11-12T22:04:16.287Z] File C:\Users\Rob\Apps\not-alone\functions\lib\index.js.map changed, reloading triggers {"metadata":{"emulator":{"name":"functions"},"message":"File C:\\Users\\Rob\\Apps\\not-alone\\functions\\lib\\index.js.map changed, reloading triggers"}}
+[debug] [2024-11-12T22:04:16.288Z] File C:\Users\Rob\Apps\not-alone\functions\lib\index.js changed, reloading triggers {"metadata":{"emulator":{"name":"functions"},"message":"File C:\\Users\\Rob\\Apps\\not-alone\\functions\\lib\\index.js changed, reloading triggers"}}
+[debug] [2024-11-12T22:04:17.292Z] Validating nodejs source
+[debug] [2024-11-12T22:04:18.201Z] > [functions] package.json contents: {
+  "name": "functions",
+  "scripts": {
+    "lint": "eslint --ext .js,.ts .",
+    "build": "tsc",
+    "build:watch": "tsc --watch",
+    "serve": "npm run build && firebase emulators:start --only functions",
+    "shell": "npm run build && firebase functions:shell",
+    "start": "npm run shell",
+    "deploy": "firebase deploy --only functions",
+    "logs": "firebase functions:log"
+  },
+  "engines": {
+    "node": "18"
+  },
+  "main": "lib/index.js",
+  "type": "commonjs",
+  "dependencies": {
+    "@google-cloud/vertexai": "^1.9.0",
+    "firebase-admin": "^12.7.0",
+    "firebase-functions": "^6.1.0"
+  },
+  "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.12.0",
+    "@typescript-eslint/parser": "^5.12.0",
+    "eslint": "^8.9.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-plugin-import": "^2.25.4",
+    "firebase-functions-test": "^3.1.0",
+    "typescript": "^4.9.0"
+  },
+  "private": true
+}
+[debug] [2024-11-12T22:04:18.202Z] Building nodejs source
+[debug] [2024-11-12T22:04:18.202Z] Failed to find version of module node: reached end of search path C:\Users\Rob\Apps\not-alone\functions\node_modules
+[warn] !  functions: Your requested "node" version "18" doesn't match your global version "20". Using node@20 from host. 
+[debug] [2024-11-12T22:04:18.203Z] Could not find functions.yaml. Must use http discovery
+[debug] [2024-11-12T22:04:18.211Z] Found firebase-functions binary at 'C:\Users\Rob\Apps\not-alone\functions\node_modules\.bin\firebase-functions'
+[info] Serving at port 8802
+
+[debug] [2024-11-12T22:04:18.809Z] Got response from /__/functions.yaml {"endpoints":{"processChat":{"availableMemoryMb":null,"timeoutSeconds":null,"minInstances":null,"maxInstances":null,"ingressSettings":null,"concurrency":null,"serviceAccountEmail":null,"vpc":null,"platform":"gcfv2","labels":{},"callableTrigger":{},"entryPoint":"processChat"}},"specVersion":"v1alpha1","requiredAPIs":[],"extensions":{}}
+[debug] [2024-11-12T22:04:22.830Z] defaultcredentials: writing to file C:\Users\Rob\AppData\Roaming\firebase\lisakhun58_gmail_com_application_default_credentials.json
+[debug] [2024-11-12T22:04:22.830Z] Setting GAC to C:\Users\Rob\AppData\Roaming\firebase\lisakhun58_gmail_com_application_default_credentials.json {"metadata":{"emulator":{"name":"functions"},"message":"Setting GAC to C:\\Users\\Rob\\AppData\\Roaming\\firebase\\lisakhun58_gmail_com_application_default_credentials.json"}}
+[info] +  functions: Loaded functions definitions from source: processChat. {"metadata":{"emulator":{"name":"functions"},"message":"Loaded functions definitions from source: processChat."}}
+[debug] [2024-11-12T22:04:33.448Z] [work-queue] {"queuedWork":["/notalone-de4fc/us-central1/processChat-2024-11-12T22:04:33.448Z"],"queueLength":1,"runningWork":[],"workRunningCount":0}
+[debug] [2024-11-12T22:04:33.448Z] [work-queue] {"queuedWork":[],"queueLength":0,"runningWork":["/notalone-de4fc/us-central1/processChat-2024-11-12T22:04:33.448Z"],"workRunningCount":1}
+[debug] [2024-11-12T22:04:33.449Z] Accepted request OPTIONS /notalone-de4fc/us-central1/processChat --> us-central1-processChat
+[debug] [2024-11-12T22:04:33.451Z] [functions] Runtime ready! Sending request! {"metadata":{"emulator":{"name":"functions"},"message":"[functions] Runtime ready! Sending request!"}}
+[debug] [2024-11-12T22:04:33.451Z] [functions] Got req.url=/notalone-de4fc/us-central1/processChat, mapping to path=/ {"metadata":{"emulator":{"name":"functions"},"message":"[functions] Got req.url=/notalone-de4fc/us-central1/processChat, mapping to path=/"}}
+[debug] [2024-11-12T22:04:33.451Z] [worker-pool] Cleaned up workers for us-central1-processChat: 1 --> 0 {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] Cleaned up workers for us-central1-processChat: 1 --> 0"}}
+[debug] [2024-11-12T22:04:33.459Z] [worker-pool] addWorker(us-central1-processChat) {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] addWorker(us-central1-processChat)"}}
+[debug] [2024-11-12T22:04:33.459Z] [worker-pool] Adding worker with key us-central1-processChat, total=1 {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] Adding worker with key us-central1-processChat, total=1"}}
+[debug] [2024-11-12T22:04:34.874Z] [runtime-status] [3472] Resolved module firebase-admin {"declared":true,"installed":true,"version":"12.7.0","resolution":"C:\\Users\\Rob\\Apps\\not-alone\\functions\\node_modules\\firebase-admin\\lib\\index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"[runtime-status] [3472] Resolved module firebase-admin {\"declared\":true,\"installed\":true,\"version\":\"12.7.0\",\"resolution\":\"C:\\\\Users\\\\Rob\\\\Apps\\\\not-alone\\\\functions\\\\node_modules\\\\firebase-admin\\\\lib\\\\index.js\"}"}}
+[debug] [2024-11-12T22:04:34.875Z] [runtime-status] [3472] Resolved module firebase-functions {"declared":true,"installed":true,"version":"6.1.0","resolution":"C:\\Users\\Rob\\Apps\\not-alone\\functions\\node_modules\\firebase-functions\\lib\\v2\\index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"[runtime-status] [3472] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"6.1.0\",\"resolution\":\"C:\\\\Users\\\\Rob\\\\Apps\\\\not-alone\\\\functions\\\\node_modules\\\\firebase-functions\\\\lib\\\\v2\\\\index.js\"}"}}
+[debug] [2024-11-12T22:04:34.876Z] [runtime-status] [3472] Found local functions config: C:\Users\Rob\Apps\not-alone\functions/.runtimeconfig.json {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"[runtime-status] [3472] Found local functions config: C:\\Users\\Rob\\Apps\\not-alone\\functions/.runtimeconfig.json"}}
+[debug] [2024-11-12T22:04:34.876Z] [runtime-status] [3472] Outgoing network have been stubbed. [{"name":"http","status":"mocked"},{"name":"http","status":"mocked"},{"name":"https","status":"mocked"},{"name":"https","status":"mocked"},{"name":"net","status":"mocked"}] {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"[runtime-status] [3472] Outgoing network have been stubbed. [{\"name\":\"http\",\"status\":\"mocked\"},{\"name\":\"http\",\"status\":\"mocked\"},{\"name\":\"https\",\"status\":\"mocked\"},{\"name\":\"https\",\"status\":\"mocked\"},{\"name\":\"net\",\"status\":\"mocked\"}]"}}
+[debug] [2024-11-12T22:04:34.877Z] [runtime-status] [3472] Resolved module firebase-functions {"declared":true,"installed":true,"version":"6.1.0","resolution":"C:\\Users\\Rob\\Apps\\not-alone\\functions\\node_modules\\firebase-functions\\lib\\v2\\index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"[runtime-status] [3472] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"6.1.0\",\"resolution\":\"C:\\\\Users\\\\Rob\\\\Apps\\\\not-alone\\\\functions\\\\node_modules\\\\firebase-functions\\\\lib\\\\v2\\\\index.js\"}"}}
+[debug] [2024-11-12T22:04:35.162Z] [runtime-status] [3472] Checked functions.config() {"config":{"vertex":{"project":"notalone-de4fc","location":"australia-southeast1","model":"gemini-1.5-flash-002"},"environment":{"mode":"development"}}} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"[runtime-status] [3472] Checked functions.config() {\"config\":{\"vertex\":{\"project\":\"notalone-de4fc\",\"location\":\"australia-southeast1\",\"model\":\"gemini-1.5-flash-002\"},\"environment\":{\"mode\":\"development\"}}}"}}
+[debug] [2024-11-12T22:04:35.163Z] [runtime-status] [3472] firebase-functions has been stubbed. {"functionsResolution":{"declared":true,"installed":true,"version":"6.1.0","resolution":"C:\\Users\\Rob\\Apps\\not-alone\\functions\\node_modules\\firebase-functions\\lib\\v2\\index.js"}} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"[runtime-status] [3472] firebase-functions has been stubbed. {\"functionsResolution\":{\"declared\":true,\"installed\":true,\"version\":\"6.1.0\",\"resolution\":\"C:\\\\Users\\\\Rob\\\\Apps\\\\not-alone\\\\functions\\\\node_modules\\\\firebase-functions\\\\lib\\\\v2\\\\index.js\"}}"}}
+[debug] [2024-11-12T22:04:35.164Z] [runtime-status] [3472] Resolved module firebase-functions {"declared":true,"installed":true,"version":"6.1.0","resolution":"C:\\Users\\Rob\\Apps\\not-alone\\functions\\node_modules\\firebase-functions\\lib\\v2\\index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"[runtime-status] [3472] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"6.1.0\",\"resolution\":\"C:\\\\Users\\\\Rob\\\\Apps\\\\not-alone\\\\functions\\\\node_modules\\\\firebase-functions\\\\lib\\\\v2\\\\index.js\"}"}}
+[debug] [2024-11-12T22:04:35.169Z] [runtime-status] [3472] Resolved module firebase-admin {"declared":true,"installed":true,"version":"12.7.0","resolution":"C:\\Users\\Rob\\Apps\\not-alone\\functions\\node_modules\\firebase-admin\\lib\\index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"[runtime-status] [3472] Resolved module firebase-admin {\"declared\":true,\"installed\":true,\"version\":\"12.7.0\",\"resolution\":\"C:\\\\Users\\\\Rob\\\\Apps\\\\not-alone\\\\functions\\\\node_modules\\\\firebase-admin\\\\lib\\\\index.js\"}"}}
+[debug] [2024-11-12T22:04:35.172Z] [runtime-status] [3472] Resolved module firebase-functions {"declared":true,"installed":true,"version":"6.1.0","resolution":"C:\\Users\\Rob\\Apps\\not-alone\\functions\\node_modules\\firebase-functions\\lib\\v2\\index.js"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"[runtime-status] [3472] Resolved module firebase-functions {\"declared\":true,\"installed\":true,\"version\":\"6.1.0\",\"resolution\":\"C:\\\\Users\\\\Rob\\\\Apps\\\\not-alone\\\\functions\\\\node_modules\\\\firebase-functions\\\\lib\\\\v2\\\\index.js\"}"}}
+[debug] [2024-11-12T22:04:35.172Z] [runtime-status] [3472] firebase-admin has been stubbed. {"adminResolution":{"declared":true,"installed":true,"version":"12.7.0","resolution":"C:\\Users\\Rob\\Apps\\not-alone\\functions\\node_modules\\firebase-admin\\lib\\index.js"}} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"[runtime-status] [3472] firebase-admin has been stubbed. {\"adminResolution\":{\"declared\":true,\"installed\":true,\"version\":\"12.7.0\",\"resolution\":\"C:\\\\Users\\\\Rob\\\\Apps\\\\not-alone\\\\functions\\\\node_modules\\\\firebase-admin\\\\lib\\\\index.js\"}}"}}
+[debug] [2024-11-12T22:04:35.256Z] [runtime-status] [3472] Functions runtime initialized. {"cwd":"C:\\Users\\Rob\\Apps\\not-alone\\functions","node_version":"20.18.0"} {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"[runtime-status] [3472] Functions runtime initialized. {\"cwd\":\"C:\\\\Users\\\\Rob\\\\Apps\\\\not-alone\\\\functions\",\"node_version\":\"20.18.0\"}"}}
+[debug] [2024-11-12T22:04:35.257Z] [runtime-status] [3472] Listening to port: \\?\pipe\fire_emu_eb2cd9de46805b03 {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"[runtime-status] [3472] Listening to port: \\\\?\\pipe\\fire_emu_eb2cd9de46805b03"}}
+[debug] [2024-11-12T22:04:35.343Z] [worker-us-central1-processChat-74209002-33e5-4084-a4bf-138e780294ce]: IDLE {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"[worker-us-central1-processChat-74209002-33e5-4084-a4bf-138e780294ce]: IDLE"}}
+[debug] [2024-11-12T22:04:35.344Z] [worker-pool] submitRequest(triggerId=us-central1-processChat) {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] submitRequest(triggerId=us-central1-processChat)"}}
+[info] i  functions: Beginning execution of "us-central1-processChat" {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"Beginning execution of \"us-central1-processChat\""}}
+[debug] [2024-11-12T22:04:35.345Z] [worker-us-central1-processChat-74209002-33e5-4084-a4bf-138e780294ce]: BUSY {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"[worker-us-central1-processChat-74209002-33e5-4084-a4bf-138e780294ce]: BUSY"}}
+[debug] [2024-11-12T22:04:35.348Z] Finishing up request with event=pause {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"Finishing up request with event=pause"}}
+[info] i  functions: Finished "us-central1-processChat" in 3.9732ms {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"Finished \"us-central1-processChat\" in 3.9732ms"}}
+[debug] [2024-11-12T22:04:35.349Z] [worker-us-central1-processChat-74209002-33e5-4084-a4bf-138e780294ce]: IDLE {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"[worker-us-central1-processChat-74209002-33e5-4084-a4bf-138e780294ce]: IDLE"}}
+[debug] [2024-11-12T22:04:35.350Z] Finishing up request with event=finish {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"Finishing up request with event=finish"}}
+[debug] [2024-11-12T22:04:35.350Z] Finishing up request with event=close {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"Finishing up request with event=close"}}
+[debug] [2024-11-12T22:04:35.350Z] [work-queue] {"queuedWork":[],"queueLength":0,"runningWork":[],"workRunningCount":0}
+[debug] [2024-11-12T22:04:35.353Z] [work-queue] {"queuedWork":["/notalone-de4fc/us-central1/processChat-2024-11-12T22:04:35.353Z"],"queueLength":1,"runningWork":[],"workRunningCount":0}
+[debug] [2024-11-12T22:04:35.353Z] [work-queue] {"queuedWork":[],"queueLength":0,"runningWork":["/notalone-de4fc/us-central1/processChat-2024-11-12T22:04:35.353Z"],"workRunningCount":1}
+[debug] [2024-11-12T22:04:35.353Z] Accepted request POST /notalone-de4fc/us-central1/processChat --> us-central1-processChat
+[debug] [2024-11-12T22:04:35.354Z] [functions] Runtime ready! Sending request! {"metadata":{"emulator":{"name":"functions"},"message":"[functions] Runtime ready! Sending request!"}}
+[debug] [2024-11-12T22:04:35.354Z] [functions] Got req.url=/notalone-de4fc/us-central1/processChat, mapping to path=/ {"metadata":{"emulator":{"name":"functions"},"message":"[functions] Got req.url=/notalone-de4fc/us-central1/processChat, mapping to path=/"}}
+[debug] [2024-11-12T22:04:35.354Z] [worker-pool] submitRequest(triggerId=us-central1-processChat) {"metadata":{"emulator":{"name":"functions"},"message":"[worker-pool] submitRequest(triggerId=us-central1-processChat)"}}
+[info] i  functions: Beginning execution of "us-central1-processChat" {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"Beginning execution of \"us-central1-processChat\""}}
+[debug] [2024-11-12T22:04:35.355Z] [worker-us-central1-processChat-74209002-33e5-4084-a4bf-138e780294ce]: BUSY {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"[worker-us-central1-processChat-74209002-33e5-4084-a4bf-138e780294ce]: BUSY"}}
+[info] >  {"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"} {"user":{"verifications":{"app":"MISSING","auth":"VALID"},"logging.googleapis.com/labels":{"firebase-log-type":"callable-request-verification"},"severity":"DEBUG","message":"Callable request verification passed"},"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"\u001b[90m> \u001b[39m {\"verifications\":{\"app\":\"MISSING\",\"auth\":\"VALID\"},\"logging.googleapis.com/labels\":{\"firebase-log-type\":\"callable-request-verification\"},\"severity\":\"DEBUG\",\"message\":\"Callable request verification passed\"}"}}
+[info] >  🚀 Incoming request: { auth: 'Authenticated', data: { message: 'hello', history: [] } } {"user":"🚀 Incoming request: { auth: 'Authenticated', data: { message: 'hello', history: [] } }","metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"\u001b[90m> \u001b[39m 🚀 Incoming request: { auth: 'Authenticated', data: { message: 'hello', history: [] } }"}}
+[info] >  📥 Processing request: { messageLength: 5, historyLength: 0, userId: undefined } {"user":"📥 Processing request: { messageLength: 5, historyLength: 0, userId: undefined }","metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"\u001b[90m> \u001b[39m 📥 Processing request: { messageLength: 5, historyLength: 0, userId: undefined }"}}
+[info] >  🔄 Chat history: [] {"user":"🔄 Chat history: []","metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"\u001b[90m> \u001b[39m 🔄 Chat history: []"}}
+[info] >  💬 Sending message to Gemini: hello {"user":"💬 Sending message to Gemini: hello","metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"\u001b[90m> \u001b[39m 💬 Sending message to Gemini: hello"}}
+[warn] !  Google API requested!
+   - URL: "https://oauth2.googleapis.com/token"
+   - Be careful, this may be a production service. {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"Google API requested!\n   - URL: \"https://oauth2.googleapis.com/token\"\n   - Be careful, this may be a production service."}}
+[info] >  📊 Raw Gemini response: { {"user":"📊 Raw Gemini response: {","metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"\u001b[90m> \u001b[39m 📊 Raw Gemini response: {"}}
+[info] >    candidates: [ {"user":"  candidates: [","metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"\u001b[90m> \u001b[39m   candidates: ["}}
+[info] >      { {"user":"    {","metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"\u001b[90m> \u001b[39m     {"}}
+[info] >        content: [Object], {"user":"      content: [Object],","metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"\u001b[90m> \u001b[39m       content: [Object],"}}
+[info] >        finishReason: 'STOP', {"user":"      finishReason: 'STOP',","metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"\u001b[90m> \u001b[39m       finishReason: 'STOP',"}}
+[info] >        avgLogprobs: -0.00040638302876190704, {"user":"      avgLogprobs: -0.00040638302876190704,","metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"\u001b[90m> \u001b[39m       avgLogprobs: -0.00040638302876190704,"}}
+[info] >        index: 0 {"user":"      index: 0","metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"\u001b[90m> \u001b[39m       index: 0"}}
+[info] >      } {"user":"    }","metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"\u001b[90m> \u001b[39m     }"}}
+[info] >    ], {"user":"  ],","metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"\u001b[90m> \u001b[39m   ],"}}
+[info] >    usageMetadata: { {"user":"  usageMetadata: {","metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"\u001b[90m> \u001b[39m   usageMetadata: {"}}
+[info] >      promptTokenCount: 1, {"user":"    promptTokenCount: 1,","metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"\u001b[90m> \u001b[39m     promptTokenCount: 1,"}}
+[info] >      candidatesTokenCount: 11, {"user":"    candidatesTokenCount: 11,","metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"\u001b[90m> \u001b[39m     candidatesTokenCount: 11,"}}
+[info] >      totalTokenCount: 12 {"user":"    totalTokenCount: 12","metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"\u001b[90m> \u001b[39m     totalTokenCount: 12"}}
+[info] >    }, {"user":"  },","metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"\u001b[90m> \u001b[39m   },"}}
+[info] >    modelVersion: 'gemini-1.5-flash-002' {"user":"  modelVersion: 'gemini-1.5-flash-002'","metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"\u001b[90m> \u001b[39m   modelVersion: 'gemini-1.5-flash-002'"}}
+[info] >  } {"user":"}","metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"\u001b[90m> \u001b[39m }"}}
+[debug] [2024-11-12T22:04:37.061Z] Finishing up request with event=pause {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"Finishing up request with event=pause"}}
+[info] i  functions: Finished "us-central1-processChat" in 1705.7345ms {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"Finished \"us-central1-processChat\" in 1705.7345ms"}}
+[debug] [2024-11-12T22:04:37.062Z] [worker-us-central1-processChat-74209002-33e5-4084-a4bf-138e780294ce]: IDLE {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"[worker-us-central1-processChat-74209002-33e5-4084-a4bf-138e780294ce]: IDLE"}}
+[debug] [2024-11-12T22:04:37.062Z] Finishing up request with event=finish {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"Finishing up request with event=finish"}}
+[debug] [2024-11-12T22:04:37.062Z] Finishing up request with event=close {"metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"Finishing up request with event=close"}}
+[debug] [2024-11-12T22:04:37.062Z] [work-queue] {"queuedWork":[],"queueLength":0,"runningWork":[],"workRunningCount":0}
+[info] >  ✅ Processed response: { responseLength: 38, timestamp: '2024-11-12T22:04:37.048Z' } {"user":"✅ Processed response: { responseLength: 38, timestamp: '2024-11-12T22:04:37.048Z' }","metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"\u001b[90m> \u001b[39m ✅ Processed response: { responseLength: 38, timestamp: '2024-11-12T22:04:37.048Z' }"}}
+[info] >  📤 Sending final response: { {"user":"📤 Sending final response: {","metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"\u001b[90m> \u001b[39m 📤 Sending final response: {"}}
+[info] >    message: 'Hello there! How can I help you today?', {"user":"  message: 'Hello there! How can I help you today?',","metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"\u001b[90m> \u001b[39m   message: 'Hello there! How can I help you today?',"}}
+[info] >    userMessage: 'hello', {"user":"  userMessage: 'hello',","metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"\u001b[90m> \u001b[39m   userMessage: 'hello',"}}
+[info] >    timestamp: '2024-11-12T22:04:37.048Z', {"user":"  timestamp: '2024-11-12T22:04:37.048Z',","metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"\u001b[90m> \u001b[39m   timestamp: '2024-11-12T22:04:37.048Z',"}}
+[info] >    userId: undefined {"user":"  userId: undefined","metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"\u001b[90m> \u001b[39m   userId: undefined"}}
+[info] >  } {"user":"}","metadata":{"emulator":{"name":"functions"},"function":{"name":"us-central1-processChat"},"extension":{},"message":"\u001b[90m> \u001b[39m }"}}
