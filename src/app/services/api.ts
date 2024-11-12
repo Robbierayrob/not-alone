@@ -53,14 +53,11 @@ export const apiService = {
               const result = JSON.parse(chunk);
               console.log('API parsed result:', result);
               
-              if (result.result?.chunks) {
-                console.log('Found chunks array:', result.result.chunks);
-                for (const chunkText of result.result.chunks) {
-                  console.log('Yielding chunk:', chunkText);
-                  yield chunkText;
-                }
+              if (result.result?.chunk) {
+                console.log('Yielding chunk:', result.result.chunk);
+                yield result.result.chunk;
               } else {
-                console.warn('No chunks found in result:', result);
+                console.warn('No chunk found in result:', result);
               }
             } catch (e) {
               console.warn('Error parsing chunk:', e, 'Raw chunk:', chunk);
