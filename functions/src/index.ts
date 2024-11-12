@@ -1,26 +1,5 @@
 import * as functions from 'firebase-functions';
-import * as admin from 'firebase-admin';
 import { VertexAI } from '@google-cloud/vertexai';
-import * as fs from 'fs';
-import * as path from 'path';
-
-// Initialize Firebase Admin SDK
-if (!admin.apps.length) {
-  if (process.env.NODE_ENV === 'development') {
-    try {
-      const serviceAccountPath = path.resolve(__dirname, '../../config/serviceAccount.json');
-      const serviceAccount = JSON.parse(fs.readFileSync(serviceAccountPath, 'utf8'));
-      admin.initializeApp({
-        credential: admin.credential.cert(serviceAccount),
-      });
-    } catch (error) {
-      console.error('Failed to load service account:', error);
-      throw new Error('Service account configuration is required for local development');
-    }
-  } else {
-    admin.initializeApp();
-  }
-}
 
 
 // Initialize Vertex AI
@@ -33,195 +12,55 @@ const model = vertex.preview.getGenerativeModel({
   model: 'gemini-1.5-flash-002',
 });
 
-const firestore = admin.firestore();
-
-/**
- * Represents the structure of a chat message in the history
- */
-interface ChatHistory {
-  role: string;
-  parts: Array<{text: string}>;
+interface ChatMessage {
+  role: 'user' | 'model';
+  parts: Array<{ text: string }>;
 }
 
-/**
- * Loads chat history from Firestore for a given session
- * @param {string} sessionId - The unique identifier for the chat session
- * @return {Promise<ChatHistory[]>} Array of chat history messages
- */
-async function loadChatHistory(sessionId: string): Promise<ChatHistory[]> {
-  if (!sessionId) {
-    throw new Error('Session ID is required');
-  }
-  const chatDoc = await firestore.collection('chatSessions').doc(sessionId).get();
-  return chatDoc.exists ? chatDoc.data()?.history || [] : [];
-}
-
-/**
- * Saves chat history to Firestore
- * @param {string} sessionId - The unique identifier for the chat session
- * @param {ChatHistory[]} history - Array of chat messages to save
- * @return {Promise<void>}
- */
-async function saveChatHistory(sessionId: string, history: ChatHistory[]) {
-  if (!sessionId) {
-    throw new Error('Session ID is required');
-  }
-  
-  await firestore.collection('chatSessions').doc(sessionId).set({
-    history,
-    updatedAt: new Date(),
-  }, { merge: true });
-}
-
-export interface ChatRequest {
-  message: string;
-  userId: string;
-  sessionId?: string; // Optional session ID for chat continuity
-}
-
-export interface ChatResponse {
-  message: string;
-  userMessage: string;
-  timestamp: Date;
-}
-
-interface ChatInteraction {
-  userId: string;
-  userMessage: string;
-  aiResponse: string;
-  timestamp: admin.firestore.Timestamp;
-  sessionId?: string;
-  metadata: {
-    modelVersion: string;
-    processingTime: number;
-    createdAt: admin.firestore.Timestamp;
-  };
-}
-
-/**
- * Processes a chat message through Vertex AI, stores interaction, and returns the response
- * @param {functions.https.CallableRequest<ChatRequest>} data - The request data containing the message and user ID
- * @param {functions.https.CallableContext} context - The context of the function call
- * @returns {Promise<ChatResponse>} The AI generated response with user message
- */
 export const processChat = functions.https.onCall(async (request) => {
-  // Enhanced logging for tracking function calls
-  console.log('Processing chat request:', JSON.stringify(request.data));
-
-  // Check if the user is authenticated
   if (!request.auth) {
-    throw new functions.https.HttpsError('unauthenticated', 'The function must be called while authenticated.');
+    throw new functions.https.HttpsError('unauthenticated', 'Authentication required');
   }
 
-  // Validate request data
-  if (!request.data || !request.data.message) {
+  if (!request.data?.message) {
     throw new functions.https.HttpsError('invalid-argument', 'Message is required');
   }
 
-  const { message } = request.data;
-  
   try {
-    const startTime = Date.now();
+    const { message, history = [] } = request.data;
 
-    // Get sessionId from request data or fall back to auth uid
-    const sessionId = request.data.sessionId || request.auth?.uid;
-    console.log('Using session ID:', sessionId);
-    
-    if (!sessionId) {
-      throw new functions.https.HttpsError('invalid-argument', 'Session ID is required');
-    }
-    
-    const chatHistory = await loadChatHistory(sessionId);
-
-    // Start chat session with loaded history
+    // Start chat session with history if provided
     const chat = model.startChat({
-      history: chatHistory,
+      history: history as ChatMessage[],
       generationConfig: {
         maxOutputTokens: 1000,
       },
     });
 
-    // Send message and get response
+    // Send message and get streaming response
     const result = await chat.sendMessage(message);
     const response = await result.response;
-    
-    // Debug log to see the actual response structure
-    console.log('Raw AI response:', JSON.stringify(response));
 
-    // More detailed response validation
-    if (!response || !response.candidates) {
-      throw new functions.https.HttpsError('internal', 'No response received from AI model');
+    if (!response?.candidates?.[0]?.content) {
+      throw new functions.https.HttpsError('internal', 'Invalid response from AI model');
     }
 
-    if (response.candidates.length === 0) {
-      throw new functions.https.HttpsError('internal', 'No candidates in AI response');
-    }
-
-    const candidate = response.candidates[0];
-    if (!candidate.content) {
-      throw new functions.https.HttpsError('internal', 'No content in AI response candidate');
-    }
-
-    // Extract text from the response
-    let aiResponse = '';
-    if (candidate.content.parts && candidate.content.parts.length > 0) {
-      aiResponse = candidate.content.parts.map(part => part.text).join(' ').trim();
-    }
-
-    if (!aiResponse) {
-      throw new functions.https.HttpsError('internal', 'No text content in AI response');
-    }
-
-    // Update chat history
-    chatHistory.push(
-      { role: 'user', parts: [{ text: message }] },
-      { role: 'model', parts: [{ text: aiResponse }] }
-    );
-
-    // Save updated history to Firestore
-    await saveChatHistory(sessionId, chatHistory);
-    const processingTime = Date.now() - startTime;
-
-    // Prepare chat interaction data
-    const chatInteraction: ChatInteraction = {
-      userId: request.auth?.uid || 'anonymous',
-      userMessage: message,
-      aiResponse,
-      timestamp: admin.firestore.Timestamp.now(),
-      metadata: {
-        modelVersion: 'gemini-1.5-flash-002',
-        processingTime,
-        createdAt: admin.firestore.Timestamp.now(),
-      },
-    };
-
-    // Only add sessionId if it exists
-    if (request.data.sessionId) {
-      chatInteraction.sessionId = request.data.sessionId;
-    }
-
-    // Validate required fields before storage
-    if (!chatInteraction.userId || !chatInteraction.userMessage || !chatInteraction.aiResponse) {
-      throw new Error('Missing required fields for chat interaction');
-    }
-
-    // Store chat interaction in Firestore
-    try {
-      const docRef = await firestore.collection('chatInteractions').add(chatInteraction);
-      console.log(`Chat interaction stored with ID: ${docRef.id}`);
-    } catch (storageError) {
-      console.error('Failed to store chat interaction:', storageError);
-      // Non-critical error, continue with response
-    }
+    const aiResponse = response.candidates[0].content.parts
+      .map(part => part.text)
+      .join(' ')
+      .trim();
 
     return {
       message: aiResponse,
       userMessage: message,
-      timestamp: new Date(),
+      timestamp: new Date().toISOString(),
     };
 
   } catch (error) {
-    console.error('Error processing chat:', error);
-    throw new functions.https.HttpsError('internal', 'Error processing chat');
+    console.error('Chat processing error:', error);
+    throw new functions.https.HttpsError(
+      'internal',
+      error instanceof Error ? error.message : 'Error processing chat'
+    );
   }
 });

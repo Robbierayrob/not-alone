@@ -4,7 +4,7 @@ export const LOCAL_FUNCTION_URL = 'http://127.0.0.1:5001/notalone-de4fc/us-centr
 
 export const apiService = {
   // Chat related API calls
-  async sendMessage(message: string, token: string) {
+  async sendMessage(message: string, token: string, history: Array<{role: string, parts: Array<{text: string}>}> = []) {
     try {
       if (!token) {
         throw new Error('Authentication token is required');
@@ -19,7 +19,7 @@ export const apiService = {
         body: JSON.stringify({
           data: {
             message,
-            sessionId: token
+            history
           },
         }),
       });
@@ -29,13 +29,15 @@ export const apiService = {
         throw new Error(errorData.error?.message || 'Failed to send message');
       }
 
-      return await response.json();
+      const result = await response.json();
+      return {
+        message: result.message,
+        userMessage: result.userMessage,
+        timestamp: new Date(result.timestamp)
+      };
     } catch (error) {
       console.error('Error sending message:', error);
-      if (error instanceof Error) {
-        throw new Error(`Failed to send message: ${error.message}`);
-      }
-      throw new Error('Failed to send message');
+      throw error instanceof Error ? error : new Error('Failed to send message');
     }
   },
 
