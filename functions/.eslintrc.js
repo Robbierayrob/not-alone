@@ -31,5 +31,6 @@ module.exports = {
     "max-len": ["error", { "code": 200 }],
     "object-curly-spacing": ["error", "always"],
     "comma-dangle": ["error", "always-multiline"],
+    "linebreak-style": 0,  // Disable linebreak-style checks
   },
 };
