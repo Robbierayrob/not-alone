@@ -80,12 +80,16 @@ export const processChat = functions.https.onCall(async (request) => {
       userMessage: message,
       aiResponse,
       timestamp: new Date(),
-      sessionId: request.data.sessionId,
       metadata: {
         modelVersion: 'gemini-1.5-flash-002',
         processingTime,
       },
     };
+
+    // Only add sessionId if it exists
+    if (request.data.sessionId) {
+      chatInteraction.sessionId = request.data.sessionId;
+    }
 
     // Validate required fields before storage
     if (!chatInteraction.userId || !chatInteraction.userMessage || !chatInteraction.aiResponse) {
