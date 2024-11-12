@@ -37,7 +37,7 @@ interface ChatInteraction {
   userId: string;
   userMessage: string;
   aiResponse: string;
-  timestamp: FirebaseFirestore.FieldValue;
+  timestamp: admin.firestore.Timestamp;
   sessionId?: string;
   metadata?: {
     modelVersion: string;
@@ -79,7 +79,7 @@ export const processChat = functions.https.onCall(async (request) => {
       userId: request.auth.uid,
       userMessage: message,
       aiResponse,
-      timestamp: admin.firestore.Timestamp.now(),
+      timestamp: admin.firestore.Timestamp.fromDate(new Date()),
       sessionId: request.data.sessionId,
       metadata: {
         modelVersion: 'gemini-1.5-flash-002',
