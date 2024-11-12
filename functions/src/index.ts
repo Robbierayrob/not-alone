@@ -98,6 +98,9 @@ interface ChatInteraction {
   };
 }
 
+// Helper function to create timestamps
+const createTimestamp = () => admin.firestore.Timestamp.now();
+
 /**
  * Processes a chat message through Vertex AI, stores interaction, and returns the response
  * @param {functions.https.CallableRequest<ChatRequest>} data - The request data containing the message and user ID
@@ -187,11 +190,11 @@ export const processChat = functions.https.onCall(async (request) => {
       userId: request.auth?.uid || 'anonymous',
       userMessage: message,
       aiResponse,
-      timestamp: new Date(),
+      timestamp: admin.firestore.Timestamp.now(),
       metadata: {
         modelVersion: 'gemini-1.5-flash-002',
         processingTime,
-        createdAt: new Date(),
+        createdAt: admin.firestore.Timestamp.now(),
       },
     };
 

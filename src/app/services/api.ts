@@ -6,6 +6,10 @@ export const apiService = {
   // Chat related API calls
   async sendMessage(message: string, token: string) {
     try {
+      if (!token) {
+        throw new Error('Authentication token is required');
+      }
+
       const response = await fetch(LOCAL_FUNCTION_URL, {
         method: 'POST',
         headers: {
@@ -15,7 +19,7 @@ export const apiService = {
         body: JSON.stringify({
           data: {
             message,
-            sessionId: token || undefined // Only pass if token exists
+            sessionId: token
           },
         }),
       });
