@@ -35,16 +35,40 @@ export const apiService = {
         throw new Error(errorData.error?.message || 'Failed to send message');
       }
 
-      const result = await response.json();
-      console.log('✅ API received response:', result);
+      const reader = response.body?.getReader();
+      if (!reader) {
+        throw new Error('No response body reader available');
+      }
+
+      const chunks: string[] = [];
+      let completeMessage = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        // Convert the Uint8Array to string
+        const chunk = new TextDecoder().decode(value);
+        try {
+          const result = JSON.parse(chunk);
+          if (result.result?.chunks?.[0]) {
+            chunks.push(result.result.chunks[0]);
+            completeMessage += result.result.chunks[0];
+          }
+        } catch (e) {
+          console.warn('Error parsing chunk:', e);
+        }
+      }
+
+      console.log('✅ API received complete response');
       
       return {
-        message: result.result.message,
-        userMessage: result.result.userMessage,
-        timestamp: new Date(result.result.timestamp),
-        userId: result.result.userId,
-        chatId: result.result.chatId,
-        chunks: result.result.chunks
+        message: completeMessage,
+        userMessage: message,
+        timestamp: new Date().toISOString(),
+        userId: null,
+        chatId: chatId,
+        chunks: chunks
       };
     } catch (error) {
       console.error('Error sending message:', error);

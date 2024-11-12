@@ -145,12 +145,14 @@ export default function DiaryPage() {
 
   const createNewChat = async () => {
     try {
-      const data = await apiService.createNewChat();
-      setCurrentChatId(data.chatId);
+      const chatId = `chat-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+      setCurrentChatId(chatId);
       setMessages([]);
       loadChats();
+      return chatId;
     } catch (error) {
       console.error('Error creating new chat:', error);
+      return 'default-chat';
     }
   };
 
@@ -178,9 +180,22 @@ export default function DiaryPage() {
     try {
       const data = await apiService.sendMessage(input, user.accessToken, currentChatId);
       console.log('Diary page received API response:', data);
-      if (data && data.message) {
-        const aiMessage = { role: 'assistant', content: data.message };
-        setMessages(prev => [...prev, aiMessage]);
+      
+      // Initialize an empty assistant message
+      const aiMessage = { role: 'assistant', content: '' };
+      setMessages(prev => [...prev, aiMessage]);
+      
+      // Update the message content with each chunk
+      if (data.chunks) {
+        let accumulatedContent = '';
+        for (const chunk of data.chunks) {
+          accumulatedContent += chunk;
+          setMessages(prev => prev.map((msg, idx) => 
+            idx === prev.length - 1 
+              ? { ...msg, content: accumulatedContent }
+              : msg
+          ));
+        }
       } else {
         console.error('Invalid response format:', data);
       }
