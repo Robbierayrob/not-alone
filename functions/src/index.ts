@@ -83,16 +83,24 @@ export const processChat = functions.https.onCall(async (request) => {
     console.log('🔄 Starting stream processing');
     try {
       for await (const chunk of result.stream) {
+        console.log('Raw chunk received:', chunk);
+        
         if (chunk?.candidates?.[0]?.content?.parts?.[0]?.text) {
           const chunkText = chunk.candidates[0].content.parts[0].text;
+          console.log('Extracted chunk text:', chunkText);
+          
           chunks.push(chunkText);
           aiResponse += chunkText;
           
           // Send chunk immediately
           console.log('📦 Sending chunk:', {
+            chunkText,
             chunkLength: chunkText.length,
-            totalLength: aiResponse.length
+            totalLength: aiResponse.length,
+            totalChunks: chunks.length
           });
+        } else {
+          console.log('Invalid chunk format:', chunk);
         }
       }
     } catch (streamError) {

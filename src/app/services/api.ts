@@ -47,15 +47,23 @@ export const apiService = {
             if (done) break;
 
             const chunk = new TextDecoder().decode(value);
+            console.log('API received raw chunk:', chunk);
+            
             try {
               const result = JSON.parse(chunk);
+              console.log('API parsed result:', result);
+              
               if (result.result?.chunks) {
+                console.log('Found chunks array:', result.result.chunks);
                 for (const chunkText of result.result.chunks) {
+                  console.log('Yielding chunk:', chunkText);
                   yield chunkText;
                 }
+              } else {
+                console.warn('No chunks found in result:', result);
               }
             } catch (e) {
-              console.warn('Error parsing chunk:', e);
+              console.warn('Error parsing chunk:', e, 'Raw chunk:', chunk);
             }
           }
         }
