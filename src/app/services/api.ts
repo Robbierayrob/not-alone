@@ -60,7 +60,7 @@ export const apiService = {
               
               if (chunk) {
                 console.log('Yielding chunk:', chunk);
-                yield chunk;
+                yield chunk.toString().replace(/\\n/g, '\n'); // Handle escaped newlines
               } else {
                 console.warn('No chunk found in result:', result);
               }

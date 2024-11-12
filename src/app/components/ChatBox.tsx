@@ -102,10 +102,13 @@ export default function ChatBox({
               >
                 <div className={`prose prose-sm md:prose-base max-w-none break-words ${
                   message.role === 'user' ? 'prose-invert' : ''
-                } ${message.role === 'assistant' && message.isTyping ? 'typing-animation cursor-blink typing-cursor' : ''}`}>
+                } ${message.role === 'assistant' && message.isTyping ? 'typing-animation' : ''}`}>
                   <ReactMarkdown>
                     {message.content}
                   </ReactMarkdown>
+                  {message.role === 'assistant' && message.isTyping && (
+                    <span className="cursor-blink">▋</span>
+                  )}
                 </div>
               </div>
             );
