@@ -151,11 +151,32 @@ export const processChat = functions.https.onCall(async (request) => {
     const result = await chat.sendMessage(message);
     const response = await result.response;
     
-    if (!response.candidates?.[0]?.content?.parts?.[0]?.text) {
-      throw new functions.https.HttpsError('internal', 'Invalid response format from AI model');
+    // Debug log to see the actual response structure
+    console.log('Raw AI response:', JSON.stringify(response));
+
+    // More detailed response validation
+    if (!response || !response.candidates) {
+      throw new functions.https.HttpsError('internal', 'No response received from AI model');
     }
 
-    const aiResponse = response.candidates[0].content.parts[0].text;
+    if (response.candidates.length === 0) {
+      throw new functions.https.HttpsError('internal', 'No candidates in AI response');
+    }
+
+    const candidate = response.candidates[0];
+    if (!candidate.content) {
+      throw new functions.https.HttpsError('internal', 'No content in AI response candidate');
+    }
+
+    // Extract text from the response
+    let aiResponse = '';
+    if (candidate.content.parts && candidate.content.parts.length > 0) {
+      aiResponse = candidate.content.parts.map(part => part.text).join(' ').trim();
+    }
+
+    if (!aiResponse) {
+      throw new functions.https.HttpsError('internal', 'No text content in AI response');
+    }
 
     // Update chat history
     chatHistory.push(
