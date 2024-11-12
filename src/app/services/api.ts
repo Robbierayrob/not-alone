@@ -35,41 +35,8 @@ export const apiService = {
         throw new Error(errorData.error?.message || 'Failed to send message');
       }
 
-      const reader = response.body?.getReader();
-      if (!reader) {
-        throw new Error('No response body reader available');
-      }
-
-      return {
-        stream: async function* () {
-          while (true) {
-            const { done, value } = await reader.read();
-            if (done) break;
-
-            const chunk = new TextDecoder().decode(value);
-            console.log('API received raw chunk:', chunk);
-            
-            try {
-              const result = JSON.parse(chunk);
-              console.log('API parsed result:', result);
-              
-              // Handle nested result structure
-              const chunk = result?.result?.result?.chunk || 
-                          result?.result?.chunk ||
-                          (typeof result === 'object' && 'chunk' in result ? result.chunk : null);
-              
-              if (chunk) {
-                console.log('Yielding chunk:', chunk);
-                yield chunk.toString().replace(/\\n/g, '\n'); // Handle escaped newlines
-              } else {
-                console.warn('No chunk found in result:', result);
-              }
-            } catch (e) {
-              console.warn('Error parsing chunk:', e, 'Raw chunk:', chunk);
-            }
-          }
-        }
-      };
+      const data = await response.json();
+      return data?.result?.message || '';
     } catch (error) {
       console.error('Error sending message:', error);
       throw error instanceof Error ? error : new Error('Failed to send message');

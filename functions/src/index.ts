@@ -75,48 +75,17 @@ export const processChat = functions.https.onCall(async (request) => {
 
     console.log('💬 Sending message to Gemini:', message);
     
-    const result = await chat.sendMessageStream(message);
-
-    let aiResponse = '';
-    const chunks: string[] = [];
-
-    console.log('🔄 Starting stream processing');
-    try {
-      for await (const chunk of result.stream) {
-        console.log('Raw chunk received:', chunk);
-        
-        if (chunk?.candidates?.[0]?.content?.parts?.[0]?.text) {
-          const chunkText = chunk.candidates[0].content.parts[0].text;
-          console.log('Extracted chunk text:', chunkText);
-          
-          chunks.push(chunkText);
-          aiResponse += chunkText;
-          
-          // Send chunk immediately
-          console.log('📦 Sending chunk:', {
-            chunkText,
-            chunkLength: chunkText.length,
-            totalLength: aiResponse.length,
-            totalChunks: chunks.length
-          });
-          
-          // Return each chunk immediately
-          return { result: { result: { chunk: chunkText } } };
-        } else {
-          console.log('Invalid chunk format:', chunk);
-        }
-      }
-    } catch (streamError) {
-      console.error('Stream processing error:', streamError);
-      throw new functions.https.HttpsError(
-        'internal',
-        'Error processing response stream'
-      );
+    const result = await chat.sendMessage(message);
+    const response = result.response;
+    
+    if (!response?.candidates?.[0]?.content?.parts?.[0]?.text) {
+      throw new Error('Invalid response format from Gemini');
     }
 
-    console.log('✅ Stream complete:', {
-      totalChunks: chunks.length,
-      finalLength: aiResponse.length,
+    const aiResponse = response.candidates[0].content.parts[0].text;
+    
+    console.log('✅ Response received:', {
+      responseLength: aiResponse.length,
       timestamp: new Date().toISOString(),
     });
 
@@ -125,11 +94,10 @@ export const processChat = functions.https.onCall(async (request) => {
       userMessage: message,
       timestamp: new Date().toISOString(),
       userId,
-      chatId,
-      chunks
+      chatId
     };
 
-    console.log('📤 Sending final response:', finalResponse);
+    console.log('📤 Sending response:', finalResponse);
     return { result: finalResponse };
 
   } catch (error) {

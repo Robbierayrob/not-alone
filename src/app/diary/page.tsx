@@ -178,50 +178,8 @@ export default function DiaryPage() {
     setIsLoading(true);
 
     try {
-      const response = await apiService.sendMessage(input, user.accessToken, currentChatId);
-      
-      // Initialize an empty assistant message with typing indicator
-      const aiMessage = { role: 'assistant', content: '', isTyping: true };
-      setMessages(prev => [...prev, aiMessage]);
-      
-      let accumulatedContent = '';
-      try {
-        console.log('Starting to process response stream');
-        for await (const chunk of response.stream()) {
-          console.log('UI received chunk:', chunk);
-          
-          if (chunk) {
-            accumulatedContent += chunk;
-            console.log('Received chunk:', chunk);
-            console.log('Accumulated content:', accumulatedContent);
-            
-            setMessages(prev => {
-              console.log('Updating messages with new chunk');
-              const newMessages = [...prev];
-              const lastMessage = newMessages[newMessages.length - 1];
-              if (lastMessage.role === 'assistant') {
-                lastMessage.content = accumulatedContent;
-                lastMessage.isTyping = true;
-                console.log('Updated assistant message:', lastMessage);
-              }
-              return newMessages;
-            });
-          }
-          
-          // Add a small delay to create a more natural typing effect
-          await new Promise(resolve => setTimeout(resolve, 50));
-        }
-        console.log('Stream processing complete');
-      } catch (error) {
-        console.error('Error processing stream:', error, error.stack);
-      }
-      
-      // Remove typing indicator when done
-      setMessages(prev => prev.map((msg, idx) => 
-        idx === prev.length - 1 
-          ? { ...msg, isTyping: false }
-          : msg
-      ));
+      const aiResponse = await apiService.sendMessage(input, user.accessToken, currentChatId);
+      setMessages(prev => [...prev, { role: 'assistant', content: aiResponse }]);
     } catch (error: unknown) {
       console.error('Error:', error instanceof Error ? error.message : 'Unknown error');
     } finally {
