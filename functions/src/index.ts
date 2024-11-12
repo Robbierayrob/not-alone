@@ -11,6 +11,9 @@ const model = vertex.preview.getGenerativeModel({
   model: 'gemini-1.5-flash-002',
 });
 
+// Store chat sessions
+const chatSessions = new Map();
+
 export const processChat = functions.https.onCall(async (request) => {
   console.log('🚀 Incoming request:', {
     auth: request.auth ? 'Authenticated' : 'Not authenticated',
@@ -30,30 +33,56 @@ export const processChat = functions.https.onCall(async (request) => {
   }
 
   try {
-    const { message } = request.data;
+    const { message, chatId } = request.data;
     const userId = request.auth.uid;
     
     console.log('📥 Processing request:', {
       messageLength: message.length,
       userId,
+      chatId,
     });
+
+    // Get or create chat session
+    let chat = chatSessions.get(chatId);
+    if (!chat) {
+      console.log('🆕 Creating new chat session:', chatId);
+      chat = await model.startChat({
+        context: "You are a relationship counselor AI assistant. Help users understand and improve their relationships.",
+        examples: [{
+          input: { content: "Tell me about my relationships" },
+          output: { content: "I'd be happy to help you explore and understand your relationships. What specific aspects would you like to discuss?" }
+        }]
+      });
+      chatSessions.set(chatId, chat);
+      console.log('📝 Chat session created:', {
+        chatId,
+        sessionExists: chatSessions.has(chatId)
+      });
+    }
 
     console.log('💬 Sending message to Gemini:', message);
     
-    const result = await model.generateContent(message);
-    const response = await result.response;
+    const result = await chat.sendMessage(message, {
+      stream: true
+    });
 
-    console.log('📊 Raw Gemini response:', response);
+    let aiResponse = '';
+    const chunks = [];
 
-    if (!response?.candidates?.[0]?.content?.parts?.[0]?.text) {
-      console.error('❌ Invalid AI response structure:', response);
-      throw new functions.https.HttpsError('internal', 'Invalid response from AI model');
+    console.log('🔄 Starting stream processing');
+    for await (const chunk of result.stream) {
+      const chunkText = chunk.candidates[0]?.content?.parts?.[0]?.text || '';
+      chunks.push(chunkText);
+      aiResponse += chunkText;
+      console.log('📦 Received chunk:', {
+        chunkLength: chunkText.length,
+        totalLength: aiResponse.length
+      });
     }
 
-    const aiResponse = response.candidates[0].content.parts[0].text;
-
-    console.log('✅ Processed response:', {
-      responseLength: aiResponse.length,
+    console.log('✅ Stream complete:', {
+      totalChunks: chunks.length,
+      finalLength: aiResponse.length,
       timestamp: new Date().toISOString(),
     });
 
@@ -62,6 +91,8 @@ export const processChat = functions.https.onCall(async (request) => {
       userMessage: message,
       timestamp: new Date().toISOString(),
       userId,
+      chatId,
+      chunks
     };
 
     console.log('📤 Sending final response:', finalResponse);

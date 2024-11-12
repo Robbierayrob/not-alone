@@ -176,7 +176,7 @@ export default function DiaryPage() {
     setIsLoading(true);
 
     try {
-      const data = await apiService.sendMessage(input, user.accessToken);
+      const data = await apiService.sendMessage(input, user.accessToken, currentChatId);
       console.log('Diary page received API response:', data);
       if (data && data.message) {
         const aiMessage = { role: 'assistant', content: data.message };
@@ -318,7 +318,7 @@ export default function DiaryPage() {
                 setIsLoading(true);
 
                 try {
-                  const data = await apiService.sendMessage(text, user.accessToken);
+                  const data = await apiService.sendMessage(text, user.accessToken, currentChatId);
                   console.log('Suggestion click received API response:', data);
                   if (data && data.message) {
                     const aiMessage = { role: 'assistant', content: data.message };

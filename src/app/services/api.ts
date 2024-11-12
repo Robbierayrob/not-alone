@@ -4,11 +4,16 @@ export const LOCAL_FUNCTION_URL = 'http://127.0.0.1:5001/notalone-de4fc/us-centr
 
 export const apiService = {
   // Chat related API calls
-  async sendMessage(message: string, token: string) {
+  async sendMessage(message: string, token: string, chatId: string) {
     try {
       if (!token) {
         throw new Error('Authentication token is required');
       }
+
+      console.log('🚀 Sending message to API:', {
+        messageLength: message.length,
+        chatId
+      });
 
       const response = await fetch(LOCAL_FUNCTION_URL, {
         method: 'POST',
@@ -19,24 +24,27 @@ export const apiService = {
         body: JSON.stringify({
           data: {
             message,
-            history
+            chatId
           },
         }),
       });
 
       if (!response.ok) {
         const errorData = await response.json();
+        console.error('❌ API error:', errorData);
         throw new Error(errorData.error?.message || 'Failed to send message');
       }
 
       const result = await response.json();
-      console.log('API received response:', result);
-      // Cloud Functions wrap the response in a 'result' object
+      console.log('✅ API received response:', result);
+      
       return {
         message: result.result.message,
         userMessage: result.result.userMessage,
         timestamp: new Date(result.result.timestamp),
         userId: result.result.userId,
+        chatId: result.result.chatId,
+        chunks: result.result.chunks
       };
     } catch (error) {
       console.error('Error sending message:', error);
