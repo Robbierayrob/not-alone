@@ -3,21 +3,25 @@ import * as admin from 'firebase-admin';
 import { VertexAI } from '@google-cloud/vertexai';
 
 // Initialize Firebase Admin SDK
-if (!admin.apps.length) {
-  if (process.env.NODE_ENV === 'development') {
-    // Using require for synchronous import in development
-    const serviceAccount = require('./config/serviceAccount.json');
-    admin.initializeApp({
-      credential: admin.credential.cert({
-        projectId: serviceAccount.project_id,
-        clientEmail: serviceAccount.client_email,
-        privateKey: serviceAccount.private_key,
-      }),
-    });
-  } else {
-    admin.initializeApp();
+const initializeApp = async () => {
+  if (!admin.apps.length) {
+    if (process.env.NODE_ENV === 'development') {
+      const serviceAccount = await import('../../config/serviceAccount.json');
+      admin.initializeApp({
+        credential: admin.credential.cert({
+          projectId: serviceAccount.default.project_id,
+          clientEmail: serviceAccount.default.client_email,
+          privateKey: serviceAccount.default.private_key,
+        }),
+      });
+    } else {
+      admin.initializeApp();
+    }
   }
-}
+};
+
+// Initialize admin before exporting functions
+await initializeApp();
 
 
 // Initialize Vertex AI
