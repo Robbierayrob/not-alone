@@ -33,8 +33,10 @@ export const processChat = functions.https.onCall(async (request) => {
   }
 
   try {
-    const { message, chatId } = request.data;
+    const { message, chatId = `chat-${Date.now()}-${Math.random().toString(36).substr(2, 9)}` } = request.data;
     const userId = request.auth.uid;
+    
+    console.log('📝 Using chat ID:', chatId);
     
     console.log('📥 Processing request:', {
       messageLength: message.length,

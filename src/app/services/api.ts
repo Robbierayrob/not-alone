@@ -4,7 +4,7 @@ export const LOCAL_FUNCTION_URL = 'http://127.0.0.1:5001/notalone-de4fc/us-centr
 
 export const apiService = {
   // Chat related API calls
-  async sendMessage(message: string, token: string, chatId: string) {
+  async sendMessage(message: string, token: string, chatId?: string) {
     try {
       if (!token) {
         throw new Error('Authentication token is required');
@@ -24,7 +24,7 @@ export const apiService = {
         body: JSON.stringify({
           data: {
             message,
-            chatId
+            chatId: chatId || `chat-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
           },
         }),
       });
