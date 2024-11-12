@@ -35,8 +35,11 @@ export const apiService = {
         throw new Error(errorData.error?.message || 'Failed to send message');
       }
 
-      const { result } = await response.json();
-      return result;
+      const data = await response.json();
+      if (!data?.result?.result) {
+        throw new Error('Invalid response format from server');
+      }
+      return data.result.result;
     } catch (error) {
       console.error('Error sending message:', error);
       throw error instanceof Error ? error : new Error('Failed to send message');
