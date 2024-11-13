@@ -123,7 +123,11 @@ export default function DiaryPage() {
     try {
       if (user) {
         const data = await apiService.loadChats(user.uid, await user.getIdToken());
-        setChats(data);
+        // Sort chats by createdAt timestamp in descending order (newest first)
+        const sortedChats = data.sort((a, b) => 
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
+        setChats(sortedChats);
       }
     } catch (error) {
       console.error('Error loading chats:', error);

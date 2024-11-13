@@ -53,7 +53,7 @@ export const getChatHistory = onCall(async (request) => {
     // Focus on chat_histories collection
     const baseQuery = firestore.collection('chat_histories')
       .where('userId', '==', userId)
-      .orderBy('lastUpdated', 'desc');
+      .orderBy('createdAt', 'desc');
     
     const query = chatId 
       ? baseQuery.where('chatId', '==', chatId)
