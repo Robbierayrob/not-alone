@@ -17,32 +17,16 @@ if (admin.apps.length === 0) {
 const firestore = admin.firestore();
 
 export const getChatHistory = onCall(async (request: { data?: any } | unknown, context?: CallableContext) => {
-  console.log('🔍 Retrieving Chat History', { 
-    request, 
-    contextExists: !!context,
-    authExists: !!(context && context.auth),
-    authUid: context?.auth?.uid,
-    authToken: context?.auth?.token
+  console.log('🔍 Retrieving Chat History', {
+    auth: context?.auth ? 'Authenticated' : 'Not authenticated',
+    data: request,
   });
 
-  // Enhanced authentication logging
-  if (!context) {
-    console.error('❌ No context provided');
-    throw new HttpsError('unauthenticated', 'No authentication context');
+  // Authentication check
+  if (!context?.auth) {
+    console.error('❌ Authentication missing');
+    throw new HttpsError('unauthenticated', 'Authentication required');
   }
-
-  if (!context.auth) {
-    console.error('❌ No authentication in context', { context });
-    throw new HttpsError('unauthenticated', 'Authentication token missing');
-  }
-
-  // Log detailed authentication information
-  console.log('🔐 Authentication Details', {
-    uid: context.auth.uid,
-    token: context.auth.token ? 'Token Present' : 'No Token',
-    authTime: context.auth.token?.authTime,
-    claims: context.auth.token?.claims
-  });
 
   // Basic validation
   if (!request || typeof request !== 'object') {

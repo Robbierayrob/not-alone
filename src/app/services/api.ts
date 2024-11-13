@@ -87,9 +87,13 @@ export const apiService = {
   // Chat history related API calls
   async loadChats(userId: string, token: string) {
     try {
-      console.log('🔍 Attempting to load chats', { 
-        userId, 
-        tokenLength: token.length 
+      if (!token) {
+        throw new Error('Authentication token is required');
+      }
+
+      console.log('🚀 Loading chat history', {
+        userId,
+        tokenLength: token.length
       });
 
       const requestBody = {
@@ -97,13 +101,6 @@ export const apiService = {
           userId: userId
         }
       };
-
-      console.log('📦 Request Body:', JSON.stringify(requestBody, null, 2));
-      console.log('🔑 Token Details:', {
-        tokenType: typeof token,
-        tokenStart: token.substring(0, 10),
-        tokenEnd: token.substring(token.length - 10)
-      });
 
       const response = await fetch(GET_CHAT_HISTORY_URL, {
         method: 'POST',
