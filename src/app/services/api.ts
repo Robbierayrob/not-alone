@@ -186,7 +186,7 @@ export const apiService = {
       }
 
       // Validate response structure
-      if (!responseData || !responseData.chatHistories) {
+      if (!responseData || !responseData?.chatHistories) {
         console.warn('⚠️ Unexpected Response Structure', {
           responseData,
           hasSuccess: responseData?.success,
@@ -197,7 +197,7 @@ export const apiService = {
       }
 
       // Generate meaningful titles
-      const chatHistoriesWithTitles = this.generateChatTitle(responseData.chatHistories);
+      const chatHistoriesWithTitles = this.generateChatTitle(responseData.chatHistories || []);
 
       console.log('✅ Chat Histories Retrieved', {
         totalChats: chatHistoriesWithTitles.length,
