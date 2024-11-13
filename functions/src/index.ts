@@ -33,7 +33,7 @@ function getOrInitializeClientApp(projectId: string, apiKey: string) {
 }
 
 // Initialize Firebase client app with project-specific configuration
-const { clientApp: _clientApp, functions: _functions } = getOrInitializeClientApp('notalone-de4fc', 'local-api-key');
+const { clientApp: _clientApp, functions } = getOrInitializeClientApp('notalone-de4fc', 'local-api-key');
 
 // Initialize Vertex AI
 const vertex = new VertexAI({
@@ -196,7 +196,7 @@ export const processChat = firebaseFunctions.https.onCall(async (request: fireba
 
       // Trigger profile analysis
       try {
-        const analyzeProfileFunction = httpsCallable(functions as Functions, 'analyzeProfileFromChat');
+        const analyzeProfileFunction = httpsCallable(functions, 'analyzeProfileFromChat');
         const profileAnalysisPayload = {
           userId: request.auth?.uid,
           chatId: sessionChatId,
@@ -239,7 +239,7 @@ export const processChat = firebaseFunctions.https.onCall(async (request: fireba
         // Use the existing client app or reinitialize if needed
         const { clientApp: _clientApp, functions: _functions } = getOrInitializeClientApp(projectId, 'local-api-key');
 
-        const saveChatHistoryFunction = httpsCallable(functions as Functions, 'saveChatHistory');
+        const saveChatHistoryFunction = httpsCallable(functions, 'saveChatHistory');
         console.log('🔍 Save Chat History Function Details:', {
           functionExists: !!saveChatHistoryFunction,
           functionType: typeof saveChatHistoryFunction,
