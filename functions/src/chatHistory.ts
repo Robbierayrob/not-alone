@@ -1,4 +1,5 @@
-import { onCall, HttpsError, CallableContext } from 'firebase-functions/v2/https';
+import { onCall, HttpsError } from 'firebase-functions/v2/https';
+import { CallableContext } from 'firebase-functions/lib/common/providers/https';
 import * as admin from 'firebase-admin';
 
 // Ensure Firebase Admin is initialized
