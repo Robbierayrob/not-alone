@@ -21,10 +21,16 @@ export default function DiaryPage() {
   const router = useRouter();
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [user, setUser] = useState<any>(null);
+  const [userToken, setUserToken] = useState<string | null>(null);
   
   // Check authentication status and session timeout
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        // Get the ID token and store it in state
+        const token = await user.getIdToken();
+        setUserToken(token);
+      }
       if (user) {
         // Get the user's last activity timestamp from localStorage
         const lastActivity = localStorage.getItem('lastActivityTime');
@@ -315,7 +321,7 @@ export default function DiaryPage() {
           }}
           onLoadChatMessages={loadChatMessages}
           userId={user.uid}
-          token={await user.getIdToken()}
+          token={userToken || ''}
         />
   
         {/* Main chat area */}
