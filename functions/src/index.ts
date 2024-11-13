@@ -181,19 +181,19 @@ export const processChat = firebaseFunctions.https.onCall(async (request: fireba
         chatId: sessionChatId,
         messageCount: 2,
         timestamp: new Date().toISOString(),
-        clientAppConfig: clientApp.options
+        clientAppConfig: _clientApp.options
       });
 
       // Explicitly log Firebase configuration
       console.log('🔧 Firebase Client Configuration:', {
-        projectId: clientApp.options.projectId,
-        apiKey: clientApp.options.apiKey,
-        authDomain: clientApp.options.authDomain,
+        projectId: _clientApp.options.projectId,
+        apiKey: _clientApp.options.apiKey,
+        authDomain: _clientApp.options.authDomain,
         emulatorHost: 'localhost',
         emulatorPort: 5001
       });
 
-      const functions = getFunctions(clientApp);
+      const functions = getFunctions(_clientApp);
       console.log('🔍 Firebase Functions Object Keys:', Object.keys(functions));
       console.log('🔍 Firebase Functions Instance:', functions);
 
