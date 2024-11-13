@@ -193,6 +193,16 @@ export default function DiaryPage() {
     }
   };
 
+  const resetChatState = async () => {
+    setMessages([]);
+    setCurrentChatId('default-chat');
+    setChats([]);
+    setShowSuggestions(true);
+    setInput('');
+    setIsLoading(false);
+    setGraphData({ nodes: [], links: [] });
+  };
+
   const createNewChat = async () => {
     try {
       const chatId = `chat-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
@@ -212,6 +222,7 @@ export default function DiaryPage() {
       if (user) {
         console.log('🔄 Triggering initial chat load', { userId: user.uid });
         try {
+          await resetChatState();  // Reset state first
           await loadChats();
         } catch (error) {
           console.error('Failed to load chats:', error);
