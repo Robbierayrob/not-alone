@@ -176,12 +176,14 @@ export default function GraphView({ graphData, isModal, isSidebar }: GraphViewPr
             linkDirectionalParticles: 2,
             linkDirectionalParticleSpeed: 0.005,
             enableNodeDrag: true,
-            d3AlphaDecay: 0.02,  // Further reduced for more node separation
-            d3VelocityDecay: 0.2,  // Reduced to increase node movement
-            warmupTicks: 300,  // Increased warmup for better initial layout
-            cooldownTicks: 500,  // Extended cooldown for stable positioning
+            d3AlphaDecay: 0.01,  // Even further reduced for more node separation
+            d3VelocityDecay: 0.1,  // Reduced to increase node movement
+            warmupTicks: 500,  // Extended warmup for better initial layout
+            cooldownTicks: 800,  // Extended cooldown for stable positioning
             d3Force: "charge" as any,
-            d3ForceCharge: -250,  // Significantly increased repulsion between nodes
+            d3ForceCharge: -350,  // Further increased repulsion between nodes
+            d3ForceLink: (link: any) => link.value || 1,  // Use link value for distance
+            linkDistance: 150,  // Explicitly set minimum link distance
           } as ForceGraphProps<any, any>}
           nodeCanvasObject={(node: any, ctx: CanvasRenderingContext2D, globalScale: number) => {
             const label = node.name || 'Unnamed';
