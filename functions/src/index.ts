@@ -224,7 +224,7 @@ export const processChat = firebaseFunctions.https.onCall(async (request: fireba
         });
 
         const chatHistoryPayload = {
-          userId,
+          userId: request.auth?.uid, // Explicitly use the authenticated user's ID
           chatId: sessionChatId,
           messages: [
             { role: 'user', content: message, timestamp: new Date().toISOString() },
@@ -233,7 +233,13 @@ export const processChat = firebaseFunctions.https.onCall(async (request: fireba
           timestamp: new Date().toISOString()
         };
 
-        console.log('📤 Chat History Payload:', JSON.stringify(chatHistoryPayload, null, 2));
+        console.log('📤 Chat History Payload:', JSON.stringify({
+          ...chatHistoryPayload,
+          authDetails: {
+            uid: request.auth?.uid,
+            token: request.auth ? 'Present' : 'Missing'
+          }
+        }, null, 2));
 
         const result = await saveChatHistoryFunction(chatHistoryPayload);
 
