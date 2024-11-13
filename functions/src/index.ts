@@ -12,8 +12,9 @@ const clientApp = initializeClientApp({
 
 // Configure Firebase Functions to use local emulator
 const functions = getFunctions(clientApp);
-functions.host = 'localhost';
-functions.port = 5001;
+// Use connectFunctionsEmulator for proper type-safe emulator configuration
+import { connectFunctionsEmulator } from 'firebase/functions';
+connectFunctionsEmulator(functions, 'localhost', 5001);
 console.log('🔧 Configured Firebase Functions to use local emulator');
 // Remove unused clientFunctions
 
@@ -188,13 +189,17 @@ export const processChat = firebaseFunctions.https.onCall(async (request: fireba
       });
 
       console.log('✅ Chat history save result:', result);
-    } catch (saveError) {
-      console.error('❌ Detailed save chat history error:', {
-        errorName: saveError.name,
-        errorCode: saveError.code,
-        errorMessage: saveError.message,
-        fullError: saveError
-      });
+    } catch (saveError: unknown) {
+      if (saveError instanceof Error) {
+        console.error('❌ Detailed save chat history error:', {
+          errorName: saveError.name,
+          errorCode: (saveError as any).code,
+          errorMessage: saveError.message,
+          fullError: saveError
+        });
+      } else {
+        console.error('❌ Unknown error saving chat history:', saveError);
+      }
       // Non-critical error, so we'll continue with the main response
     }
 
