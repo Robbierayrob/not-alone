@@ -44,7 +44,18 @@ export const saveProfileHistory = onCall(async (request: unknown, context?: Call
       target: string, 
       value: number, 
       label: string, 
-      details?: Record<string, any>
+      details?: {
+        relationshipType?: string,
+        duration?: string,
+        status?: string,
+        sentiment?: string,
+        interactions?: Array<{
+          date: string,
+          type: string,
+          description: string,
+          impact: string
+        }>
+      }
     }>,
     metadata?: Record<string, any>
   };
