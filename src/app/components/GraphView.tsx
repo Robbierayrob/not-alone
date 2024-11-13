@@ -174,7 +174,6 @@ export default function GraphView({ graphData, isModal, isSidebar }: GraphViewPr
           linkDirectionalParticles={2}
           linkDirectionalParticleSpeed={0.005}
           enableNodeDrag={true}
-          d3Force="charge" 
           d3AlphaDecay={0.05}  // Decreased to allow more node separation
           d3VelocityDecay={0.3}  // Reduced to increase node movement
           warmupTicks={200}  // More warmup for better initial layout
