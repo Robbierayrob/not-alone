@@ -2,7 +2,7 @@ import * as firebaseFunctions from 'firebase-functions';
 import { VertexAI } from '@google-cloud/vertexai';
 import * as admin from 'firebase-admin';
 import { getFunctions, httpsCallable, connectFunctionsEmulator, Functions } from 'firebase/functions';
-import { initializeApp as initializeClientApp, getApps, deleteApp } from 'firebase/app';
+import { initializeApp as initializeClientApp, getApps } from 'firebase/app';
 
 // Utility function to safely initialize Firebase client app
 function getOrInitializeClientApp(projectId: string, apiKey: string) {
