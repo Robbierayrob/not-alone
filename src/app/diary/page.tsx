@@ -1,6 +1,7 @@
 'use client';
 
-import { useState, FormEvent, useRef, useEffect } from 'react';
+import { useState, FormEvent, useRef, useEffect, useCallback } from 'react';
+import { Toast } from '../components/Toast';
 import { useRouter } from 'next/navigation';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../firebase/config';
@@ -106,6 +107,15 @@ export default function DiaryPage() {
     fetchGraphData();
   }, [currentChatId]);
   const [deleteConfirmation, setDeleteConfirmation] = useState<string | null>(null);
+  const [toast, setToast] = useState<{
+    message: string;
+    type?: 'success' | 'error' | 'warning';
+  } | null>(null);
+
+  const showToast = useCallback((message: string, type: 'success' | 'error' | 'warning' = 'success') => {
+    setToast({ message, type });
+    setTimeout(() => setToast(null), 3000);
+  }, []);
   const [chats, setChats] = useState<Array<{
     chatId: string;  // Changed from 'id' to 'chatId'
     title: string;
@@ -295,6 +305,13 @@ export default function DiaryPage() {
 
   return (
     <main>
+      {toast && (
+        <Toast 
+          message={toast.message} 
+          type={toast.type} 
+          onClose={() => setToast(null)} 
+        />
+      )}
       <div className="h-screen flex relative">
         <ProfileSidebar
           isOpen={isProfileSidebarOpen}
@@ -316,9 +333,11 @@ export default function DiaryPage() {
                   setMessages([]);
                 }
                 await loadChats();
+                showToast('Chat successfully deleted', 'success');
               }
             } catch (error) {
               console.error('Error deleting chat:', error);
+              showToast('Failed to delete chat', 'error');
             }
           }}
           onLoadChatMessages={loadChatMessages}
