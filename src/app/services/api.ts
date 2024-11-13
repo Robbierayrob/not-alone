@@ -250,17 +250,7 @@ export const apiService = {
     }
   },
 
-  async createNewChat() {
-    try {
-      const response = await fetch(`${API_BASE_URL}/api/chats/new`, {
-        method: 'POST'
-      });
-      return await response.json();
-    } catch (error) {
-      console.error('Error creating new chat:', error);
-      throw error;
-    }
-  },
+  
 
   async deleteChat(userId: string, token: string, chatId: string) {
     try {
