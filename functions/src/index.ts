@@ -184,10 +184,6 @@ export const processChat = firebaseFunctions.https.onCall(async (request: fireba
       console.log('🔍 Firebase Functions Object Keys:', Object.keys(functions));
       console.log('🔍 Firebase Functions Instance:', functions);
 
-      // Detailed function registration check
-      const availableFunctions = await functions.httpsCallable('__getFunctions')();
-      console.log('🔍 Registered Cloud Functions:', availableFunctions);
-
       const saveChatHistoryFunction = httpsCallable(functions as Functions, 'saveChatHistory');
       console.log('🔍 Save Chat History Function Details:', {
         functionExists: !!saveChatHistoryFunction,
