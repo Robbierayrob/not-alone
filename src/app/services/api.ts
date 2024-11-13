@@ -87,46 +87,118 @@ export const apiService = {
   // Chat history related API calls
   async loadChats(userId: string, token: string) {
     try {
+      // Extensive pre-request logging
+      console.group('🔍 loadChats Detailed Diagnostics');
+      console.log('🔑 Input Validation', {
+        userIdProvided: !!userId,
+        userIdType: typeof userId,
+        userIdLength: userId?.length,
+        tokenProvided: !!token,
+        tokenType: typeof token,
+        tokenLength: token?.length
+      });
+
       if (!token) {
+        console.error('❌ No authentication token');
         throw new Error('Authentication token is required');
       }
 
-      console.log('🚀 Loading chat history', {
-        userId,
-        tokenLength: token.length
-      });
+      if (!userId) {
+        console.error('❌ No user ID provided');
+        throw new Error('User ID is required');
+      }
 
-      const response = await fetch(GET_CHAT_HISTORY_URL, {
+      // Detailed request configuration logging
+      const requestConfig = {
+        url: GET_CHAT_HISTORY_URL,
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({
+        body: {
           data: {
             userId: userId,
             chatId: undefined
           }
-        }),
+        }
+      };
+
+      console.log('📡 Request Configuration', {
+        url: requestConfig.url,
+        method: requestConfig.method,
+        bodyUserId: requestConfig.body.data.userId,
+        bodyUserIdType: typeof requestConfig.body.data.userId
       });
 
+      // Perform fetch with enhanced error tracking
+      const response = await fetch(GET_CHAT_HISTORY_URL, {
+        method: 'POST',
+        headers: requestConfig.headers,
+        body: JSON.stringify(requestConfig.body),
+      });
+
+      console.log('🌐 Response Details', {
+        status: response.status,
+        statusText: response.statusText,
+        headers: Object.fromEntries(response.headers.entries())
+      });
+
+      // Comprehensive error handling for non-OK responses
       if (!response.ok) {
         const errorText = await response.text();
-        console.error('❌ API error:', errorText);
-        throw new Error(errorText || 'Failed to load chats');
+        console.error('❌ HTTP Error Response', {
+          status: response.status,
+          statusText: response.statusText,
+          errorText
+        });
+        throw new Error(`HTTP Error: ${response.status} - ${errorText || 'Unknown error'}`);
       }
 
-      const responseData = await response.json();
-      
-      console.log('✅ Loaded Chats:', {
-        totalChats: responseData.chatHistories?.length || 0,
-        chatHistories: responseData.chatHistories
+      // Detailed response parsing
+      let responseData;
+      try {
+        responseData = await response.json();
+        console.log('📦 Parsed Response Data', {
+          responseType: typeof responseData,
+          keys: Object.keys(responseData),
+          chatHistoriesType: typeof responseData.chatHistories,
+          chatHistoriesLength: responseData.chatHistories?.length
+        });
+      } catch (parseError) {
+        console.error('❌ JSON Parsing Error', {
+          error: parseError,
+          responseText: await response.text()
+        });
+        throw new Error('Failed to parse response JSON');
+      }
+
+      // Validate response structure
+      if (!responseData || !responseData.chatHistories) {
+        console.warn('⚠️ Unexpected Response Structure', {
+          responseData,
+          hasSuccess: responseData?.success,
+          hasMessage: responseData?.message
+        });
+        return [];
+      }
+
+      console.log('✅ Chat Histories Retrieved', {
+        totalChats: responseData.chatHistories.length,
+        chatIds: responseData.chatHistories.map((chat: any) => chat.chatId)
       });
 
-      // Directly return the chat histories from the response
+      console.groupEnd();
+
+      // Return chat histories or empty array
       return responseData.chatHistories || [];
     } catch (error) {
-      console.error('❌ Error loading chats:', error);
+      console.error('❌ Complete loadChats Error', {
+        errorName: error instanceof Error ? error.name : 'Unknown Error',
+        errorMessage: error instanceof Error ? error.message : error,
+        errorStack: error instanceof Error ? error.stack : 'No stack trace'
+      });
+      console.groupEnd();
       throw error;
     }
   },
