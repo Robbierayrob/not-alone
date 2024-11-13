@@ -37,7 +37,8 @@ export const saveChatHistory = onCall(async (data: unknown, context?: CallableCo
   console.log('🔍 COMPREHENSIVE saveChatHistory function called:', {
     timestamp: new Date().toISOString(),
     hasAuth: !!context?.auth,
-    requestDataType: typeof data
+    requestDataType: typeof data,
+    rawData: JSON.stringify(data, null, 2)
   });
 
   // Validate input data structure
@@ -62,10 +63,17 @@ export const saveChatHistory = onCall(async (data: unknown, context?: CallableCo
   // Provide a default timestamp if not provided
   const safeTimestamp = timestamp || new Date().toISOString();
 
-  // Comprehensive validation
-  if (!userId || typeof userId !== 'string') {
-    console.error('❌ Invalid or missing userId');
-    throw new HttpsError('invalid-argument', 'Invalid user ID');
+  // More flexible userId validation
+  if (!userId) {
+    console.error('❌ Missing userId');
+    throw new HttpsError('invalid-argument', 'User ID is required');
+  }
+
+  // Ensure userId is a non-empty string
+  const sanitizedUserId = String(userId).trim();
+  if (sanitizedUserId.length === 0) {
+    console.error('❌ Empty userId');
+    throw new HttpsError('invalid-argument', 'User ID cannot be empty');
   }
 
   if (!chatId || typeof chatId !== 'string') {
