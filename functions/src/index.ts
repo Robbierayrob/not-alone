@@ -1,8 +1,15 @@
+import * as dotenv from 'dotenv';
+import * as path from 'path';
 import * as firebaseFunctions from 'firebase-functions';
 import { VertexAI } from '@google-cloud/vertexai';
 import * as admin from 'firebase-admin';
 import { getFunctions, httpsCallable } from 'firebase/functions';
 import { initializeApp as initializeClientApp } from 'firebase/app';
+
+// Load environment variables
+dotenv.config({ 
+  path: path.resolve(__dirname, '.env.local') 
+});
 // Initialize Firebase client app (if not already done)
 // Use emulator configuration for local development
 const clientApp = initializeClientApp({
