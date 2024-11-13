@@ -1,15 +1,8 @@
-import * as dotenv from 'dotenv';
-import * as path from 'path';
 import * as firebaseFunctions from 'firebase-functions';
 import { VertexAI } from '@google-cloud/vertexai';
 import * as admin from 'firebase-admin';
 import { getFunctions, httpsCallable } from 'firebase/functions';
 import { initializeApp as initializeClientApp } from 'firebase/app';
-
-// Load environment variables
-dotenv.config({ 
-  path: path.resolve(__dirname, '.env.local') 
-});
 // Initialize Firebase client app (if not already done)
 // Use emulator configuration for local development
 const clientApp = initializeClientApp({
@@ -20,7 +13,7 @@ const clientApp = initializeClientApp({
 
 // Initialize Vertex AI
 const vertex = new VertexAI({
-  project: process.env.GOOGLE_CLOUD_PROJECT || 'notalone-de4fc',
+  project: 'notalone-de4fc',
   location: 'australia-southeast1',
 });
 
@@ -41,13 +34,11 @@ if (admin.apps.length === 0) {
   admin.initializeApp();
   
   // Connect to local Firestore emulator
-  if (process.env.FIRESTORE_EMULATOR_HOST) {
-    console.log('Connecting to Firestore Emulator:', process.env.FIRESTORE_EMULATOR_HOST);
-    admin.firestore().settings({
-      host: process.env.FIRESTORE_EMULATOR_HOST,
-      ssl: false
-    });
-  }
+  console.log('Connecting to Firestore Emulator: localhost:8080');
+  admin.firestore().settings({
+    host: 'localhost:8080',
+    ssl: false
+  });
 }
 
 export const processChat = firebaseFunctions.https.onCall(async (request: firebaseFunctions.https.CallableRequest) => {

@@ -6,13 +6,11 @@ if (admin.apps.length === 0) {
   admin.initializeApp();
   
   // Connect to local Firestore emulator
-  if (process.env.FIRESTORE_EMULATOR_HOST) {
-    console.log('Connecting to Firestore Emulator:', process.env.FIRESTORE_EMULATOR_HOST);
-    admin.firestore().settings({
-      host: process.env.FIRESTORE_EMULATOR_HOST,
-      ssl: false
-    });
-  }
+  console.log('Connecting to Firestore Emulator: localhost:8080');
+  admin.firestore().settings({
+    host: 'localhost:8080',
+    ssl: false
+  });
 }
 
 const firestore = admin.firestore();
