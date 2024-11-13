@@ -1,7 +1,7 @@
 import * as firebaseFunctions from 'firebase-functions';
 import { VertexAI } from '@google-cloud/vertexai';
 import * as admin from 'firebase-admin';
-import { getFunctions, httpsCallable, connectFunctionsEmulator, Functions } from 'firebase/functions';
+import { getFunctions, httpsCallable, connectFunctionsEmulator } from 'firebase/functions';
 import { initializeApp as initializeClientApp, getApps } from 'firebase/app';
 
 // Utility function to safely initialize Firebase client app
@@ -19,17 +19,17 @@ function getOrInitializeClientApp(projectId: string, apiKey: string) {
     apiKey: apiKey
   });
 
-  const functions = getFunctions(clientApp);
+  const functionsInstance = getFunctions(clientApp);
   
   // Safely connect to emulator
   try {
-    connectFunctionsEmulator(functions, 'localhost', 5001);
+    connectFunctionsEmulator(functionsInstance, 'localhost', 5001);
     console.log('🔧 Configured Firebase Functions to use local emulator');
   } catch (error) {
     console.warn('⚠️ Failed to connect to Functions emulator:', error);
   }
 
-  return { clientApp, functions };
+  return { clientApp, functions: functionsInstance };
 }
 
 // Initialize Firebase client app with project-specific configuration
@@ -196,7 +196,8 @@ export const processChat = firebaseFunctions.https.onCall(async (request: fireba
 
       // Trigger profile analysis
       try {
-        const analyzeProfileFunction = httpsCallable(functions, 'analyzeProfileFromChat');
+        const functionsInstance = getFunctions(_clientApp);
+        const analyzeProfileFunction = httpsCallable(functionsInstance, 'analyzeProfileFromChat');
         const profileAnalysisPayload = {
           userId: request.auth?.uid,
           chatId: sessionChatId,
@@ -239,7 +240,8 @@ export const processChat = firebaseFunctions.https.onCall(async (request: fireba
         // Use the existing client app or reinitialize if needed
         const { clientApp: _clientApp, functions: _functions } = getOrInitializeClientApp(projectId, 'local-api-key');
 
-        const saveChatHistoryFunction = httpsCallable(functions, 'saveChatHistory');
+        const functionsInstance = getFunctions(_clientApp);
+        const saveChatHistoryFunction = httpsCallable(functionsInstance, 'saveChatHistory');
         console.log('🔍 Save Chat History Function Details:', {
           functionExists: !!saveChatHistoryFunction,
           functionType: typeof saveChatHistoryFunction,
