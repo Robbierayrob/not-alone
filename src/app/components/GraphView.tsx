@@ -89,17 +89,13 @@ export default function GraphView({ graphData, isModal, isSidebar }: GraphViewPr
     );
   }
 
-  // Ensure at least some nodes and links exist
-  if (processedGraphData.nodes.length === 0 || processedGraphData.links.length === 0) {
-    console.warn('Graph data is empty', { 
+  // Render if there are nodes, even without links
+  if (processedGraphData.nodes.length === 0) {
+    console.warn('No nodes found in graph data', { 
       nodeCount: processedGraphData.nodes.length, 
       linkCount: processedGraphData.links.length 
     });
-    return (
-      <div className="text-center text-yellow-500 p-4">
-        No nodes or links to display
-      </div>
-    );
+    return null; // Silently do nothing if no nodes
   }
 
   const containerRef = useRef<HTMLDivElement>(null);
