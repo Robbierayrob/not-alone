@@ -6,17 +6,17 @@ import DeleteConfirmationModal from './DeleteConfirmationModal';
 interface ChatHistorySidebarProps {
   isSidebarOpen: boolean;
   chats: Array<{
-    id: string;
+    chatId: string;  // Changed from 'id' to 'chatId' for consistency
     title: string;
     createdAt: string;
     messages: Array<{role: string, content: string}>;
   }>;
   currentChatId: string;
-  onCreateNewChat: () => Promise<string>;  // Changed to async function
+  onCreateNewChat: () => Promise<string>;
   onChatSelect: (chatId: string) => void;
   onDeleteChat: (chatId: string) => void;
-  onLoadChats?: () => void;  // Optional callback to trigger chat loading
-  onLoadChatMessages?: (chatId: string) => void;  // New prop to load specific chat messages
+  onLoadChats?: () => void;
+  onLoadChatMessages?: (chatId: string) => void;
 }
 
 export default function ChatHistorySidebar({
@@ -60,41 +60,48 @@ export default function ChatHistorySidebar({
           </button>
         </div>
         <div className="space-y-2">
-          {chats.map((chat, index) => (
-            <div key={`${chat.id}-${index}`} className="relative group">
-              <button
-                onClick={() => {
-                  onChatSelect(chat.id);
-                  // If onLoadChatMessages is provided, load messages for this chat
-                  if (onLoadChatMessages) {
-                    onLoadChatMessages(chat.id);
-                  }
-                }}
-                className={`w-full px-4 py-3 rounded-lg text-left hover:bg-gray-100 
-                  ${currentChatId === chat.id ? 'bg-gray-100' : ''} transition-colors`}
-              >
-                <div className="flex flex-col">
-                  <span className="chat-history-title">{chat.title || `Chat ${index + 1}`}</span>
-                  <span className="chat-history-subtitle">
-                    {new Date(chat.createdAt).toLocaleDateString()}
-                  </span>
-                </div>
-              </button>
-              <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  handleDeleteClick(chat.id);
-                }}
-                className="absolute right-2 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 
-                  p-2 text-gray-400 hover:text-red-500 transition-all"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" 
-                  strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-              </button>
-            </div>
-          ))}
+          {chats.map((chat, index) => {
+            // Ensure chatId is always available, fallback to a generated ID if not
+            const chatId = chat.chatId || chat.id || `fallback-chat-${index}`;
+          
+            return (
+              <div key={`${chatId}-${index}`} className="relative group">
+                <button
+                  onClick={() => {
+                    onChatSelect(chatId);
+                    // If onLoadChatMessages is provided, load messages for this chat
+                    if (onLoadChatMessages) {
+                      onLoadChatMessages(chatId);
+                    }
+                  }}
+                  className={`w-full px-4 py-3 rounded-lg text-left hover:bg-gray-100 
+                    ${currentChatId === chatId ? 'bg-gray-100' : ''} transition-colors`}
+                >
+                  <div className="flex flex-col">
+                    <span className="chat-history-title">
+                      {chat.title || `Chat ${index + 1}`}
+                    </span>
+                    <span className="chat-history-subtitle">
+                      {new Date(chat.createdAt).toLocaleDateString()}
+                    </span>
+                  </div>
+                </button>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    handleDeleteClick(chatId);
+                  }}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 
+                    p-2 text-gray-400 hover:text-red-500 transition-all"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" 
+                    strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+            );
+          })}
 
           {deleteConfirmation && (
             <DeleteConfirmationModal

@@ -93,6 +93,13 @@ export const apiService = {
     try {
       // Extensive pre-request logging
       console.group('🔍 loadChats Detailed Diagnostics');
+      
+      // Ensure consistent chat object structure
+      const normalizeChats = (chats) => chats.map(chat => ({
+        ...chat,
+        chatId: chat.chatId || chat.id,  // Ensure chatId exists
+        id: undefined  // Remove potential duplicate id
+      }));
     
       if (!token) {
         console.error('❌ No authentication token');
@@ -164,7 +171,12 @@ export const apiService = {
       }
 
       // Generate meaningful titles using utility function
-      const chatHistoriesWithTitles = generateChatTitles(responseData.chatHistories);
+      const chatHistoriesWithTitles = generateChatTitles(responseData.chatHistories)
+        .map(chat => ({
+          ...chat,
+          chatId: chat.chatId || chat.id,  // Ensure chatId exists
+          id: undefined  // Remove potential duplicate id
+        }));
 
       console.log('✅ Chat Histories Retrieved', {
         totalChats: chatHistoriesWithTitles.length,
@@ -174,7 +186,7 @@ export const apiService = {
 
       console.groupEnd();
 
-      // Return chat histories with generated titles
+      // Return chat histories with generated titles and normalized structure
       return chatHistoriesWithTitles;
     } catch (error) {
       console.error('❌ Complete loadChats Error', {

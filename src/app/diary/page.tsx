@@ -101,7 +101,7 @@ export default function DiaryPage() {
   }, [currentChatId]);
   const [deleteConfirmation, setDeleteConfirmation] = useState<string | null>(null);
   const [chats, setChats] = useState<Array<{
-    id: string;
+    chatId: string;  // Changed from 'id' to 'chatId'
     title: string;
     createdAt: string;
     messages: Array<{role: string, content: string}>;
@@ -154,7 +154,12 @@ export default function DiaryPage() {
         setCurrentChatId('default-chat');
         setMessages([]);
       }
-      setChats(data.chats);
+      // Ensure chats have chatId property
+      const updatedChats = data.chats.map(chat => ({
+        ...chat,
+        chatId: chat.chatId || chat.id
+      }));
+      setChats(updatedChats);
       setDeleteConfirmation(null);
     } catch (error) {
       console.error('Error deleting chat:', error);
