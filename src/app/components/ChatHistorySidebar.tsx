@@ -118,6 +118,8 @@ export default function ChatHistorySidebar({
                   setDeleteConfirmation(null);
                 }
               }}
+              userId={userId}
+              token={token}
             />
           )}
         </div>

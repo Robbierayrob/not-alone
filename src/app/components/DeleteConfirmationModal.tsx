@@ -5,13 +5,17 @@ interface DeleteConfirmationModalProps {
   onClose: () => void;
   onConfirm: () => void;
   chatId?: string;  // Optional prop for additional context if needed
+  userId?: string;  // Added userId
+  token?: string;   // Added token
 }
 
 export default function DeleteConfirmationModal({ 
   isOpen, 
   onClose, 
   onConfirm,
-  chatId 
+  chatId,
+  userId,    // Added userId
+  token      // Added token
 }: DeleteConfirmationModalProps) {
   if (!isOpen) return null;
 
