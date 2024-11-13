@@ -117,7 +117,9 @@ export default function DiaryPage() {
     setTimeout(() => setToast(null), 3000);
   }, []);
   const [chats, setChats] = useState<Array<{
-    chatId: string;  // Changed from 'id' to 'chatId'
+    id: string;
+    chatId: string;
+    userId: string;
     title: string;
     createdAt: string;
     messages: Array<{role: string, content: string}>;
@@ -141,7 +143,9 @@ export default function DiaryPage() {
         const data = await apiService.loadChats(user.uid, await user.getIdToken());
         // Sort chats by createdAt timestamp in descending order (newest first)
         const sortedChats = data.map(chat => ({
+          id: chat.id || chat.chatId,  // Fallback to chatId if id is undefined
           chatId: chat.chatId,
+          userId: chat.userId,
           title: chat.messageCount > 0 
             ? chat.messages[0].content.substring(0, 50) + '...' 
             : 'New Chat',
