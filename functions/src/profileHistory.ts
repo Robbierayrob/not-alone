@@ -29,7 +29,7 @@ export const saveProfileHistory = onCall(async (request: unknown, context?: Call
   const data = (request as any).data || request;
 
   const { userId, nodes = [], links = [], metadata = {} } = data as {
-    userId?: string, 
+    userId: string, 
     nodes?: Array<{
       id: string, 
       name: string, 
@@ -85,11 +85,7 @@ export const saveProfileHistory = onCall(async (request: unknown, context?: Call
     linksCount: links.length 
   });
 
-  // Minimal validation
-  if (!userId) {
-    console.error('❌ Missing userId', { data });
-    throw new HttpsError('invalid-argument', 'User ID is required');
-  }
+  // Minimal validation is now unnecessary since userId is guaranteed to be a string
 
   try {
     const docRef = firestore

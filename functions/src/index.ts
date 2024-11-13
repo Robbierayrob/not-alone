@@ -184,15 +184,34 @@ export const processChat = firebaseFunctions.https.onCall(async (request: fireba
     };
 
     console.log('📤 Sending response:', finalResponse);
-    // Attempt to save chat history
+    // Attempt to save chat history and analyze profile
     try {
-      console.log('🔍 Attempting to save chat history with DETAILED logging:', {
+      console.log('🔍 Attempting to save chat history and analyze profile:', {
         userId,
         chatId: sessionChatId,
         messageCount: 2,
         timestamp: new Date().toISOString(),
         clientAppConfig: _clientApp.options
       });
+
+      // Trigger profile analysis
+      try {
+        const analyzeProfileFunction = httpsCallable(functions as Functions, 'analyzeProfileFromChat');
+        const profileAnalysisPayload = {
+          userId: request.auth?.uid,
+          chatId: sessionChatId,
+          messages: [
+            { role: 'user', content: message, timestamp: new Date().toISOString() },
+            { role: 'model', content: aiResponse, timestamp: new Date().toISOString() }
+          ]
+        };
+
+        const profileAnalysisResult = await analyzeProfileFunction(profileAnalysisPayload);
+        console.log('✅ Profile analysis result:', profileAnalysisResult);
+      } catch (profileAnalysisError) {
+        console.error('❌ Profile analysis error:', profileAnalysisError);
+        // Non-critical error, continue with main response
+      }
 
       // Explicitly log Firebase configuration
       console.log('🔧 Firebase Client Configuration:', {
