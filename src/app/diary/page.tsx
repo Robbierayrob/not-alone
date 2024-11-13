@@ -88,9 +88,48 @@ export default function DiaryPage() {
   const [isProfileSidebarOpen, setIsProfileSidebarOpen] = useState(false);
   const [isGraphViewOpen, setIsGraphViewOpen] = useState(false);
   const [isGraphModalOpen, setIsGraphModalOpen] = useState(false);
-  const [graphData, setGraphData] = useState({
+  const [graphData, setGraphData] = useState<{
+    nodes: Array<{
+      id: string;
+      name: string;
+      val: number;
+      gender?: string;
+      age?: number;
+      summary?: string;
+      details?: {
+        occupation?: string;
+        interests?: string[];
+        personality?: string;
+        background?: string;
+        emotionalState?: string;
+      };
+    }>;
+    links: Array<{
+      source: string;
+      target: string;
+      value: number;
+      label?: string;
+      details?: {
+        relationshipType?: string;
+        duration?: string;
+        status?: string;
+        sentiment?: string;
+        interactions?: Array<{
+          date?: string;
+          type?: string;
+          description?: string;
+          impact?: string;
+        }>;
+      };
+    }>;
+    metadata?: {
+      lastUpdated?: string;
+      version?: string;
+    };
+  }>({
     nodes: [],
-    links: []
+    links: [],
+    metadata: {}
   });
 
   const [currentChatId, setCurrentChatId] = useState('default-chat');

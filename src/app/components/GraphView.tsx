@@ -55,16 +55,29 @@ interface GraphViewProps {
 }
 
 export default function GraphView({ graphData, isModal, isSidebar }: GraphViewProps) {
+  console.log('🔍 GraphView Rendering', { 
+    graphData, 
+    isModal, 
+    isSidebar,
+    nodeCount: graphData?.nodes?.length || 0,
+    linkCount: graphData?.links?.length || 0
+  });
+
   const containerRef = useRef<HTMLDivElement>(null);
   const [dimensions, setDimensions] = useState({ width: 800, height: 600 });
+  const [isClient, setIsClient] = useState(false);
+
+  useEffect(() => {
+    setIsClient(true);
+  }, []);
 
   useEffect(() => {
     const updateDimensions = () => {
       if (containerRef.current) {
         const rect = containerRef.current.getBoundingClientRect();
         setDimensions({
-          width: rect.width,
-          height: rect.height
+          width: rect.width || 800,
+          height: rect.height || 600
         });
       }
     };
@@ -113,65 +126,67 @@ export default function GraphView({ graphData, isModal, isSidebar }: GraphViewPr
         onClose={() => setSelectedNode(null)}
         nodeData={selectedNode}
       />
-      {typeof window !== 'undefined' && <ForceGraph2D
-        graphData={graphData}
-        width={dimensions.width}
-        height={dimensions.height}
-        backgroundColor="#ffffff"
-        nodeAutoColorBy="group"
-        nodeLabel="name"
-        linkLabel="label"
-        onNodeClick={handleNodeClick}
-        linkDirectionalParticles={2}
-        linkDirectionalParticleSpeed={0.005}
-        nodeCanvasObject={(node: any, ctx, globalScale) => {
-          const label = node.name;
-          const fontSize = 14/globalScale;
-          ctx.font = `${fontSize}px Sans-Serif`;
-          // Set color based on gender property, default to neutral color
-          const nodeColor = node.gender === 'male' ? '#4299E1' : // Blue for male
-                           node.gender === 'female' ? '#FF1493' : // Pink for female
-                           '#A0AEC0'; // Gray for undefined/other
-          ctx.fillStyle = nodeColor;
-          ctx.beginPath();
-          ctx.arc(node.x, node.y, 8, 0, 2 * Math.PI, false);
-          ctx.fill();
-          
-          // Add a background for text
-          const textWidth = ctx.measureText(label).width;
-          ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-          ctx.fillRect(
-            node.x - textWidth/2 - 2,
-            node.y + 8,
-            textWidth + 4,
-            fontSize + 4
-          );
-          
-          // Draw text
-          ctx.fillStyle = '#000';
-          ctx.textAlign = 'center';
-          ctx.textBaseline = 'middle';
-          ctx.fillText(label, node.x, node.y + 15);
-        }}
-        linkCanvasObject={(link: any, ctx, globalScale) => {
-          const start = link.source;
-          const end = link.target;
-          const label = link.label;
-          const fontSize = 12/globalScale;
-          
-          ctx.font = `${fontSize}px Sans-Serif`;
-          ctx.fillStyle = '#666';
-          ctx.textAlign = 'center';
-          ctx.textBaseline = 'middle';
-          
-          const textPos = {
-            x: start.x + (end.x - start.x) * 0.5,
-            y: start.y + (end.y - start.y) * 0.5
-          };
-          
-          ctx.fillText(label, textPos.x, textPos.y);
-        }}
-      />}
+      {isClient && (
+        <ForceGraph2D
+          graphData={graphData}
+          width={dimensions.width}
+          height={dimensions.height}
+          backgroundColor="#ffffff"
+          nodeAutoColorBy="group"
+          nodeLabel="name"
+          linkLabel="label"
+          onNodeClick={handleNodeClick}
+          linkDirectionalParticles={2}
+          linkDirectionalParticleSpeed={0.005}
+          nodeCanvasObject={(node: any, ctx, globalScale) => {
+            const label = node.name;
+            const fontSize = 14/globalScale;
+            ctx.font = `${fontSize}px Sans-Serif`;
+            // Set color based on gender property, default to neutral color
+            const nodeColor = node.gender === 'male' ? '#4299E1' : // Blue for male
+                             node.gender === 'female' ? '#FF1493' : // Pink for female
+                             '#A0AEC0'; // Gray for undefined/other
+            ctx.fillStyle = nodeColor;
+            ctx.beginPath();
+            ctx.arc(node.x, node.y, 8, 0, 2 * Math.PI, false);
+            ctx.fill();
+            
+            // Add a background for text
+            const textWidth = ctx.measureText(label).width;
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+            ctx.fillRect(
+              node.x - textWidth/2 - 2,
+              node.y + 8,
+              textWidth + 4,
+              fontSize + 4
+            );
+            
+            // Draw text
+            ctx.fillStyle = '#000';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(label, node.x, node.y + 15);
+          }}
+          linkCanvasObject={(link: any, ctx, globalScale) => {
+            const start = link.source;
+            const end = link.target;
+            const label = link.label;
+            const fontSize = 12/globalScale;
+            
+            ctx.font = `${fontSize}px Sans-Serif`;
+            ctx.fillStyle = '#666';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            
+            const textPos = {
+              x: start.x + (end.x - start.x) * 0.5,
+              y: start.y + (end.y - start.y) * 0.5
+            };
+            
+            ctx.fillText(label, textPos.x, textPos.y);
+          }}
+        />
+      )}
     </div>
   );
 }
