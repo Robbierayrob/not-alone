@@ -140,7 +140,17 @@ export default function DiaryPage() {
       if (user) {
         const data = await apiService.loadChats(user.uid, await user.getIdToken());
         // Sort chats by createdAt timestamp in descending order (newest first)
-        const sortedChats = data.sort((a, b) => 
+        const sortedChats = data.map(chat => ({
+          chatId: chat.chatId,
+          title: chat.messageCount > 0 
+            ? chat.messages[0].content.substring(0, 50) + '...' 
+            : 'New Chat',
+          createdAt: chat.createdAt,
+          messages: chat.messages.map(msg => ({
+            role: msg.role,
+            content: msg.content
+          }))
+        })).sort((a, b) => 
           new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
         );
         setChats(sortedChats);
