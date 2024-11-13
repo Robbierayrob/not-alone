@@ -19,6 +19,12 @@ const firestore = admin.firestore();
 export const getChatHistory = onCall(async (request: { data?: any } | unknown, context?: CallableContext) => {
   console.log('🔍 Retrieving Chat History', { request });
 
+  // Enforce authentication
+  if (!context || !context.auth) {
+    console.error('❌ Unauthorized access attempt');
+    throw new HttpsError('unauthenticated', 'User must be authenticated');
+  }
+
   // Basic validation
   if (!request || typeof request !== 'object') {
     console.error('❌ Invalid request');
@@ -33,13 +39,16 @@ export const getChatHistory = onCall(async (request: { data?: any } | unknown, c
     chatId?: string
   };
 
-  console.log('🔍 Extracting User ID:', { userId });
-
-  // Validate userId and chatId
-  if (!userId) {
-    console.error('❌ Missing userId', { data });
-    throw new HttpsError('invalid-argument', 'User ID is required');
+  // Validate that the requested userId matches the authenticated user
+  if (!userId || userId !== context.auth.uid) {
+    console.error('❌ Unauthorized user access', { 
+      requestedUserId: userId, 
+      authenticatedUserId: context.auth.uid 
+    });
+    throw new HttpsError('permission-denied', 'You can only access your own chat histories');
   }
+
+  console.log('🔍 Extracting User ID:', { userId });
 
   try {
     // Optional: If chatId is provided, fetch specific chat history
