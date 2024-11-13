@@ -5,16 +5,18 @@ import * as admin from 'firebase-admin';
 // Ensure Firebase Admin is initialized
 if (admin.apps.length === 0) {
   admin.initializeApp();
-  
-  // Connect to local Firestore emulator
+}
+
+const firestore = admin.firestore();
+
+// Connect to local Firestore emulator
+if (process.env.NODE_ENV === 'development') {
   console.log('Connecting to Firestore Emulator: localhost:8080');
-  firestore().settings({
+  firestore.settings({
     host: 'localhost:8080',
     ssl: false
   });
 }
-
-const firestore = admin.firestore();
 
 export const getChatHistory = onCall(async (request: unknown, context?: CallableContext) => {
   console.log('🔍 Retrieving Chat History', { request });
