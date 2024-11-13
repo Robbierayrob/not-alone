@@ -105,21 +105,14 @@ export const apiService = {
         body: JSON.stringify({
           data: {
             userId: userId,
-            // Explicitly pass no chatId to retrieve all chats
             chatId: undefined
           }
         }),
       });
 
-      console.log('📡 Response Status:', response.status, response.statusText);
-
       if (!response.ok) {
         const errorText = await response.text();
-        console.error('❌ API error:', {
-          status: response.status,
-          statusText: response.statusText,
-          errorText
-        });
+        console.error('❌ API error:', errorText);
         throw new Error(errorText || 'Failed to load chats');
       }
 
@@ -130,34 +123,8 @@ export const apiService = {
         chatHistories: responseData.chatHistories
       });
 
-      // Ensure we're using the chatHistories from the response
-      const chats = responseData.chatHistories || [];
-
-      // Sort chats by lastUpdated in descending order
-      const sortedChats = chats
-        .sort((a: { lastUpdated: string | number | Date; }, b: { lastUpdated: string | number | Date; }) => 
-          new Date(b.lastUpdated).getTime() - new Date(a.lastUpdated).getTime()
-        )
-        // Map to ensure consistent structure
-        .map((chat: any) => ({
-          id: chat.chatId,
-          title: chat.title || `Chat on ${new Date(chat.createdAt).toLocaleDateString()}`,
-          createdAt: chat.createdAt,
-          lastUpdated: chat.lastUpdated,
-          messages: chat.messages || [],
-          messageCount: (chat.messages || []).length
-        }));
-
-      console.log('🗂️ Processed Chats:', {
-        totalChats: sortedChats.length,
-        chatDetails: sortedChats.map((chat: { id: any; title: any; messageCount: any; }) => ({
-          id: chat.id,
-          title: chat.title,
-          messageCount: chat.messageCount
-        }))
-      });
-
-      return sortedChats;
+      // Directly return the chat histories from the response
+      return responseData.chatHistories || [];
     } catch (error) {
       console.error('❌ Error loading chats:', error);
       throw error;
