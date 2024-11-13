@@ -1,8 +1,7 @@
 import * as firebaseFunctions from 'firebase-functions';
 import { VertexAI } from '@google-cloud/vertexai';
 import * as admin from 'firebase-admin';
-import { getFunctions, httpsCallable, connectFunctionsEmulator, Functions } from 'firebase/functions';
-import { HttpsCallable } from 'firebase/functions';
+import { getFunctions, httpsCallable, connectFunctionsEmulator, Functions, HttpsCallable } from 'firebase/functions';
 import { initializeApp as initializeClientApp } from 'firebase/app';
 
 // Initialize Firebase client app (if not already done)
