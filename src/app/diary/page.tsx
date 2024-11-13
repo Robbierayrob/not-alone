@@ -147,23 +147,16 @@ export default function DiaryPage() {
     }
   };
 
-  const deleteChat = async (chatId: string) => {
+  const deleteChat = async (userId: string, token: string, chatId: string) => {
     try {
-      const data = await apiService.deleteChat(chatId);
+      const result = await apiService.deleteChat(userId, token, chatId);
       if (currentChatId === chatId) {
         setCurrentChatId('default-chat');
         setMessages([]);
       }
-      // Ensure chats have chatId property
-      const updatedChats = data.chats.map(chat => ({
-        ...chat,
-        chatId: chat.chatId || chat.id
-      }));
-      setChats(updatedChats);
-      setDeleteConfirmation(null);
+      await loadChats();
     } catch (error) {
       console.error('Error deleting chat:', error);
-      setDeleteConfirmation(null);
     }
   };
 
@@ -308,8 +301,21 @@ export default function DiaryPage() {
           currentChatId={currentChatId}
           onCreateNewChat={async () => await createNewChat()}
           onChatSelect={setCurrentChatId}
-          onDeleteChat={deleteChat}
-          onLoadChatMessages={loadChatMessages}  // Add the new method
+          onDeleteChat={async (userId, token, chatId) => {
+            try {
+              await apiService.deleteChat(userId, token, chatId);
+              if (currentChatId === chatId) {
+                setCurrentChatId('default-chat');
+                setMessages([]);
+              }
+              await loadChats();
+            } catch (error) {
+              console.error('Error deleting chat:', error);
+            }
+          }}
+          onLoadChatMessages={loadChatMessages}
+          userId={user.uid}
+          token={await user.getIdToken()}
         />
   
         {/* Main chat area */}

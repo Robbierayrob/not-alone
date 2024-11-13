@@ -7,7 +7,8 @@ interface ChatHistorySidebarProps {
   isSidebarOpen: boolean;
   chats: Array<{
     id: string;
-    chatId: string;  // Changed from 'id' to 'chatId' for consistency
+    chatId: string;
+    userId: string;  // Add userId to the chat object
     title: string;
     createdAt: string;
     messages: Array<{role: string, content: string}>;
@@ -18,8 +19,8 @@ interface ChatHistorySidebarProps {
   onDeleteChat: (userId: string, token: string, chatId: string) => void;
   onLoadChats?: () => void;
   onLoadChatMessages?: (chatId: string) => void;
-  userId?: string;
-  token?: string;
+  userId: string;  // Make userId required
+  token: string;   // Make token required
 }
 
 export default function ChatHistorySidebar({
@@ -106,7 +107,7 @@ export default function ChatHistorySidebar({
             );
           })}
 
-          {deleteConfirmation && userId && token && (
+          {deleteConfirmation && (
             <DeleteConfirmationModal
               key={`delete-${deleteConfirmation}`}
               isOpen={true}
