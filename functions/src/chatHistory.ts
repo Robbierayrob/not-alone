@@ -16,14 +16,17 @@ if (admin.apps.length === 0) {
 
 const firestore = admin.firestore();
 
-export const saveChatHistory = onCall(async (data: unknown, context?: CallableContext) => {
-  console.log('🔍 Saving Chat History', { data });
+export const saveChatHistory = onCall(async (request: unknown, context?: CallableContext) => {
+  console.log('🔍 Saving Chat History', { request });
 
   // Basic validation
-  if (!data || typeof data !== 'object') {
-    console.error('❌ Invalid data');
-    throw new HttpsError('invalid-argument', 'Invalid data');
+  if (!request || typeof request !== 'object') {
+    console.error('❌ Invalid request');
+    throw new HttpsError('invalid-argument', 'Invalid request');
   }
+
+  // Handle nested data structure
+  const data = (request as any).data || request;
 
   const { userId, chatId, messages } = data as {
     userId?: string, 
@@ -31,9 +34,11 @@ export const saveChatHistory = onCall(async (data: unknown, context?: CallableCo
     messages?: any[]
   };
 
+  console.log('🔍 Extracted Data:', { userId, chatId, messagesCount: messages?.length });
+
   // Minimal validation
   if (!userId || !chatId) {
-    console.error('❌ Missing userId or chatId');
+    console.error('❌ Missing userId or chatId', { data });
     throw new HttpsError('invalid-argument', 'User ID and Chat ID are required');
   }
 
