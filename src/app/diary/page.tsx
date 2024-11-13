@@ -279,7 +279,7 @@ export default function DiaryPage() {
           isSidebarOpen={isSidebarOpen}
           chats={chats}
           currentChatId={currentChatId}
-          onCreateNewChat={createNewChat}
+          onCreateNewChat={async () => await createNewChat()}
           onChatSelect={setCurrentChatId}
           onDeleteChat={deleteChat}
         />
