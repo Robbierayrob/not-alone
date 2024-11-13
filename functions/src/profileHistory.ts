@@ -85,13 +85,7 @@ export const saveProfileHistory = onCall(async (request: unknown, context?: Call
     linksCount: links.length 
   });
 
-  // Minimal validation is now unnecessary since userId is guaranteed to be a string
-
   try {
-    const docRef = firestore
-      .collection('profiles')
-      .doc(userId);
-
     // Prepare metadata with version and last updated timestamp
     const finalMetadata = {
       ...metadata,
@@ -99,8 +93,13 @@ export const saveProfileHistory = onCall(async (request: unknown, context?: Call
       version: metadata.version || '1.0'
     };
 
-    // Save or update profile document
-    await docRef.set({
+    // Save or update profile_histories document with full template
+    const profileHistoryRef = firestore
+      .collection('profile_histories')
+      .doc(userId);
+
+    await profileHistoryRef.set({
+      userId,
       nodes,
       links,
       metadata: finalMetadata
@@ -111,11 +110,16 @@ export const saveProfileHistory = onCall(async (request: unknown, context?: Call
       totalLinks: links.length
     });
 
+    // Return the full profile history data
     return { 
       success: true, 
       message: 'Profile history saved',
-      totalNodes: nodes.length,
-      totalLinks: links.length
+      result: {
+        userId,
+        nodes,
+        links,
+        metadata: finalMetadata
+      }
     };
 
   } catch (error) {
