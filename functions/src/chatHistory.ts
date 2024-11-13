@@ -1,4 +1,4 @@
-import * as functions from 'firebase-functions/v2/https';
+import { onCall, HttpsError, CallableContext } from 'firebase-functions/v2/https';
 import * as admin from 'firebase-admin';
 
 // Ensure Firebase Admin is initialized
@@ -32,7 +32,7 @@ interface ChatHistoryData {
   };
 }
 
-export const saveChatHistory = functions.onCall(async (data: any, context?: functions.CallableContext) => {
+export const saveChatHistory = onCall(async (data: any, context?: CallableContext) => {
   console.log('🔍 COMPREHENSIVE saveChatHistory function called:', {
     timestamp: new Date().toISOString(),
     hasAuth: !!context?.auth,
@@ -56,7 +56,7 @@ export const saveChatHistory = functions.onCall(async (data: any, context?: func
   } = data;
 
   if (!userId || !chatId || !messages) {
-    throw new functions.https.HttpsError('invalid-argument', 'Missing required fields');
+    throw new HttpsError('invalid-argument', 'Missing required fields');
   }
 
   try {
@@ -95,7 +95,7 @@ export const saveChatHistory = functions.onCall(async (data: any, context?: func
 
   } catch (error) {
     console.error('Error saving chat history:', error);
-    throw new functions.https.HttpsError(
+    throw new HttpsError(
       'internal', 
       'Failed to save chat history',
       error instanceof Error ? error.message : 'Unknown error'
