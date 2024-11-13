@@ -85,12 +85,48 @@ export const apiService = {
   },
 
   // Chat history related API calls
+  // Helper function to generate meaningful chat titles
+  private generateChatTitle(chats: any[]): any[] {
+    // Group chats by date
+    const chatsByDate: { [key: string]: any[] } = {};
+    
+    chats.forEach(chat => {
+      const date = new Date(chat.createdAt);
+      const dateKey = date.toLocaleDateString();
+      
+      if (!chatsByDate[dateKey]) {
+        chatsByDate[dateKey] = [];
+      }
+      chatsByDate[dateKey].push(chat);
+    });
+
+    // Sort and assign titles
+    return Object.keys(chatsByDate).flatMap((dateKey, dateIndex) => {
+      const dateSortedChats = chatsByDate[dateKey].sort((a, b) => 
+        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+      );
+
+      return dateSortedChats.map((chat, chatIndex) => {
+        const date = new Date(chat.createdAt);
+        const timeString = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        
+        const titleSuffix = dateSortedChats.length > 1 
+          ? ` (Chat ${chatIndex + 1})` 
+          : '';
+        
+        return {
+          ...chat,
+          title: `${date.toLocaleDateString()} at ${timeString}${titleSuffix}`
+        };
+      });
+    });
+  }
+
   async loadChats(userId: string, token: string) {
     try {
       // Extensive pre-request logging
       console.group('🔍 loadChats Detailed Diagnostics');
     
-
       if (!token) {
         console.error('❌ No authentication token');
         throw new Error('Authentication token is required');
@@ -117,16 +153,12 @@ export const apiService = {
         }
       };
 
-      
-
       // Perform fetch with enhanced error tracking
       const response = await fetch(GET_CHAT_HISTORY_URL, {
         method: 'POST',
         headers: requestConfig.headers,
         body: JSON.stringify(requestConfig.body),
       });
-
-     
 
       // Comprehensive error handling for non-OK responses
       if (!response.ok) {
@@ -143,11 +175,8 @@ export const apiService = {
       let responseData;
       try {
         const rawResponse = await response.text();
-        
-        
         const parsedResponse = JSON.parse(rawResponse);
         responseData = parsedResponse.result; // Extract from result object
-       
       } catch (parseError) {
         console.error('❌ JSON Parsing Error', {
           error: parseError,
@@ -167,15 +196,19 @@ export const apiService = {
         return [];
       }
 
+      // Generate meaningful titles
+      const chatHistoriesWithTitles = this.generateChatTitle(responseData.chatHistories);
+
       console.log('✅ Chat Histories Retrieved', {
-        totalChats: responseData.chatHistories.length,
-        chatIds: responseData.chatHistories.map((chat: any) => chat.chatId)
+        totalChats: chatHistoriesWithTitles.length,
+        chatIds: chatHistoriesWithTitles.map((chat: any) => chat.chatId),
+        titles: chatHistoriesWithTitles.map((chat: any) => chat.title)
       });
 
       console.groupEnd();
 
-      // Return chat histories or empty array
-      return responseData.chatHistories || [];
+      // Return chat histories with generated titles
+      return chatHistoriesWithTitles;
     } catch (error) {
       console.error('❌ Complete loadChats Error', {
         errorName: error instanceof Error ? error.name : 'Unknown Error',
