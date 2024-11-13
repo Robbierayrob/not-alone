@@ -96,19 +96,21 @@ export default function NodeDetailsModal({ isOpen, onClose, nodeData }: NodeDeta
                       <p className="text-gray-600">{nodeData.details.occupation}</p>
                     </div>
 
-                    <div className="bg-white/80 backdrop-blur-sm rounded-lg p-3 shadow-sm border border-gray-100">
-                      <h3 className="font-semibold text-gray-800 mb-3">Interests</h3>
-                      <div className="flex flex-wrap gap-2">
-                        {nodeData.details.interests.map((interest: string) => (
-                          <span
-                            key={interest}
-                            className="px-3 py-1.5 bg-white shadow-sm border border-gray-200 rounded-full text-sm font-medium text-gray-700 transition-transform duration-200 hover:scale-105"
-                          >
-                            {interest}
-                          </span>
-                        ))}
+                    {nodeData.details?.interests && nodeData.details.interests.length > 0 && (
+                      <div className="bg-white/80 backdrop-blur-sm rounded-lg p-3 shadow-sm border border-gray-100">
+                        <h3 className="font-semibold text-gray-800 mb-3">Interests</h3>
+                        <div className="flex flex-wrap gap-2">
+                          {nodeData.details.interests.map((interest: string) => (
+                            <span
+                              key={interest}
+                              className="px-3 py-1.5 bg-white shadow-sm border border-gray-200 rounded-full text-sm font-medium text-gray-700 transition-transform duration-200 hover:scale-105"
+                            >
+                              {interest}
+                            </span>
+                          ))}
+                        </div>
                       </div>
-                    </div>
+                    )}
 
                     <div className="bg-gray-50 rounded-xl p-4">
                       <h3 className="font-semibold text-gray-800 mb-2">Personality</h3>
