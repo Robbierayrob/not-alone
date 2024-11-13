@@ -75,21 +75,25 @@ export default function GraphSidebar({ isOpen, graphData }: GraphSidebarProps) {
 
     if (isOpen) {
       // More comprehensive data validation
-      if (processedGraphData?.nodes?.length > 0 && processedGraphData?.links?.length > 0) {
-        setLocalGraphData(processedGraphData);
+      if (processedGraphData?.nodes?.length > 0) {
+        setLocalGraphData({
+          nodes: processedGraphData.nodes,
+          links: processedGraphData.links || [], // Allow empty links
+          metadata: processedGraphData.metadata || {}
+        });
         setIsLoading(false);
       } else {
-        console.warn('Potentially invalid graph data, attempting partial render', {
+        console.warn('No nodes found in graph data', {
           nodesCount: processedGraphData?.nodes?.length || 0,
           linksCount: processedGraphData?.links?.length || 0,
           fullData: processedGraphData
         });
         
-        // Attempt to render with available data, even if incomplete
+        // Set empty state if no nodes
         setLocalGraphData({
-          nodes: processedGraphData?.nodes || [],
-          links: processedGraphData?.links || [],
-          metadata: processedGraphData?.metadata || {}
+          nodes: [],
+          links: [],
+          metadata: {}
         });
         setIsLoading(false);
       }
