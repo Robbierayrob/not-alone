@@ -8,20 +8,24 @@ import { initializeApp as initializeClientApp, getApps, deleteApp } from 'fireba
 function getOrInitializeClientApp(projectId: string, apiKey: string) {
   const existingApps = getApps();
   
-  // If an app already exists, delete it first
-  if (existingApps.length > 0) {
-    console.log('🔧 Deleting existing Firebase client apps');
-    existingApps.forEach(app => deleteApp(app));
-  }
+  // Find an existing app with matching configuration
+  const existingMatchingApp = existingApps.find(
+    app => app.options.projectId === projectId && app.options.apiKey === apiKey
+  );
 
-  const clientApp = initializeClientApp({
+  // Use existing app if it matches, otherwise create a new one
+  const clientApp = existingMatchingApp || initializeClientApp({
     projectId: projectId,
     apiKey: apiKey
   });
 
   const functions = getFunctions(clientApp);
-  connectFunctionsEmulator(functions, 'localhost', 5001);
-  console.log('🔧 Configured Firebase Functions to use local emulator');
+  
+  // Only connect emulator if not already connected
+  if (!functions._host) {
+    connectFunctionsEmulator(functions, 'localhost', 5001);
+    console.log('🔧 Configured Firebase Functions to use local emulator');
+  }
 
   return { clientApp, functions };
 }
