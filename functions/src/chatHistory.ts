@@ -25,9 +25,9 @@ interface ChatHistoryData {
   };
 }
 
-export const saveChatHistory = functions.https.onCall(async (data, context) => {
+export const saveChatHistory = functions.https.onCall(async (request: functions.https.CallableRequest) => {
   // Authenticate the request
-  if (!context.auth) {
+  if (!request.auth) {
     throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated');
   }
 
@@ -36,7 +36,7 @@ export const saveChatHistory = functions.https.onCall(async (data, context) => {
     chatId, 
     messages, 
     timestamp 
-  } = data;
+  } = request.data;
 
   if (!userId || !chatId || !messages) {
     throw new functions.https.HttpsError('invalid-argument', 'Missing required fields');
