@@ -30,11 +30,9 @@ export const generateChatTitles = (chats: ChatEntry[]): ChatEntry[] => {
 
     return dateSortedChats.map((chat, chatIndex) => {
       const date = new Date(chat.createdAt);
-      const timeString = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
       
-      const titleSuffix = dateSortedChats.length > 1 
-        ? ` (Chat ${chatIndex + 1})` 
-        : '';
+      
+     
       
       // Generate a dynamic title based on the first user message
       const firstUserMessage = chat.messages.find(msg => msg.role === 'user')?.content || 'New Conversation';
