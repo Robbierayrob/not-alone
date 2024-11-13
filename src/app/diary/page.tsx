@@ -121,8 +121,10 @@ export default function DiaryPage() {
   // Load chat history
   const loadChats = async () => {
     try {
-      const data = await apiService.loadChats();
-      setChats(data);
+      if (user) {
+        const data = await apiService.loadChats(user.uid, await user.getIdToken());
+        setChats(data);
+      }
     } catch (error) {
       console.error('Error loading chats:', error);
     }

@@ -85,7 +85,7 @@ export const apiService = {
   },
 
   // Chat history related API calls
-  async loadChats(token: string) {
+  async loadChats(userId: string, token: string) {
     try {
       const response = await fetch(GET_CHAT_HISTORY_URL, {
         method: 'POST',
@@ -95,7 +95,7 @@ export const apiService = {
         },
         body: JSON.stringify({
           data: {
-            userId: token // Assuming token is the user ID for now
+            userId: userId
           }
         })
       });
