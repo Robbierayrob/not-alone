@@ -139,11 +139,36 @@ export default function DiaryPage() {
     const fetchGraphData = async () => {
       try {
         if (user && userToken) {
+          console.log('Fetching graph data for:', { 
+            userId: user.uid, 
+            chatId: currentChatId 
+          });
+          
           const data = await apiService.fetchGraphData(user.uid, userToken, currentChatId);
-          setGraphData(data);
+          
+          console.log('Raw graph data received:', {
+            nodes: data?.nodes?.length || 0,
+            links: data?.links?.length || 0,
+            metadata: data?.metadata
+          });
+
+          // Ensure data has valid structure before setting
+          const validatedData = {
+            nodes: Array.isArray(data?.nodes) ? data.nodes : [],
+            links: Array.isArray(data?.links) ? data.links : [],
+            metadata: data?.metadata || {}
+          };
+
+          setGraphData(validatedData);
         }
       } catch (error) {
         console.error('Error fetching graph data:', error);
+        // Set empty graph data on error
+        setGraphData({
+          nodes: [],
+          links: [],
+          metadata: {}
+        });
       }
     };
     fetchGraphData();
