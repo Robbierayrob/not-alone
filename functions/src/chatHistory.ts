@@ -22,17 +22,6 @@ interface ChatMessage {
   timestamp: string;
 }
 
-interface ChatHistoryData {
-  userId: string;
-  chatId: string;
-  messages: ChatMessage[];
-  metadata: {
-    createdAt: string;
-    messageCount: number;
-    lastInteractionTime: string;
-  };
-}
-
 export const saveChatHistory = onCall(async (data: unknown, context?: CallableContext) => {
   console.log('🔍 Saving Chat History', { data });
 
