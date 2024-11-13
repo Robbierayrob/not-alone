@@ -57,7 +57,19 @@ export const getChatHistory = onCall(async (request: { data?: any } | unknown, c
       const data = doc.data();
       return {
         chatId: doc.id,
-        title: data.title || 'Untitled Chat',
+        title: data.createdAt 
+          ? new Date(data.createdAt).toLocaleDateString('en-US', {
+              weekday: 'long', 
+              year: 'numeric', 
+              month: 'long', 
+              day: 'numeric'
+            }) 
+          : new Date().toLocaleDateString('en-US', {
+              weekday: 'long', 
+              year: 'numeric', 
+              month: 'long', 
+              day: 'numeric'
+            }),
         createdAt: data.createdAt || new Date().toISOString(),
         // Intentionally exclude messages to prevent overwhelming data transfer
       };
