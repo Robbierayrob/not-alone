@@ -7,7 +7,7 @@ import * as dotenv from 'dotenv';
 import * as path from 'path';
 
 // Load environment variables from project root
-dotenv.config({ path: path.resolve(__dirname, '../../.env') });
+dotenv.config({ path: path.resolve(__dirname, '../../.env.local') });
 
 // Initialize Firebase client app (if not already done)
 // Use emulator configuration for local development
