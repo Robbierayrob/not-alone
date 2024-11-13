@@ -9,6 +9,12 @@ const clientApp = initializeClientApp({
   projectId: 'demo-project',
   apiKey: 'local-api-key'
 });
+
+// Configure Firebase Functions to use local emulator
+const functions = getFunctions(clientApp);
+functions.host = 'localhost';
+functions.port = 5001;
+console.log('🔧 Configured Firebase Functions to use local emulator');
 // Remove unused clientFunctions
 
 // Initialize Vertex AI
