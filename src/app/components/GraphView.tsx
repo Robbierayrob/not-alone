@@ -164,23 +164,25 @@ export default function GraphView({ graphData, isModal, isSidebar }: GraphViewPr
       />
       {isClient && (
         <ForceGraph2D
-          graphData={processedGraphData}
-          width={dimensions.width}
-          height={dimensions.height}
-          backgroundColor="#ffffff"
-          nodeAutoColorBy="group"
-          nodeLabel="name"
-          linkLabel="label"
-          onNodeClick={handleNodeClick}
-          linkDirectionalParticles={2}
-          linkDirectionalParticleSpeed={0.005}
-          enableNodeDrag={true}
-          d3AlphaDecay={0.05}  // Decreased to allow more node separation
-          d3VelocityDecay={0.3}  // Reduced to increase node movement
-          warmupTicks={200}  // More warmup for better initial layout
-          cooldownTicks={300}  // Extended cooldown for stable positioning
-          d3Force="charge"
-          d3ForceCharge={-150}  // Increased repulsion between nodes
+          {...{
+            graphData: processedGraphData,
+            width: dimensions.width,
+            height: dimensions.height,
+            backgroundColor: "#ffffff",
+            nodeAutoColorBy: "group",
+            nodeLabel: "name",
+            linkLabel: "label",
+            onNodeClick: handleNodeClick,
+            linkDirectionalParticles: 2,
+            linkDirectionalParticleSpeed: 0.005,
+            enableNodeDrag: true,
+            d3AlphaDecay: 0.05,  // Decreased to allow more node separation
+            d3VelocityDecay: 0.3,  // Reduced to increase node movement
+            warmupTicks: 200,  // More warmup for better initial layout
+            cooldownTicks: 300,  // Extended cooldown for stable positioning
+            d3Force: "charge" as any,
+            d3ForceCharge: -150,  // Increased repulsion between nodes
+          } as ForceGraphProps<any, any>}
           nodeCanvasObject={(node: any, ctx: CanvasRenderingContext2D, globalScale: number) => {
             const label = node.name || 'Unnamed';
             const fontSize = 16/globalScale;
