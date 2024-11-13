@@ -14,7 +14,7 @@ const clientApp = initializeClientApp({
   projectId: 'demo-project',
   apiKey: 'local-api-key'
 });
-const clientFunctions = getFunctions(clientApp, 'localhost');
+// Remove unused clientFunctions
 
 // Initialize Vertex AI
 const vertex = new VertexAI({
@@ -163,7 +163,7 @@ export const processChat = firebaseFunctions.https.onCall(async (request: fireba
     console.log('📤 Sending response:', finalResponse);
     // Attempt to save chat history
     try {
-      const saveChatHistoryFunction = httpsCallable(functions, 'saveChatHistory');
+      const saveChatHistoryFunction = httpsCallable(clientFunctions, 'saveChatHistory');
       await saveChatHistoryFunction({
         userId,
         chatId: sessionChatId,
@@ -185,13 +185,13 @@ export const processChat = firebaseFunctions.https.onCall(async (request: fireba
     
     // Specific handling for 429 Too Many Requests
     if (error instanceof Error && error.message.includes('429')) {
-      throw new functions.https.HttpsError(
+      throw new firebaseFunctions.https.HttpsError(
         'resource-exhausted', 
         'Too many requests. Please try again later.'
       );
     }
     
-    throw new functions.https.HttpsError(
+    throw new firebaseFunctions.https.HttpsError(
       'internal',
       error instanceof Error ? error.message : 'Error processing chat'
     );
