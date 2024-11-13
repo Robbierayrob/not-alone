@@ -5,20 +5,18 @@ import * as admin from 'firebase-admin';
 // Ensure Firebase Admin is initialized
 if (admin.apps.length === 0) {
   admin.initializeApp();
-}
-
-const firestore = admin.firestore();
-
-// Connect to local Firestore emulator
-if (process.env.NODE_ENV === 'development') {
+  
+  // Connect to local Firestore emulator
   console.log('Connecting to Firestore Emulator: localhost:8080');
-  firestore.settings({
+  admin.firestore().settings({
     host: 'localhost:8080',
     ssl: false
   });
 }
 
-export const getChatHistory = onCall(async (request: unknown, context?: CallableContext) => {
+const firestore = admin.firestore();
+
+export const getChatHistory = onCall(async (request: { data?: any } | unknown, context?: CallableContext) => {
   console.log('🔍 Retrieving Chat History', { request });
 
   // Basic validation
@@ -28,19 +26,28 @@ export const getChatHistory = onCall(async (request: unknown, context?: Callable
   }
 
   // Handle nested data structure
-  const data = (request as any).data || request;
+  const data = (request as { data?: any }).data || request;
 
-  const { userId } = data as {
-    userId?: string
+  const { userId, chatId } = data as {
+    userId?: string, 
+    chatId?: string
   };
 
   console.log('🔍 Extracting User ID:', { userId });
 
-  // Validate userId
+  // Validate userId and chatId
   if (!userId) {
     console.error('❌ Missing userId', { data });
     throw new HttpsError('invalid-argument', 'User ID is required');
   }
+
+  // Optional: If chatId is provided, fetch specific chat history
+  const baseQuery = firestore.collection('chat_histories')
+    .where('userId', '==', userId);
+  
+  const query = chatId 
+    ? baseQuery.where('chatId', '==', chatId)
+    : baseQuery;
 
   try {
     // Query Firestore for all chat histories belonging to the user
@@ -50,18 +57,25 @@ export const getChatHistory = onCall(async (request: unknown, context?: Callable
     const querySnapshot = await query.get();
 
     // Transform query results into an array of chat histories
-    const chatHistories = querySnapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
-    }));
+    const chatHistories = querySnapshot.docs.map(doc => {
+      const data = doc.data();
+      return {
+        id: doc.id,
+        ...data,
+        messages: data.messages || []
+      };
+    });
 
     console.log(`✅ Retrieved chat histories for user: ${userId}`, {
-      totalChats: chatHistories.length
+      totalChats: chatHistories.length,
+      chatId: chatId || 'All chats'
     });
 
     return { 
       success: true, 
-      message: 'Chat histories retrieved',
+      message: chatId 
+        ? 'Specific chat history retrieved' 
+        : 'Chat histories retrieved',
       chatHistories: chatHistories
     };
 
