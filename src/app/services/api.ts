@@ -95,7 +95,7 @@ export const apiService = {
       console.group('🔍 loadChats Detailed Diagnostics');
       
       // Ensure consistent chat object structure
-      const normalizeChats = (chats) => chats.map(chat => ({
+      const normalizeChats = (chats: { chatId: any; id: any; }[]) => chats.map((chat: { chatId: any; id: any; }) => ({
         ...chat,
         chatId: chat.chatId || chat.id,  // Ensure chatId exists
         id: undefined  // Remove potential duplicate id
