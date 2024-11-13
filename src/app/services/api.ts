@@ -99,6 +99,11 @@ export const apiService = {
       };
 
       console.log('📦 Request Body:', JSON.stringify(requestBody, null, 2));
+      console.log('🔑 Token Details:', {
+        tokenType: typeof token,
+        tokenStart: token.substring(0, 10),
+        tokenEnd: token.substring(token.length - 10)
+      });
 
       const response = await fetch(GET_CHAT_HISTORY_URL, {
         method: 'POST',
