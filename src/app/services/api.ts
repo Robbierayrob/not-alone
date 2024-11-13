@@ -3,6 +3,8 @@ export const CLOUD_FUNCTION_URL = 'https://processchat-qpos73qvxq-uc.a.run.app';
 export const LOCAL_FUNCTION_URL = 'http://127.0.0.1:5001/notalone-de4fc/us-central1/processChat';
 export const GET_CHAT_HISTORY_URL = 'http://127.0.0.1:5001/notalone-de4fc/us-central1/getChatHistory';
 
+import { generateChatTitles } from '../utils/chatTitleGenerator';
+
 export const apiService = {
   // Chat related API calls
   sendMessage: async (message: string, token: string, chatId?: string) => {
@@ -85,42 +87,7 @@ export const apiService = {
   },
 
   // Chat history related API calls
-  // Helper function to generate meaningful chat titles
-  private generateChatTitle = (chats: any[]): any[] => {
-    // Group chats by date
-    const chatsByDate: { [key: string]: any[] } = {};
-    
-    chats.forEach(chat => {
-      const date = new Date(chat.createdAt);
-      const dateKey = date.toLocaleDateString();
-      
-      if (!chatsByDate[dateKey]) {
-        chatsByDate[dateKey] = [];
-      }
-      chatsByDate[dateKey].push(chat);
-    });
-
-    // Sort and assign titles
-    return Object.keys(chatsByDate).flatMap((dateKey) => {
-      const dateSortedChats = chatsByDate[dateKey].sort((a, b) => 
-        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
-      );
-
-      return dateSortedChats.map((chat, chatIndex) => {
-        const date = new Date(chat.createdAt);
-        const timeString = date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-        
-        const titleSuffix = dateSortedChats.length > 1 
-          ? ` (Chat ${chatIndex + 1})` 
-          : '';
-        
-        return {
-          ...chat,
-          title: `${date.toLocaleDateString()} at ${timeString}${titleSuffix}`
-        };
-      });
-    });
-  }
+  // Removed inline title generation method
 
   loadChats: async (userId: string, token: string) => {
     try {
@@ -196,8 +163,8 @@ export const apiService = {
         return [];
       }
 
-      // Generate meaningful titles
-      const chatHistoriesWithTitles = this.generateChatTitle(responseData.chatHistories);
+      // Generate meaningful titles using utility function
+      const chatHistoriesWithTitles = generateChatTitles(responseData.chatHistories);
 
       console.log('✅ Chat Histories Retrieved', {
         totalChats: chatHistoriesWithTitles.length,
