@@ -63,10 +63,32 @@ export default function GraphView({ graphData, isModal, isSidebar }: GraphViewPr
     linkCount: graphData?.links?.length || 0
   });
 
-  // Add defensive checks
-  if (!graphData || !graphData.nodes || !graphData.links) {
-    console.warn('Invalid graph data received', { graphData });
-    return <div className="text-center text-red-500">No graph data available</div>;
+  // More robust defensive checks
+  if (!graphData || !Array.isArray(graphData.nodes) || !Array.isArray(graphData.links)) {
+    console.error('Invalid graph data structure', { 
+      graphData,
+      nodeType: typeof graphData?.nodes,
+      linkType: typeof graphData?.links
+    });
+    return (
+      <div className="text-center text-red-500 p-4">
+        <p>Invalid graph data</p>
+        <pre className="text-xs mt-2">{JSON.stringify(graphData, null, 2)}</pre>
+      </div>
+    );
+  }
+
+  // Ensure at least some nodes and links exist
+  if (graphData.nodes.length === 0 || graphData.links.length === 0) {
+    console.warn('Graph data is empty', { 
+      nodeCount: graphData.nodes.length, 
+      linkCount: graphData.links.length 
+    });
+    return (
+      <div className="text-center text-yellow-500 p-4">
+        No nodes or links to display
+      </div>
+    );
   }
 
   const containerRef = useRef<HTMLDivElement>(null);

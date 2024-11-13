@@ -55,13 +55,30 @@ export default function GraphSidebar({ isOpen, graphData }: GraphSidebarProps) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    console.log('GraphSidebar useEffect triggered', { 
+      isOpen, 
+      graphData, 
+      hasNodes: !!graphData?.nodes, 
+      hasLinks: !!graphData?.links 
+    });
+
     if (isOpen) {
-      // Ensure graphData is not null or undefined
-      if (graphData && graphData.nodes && graphData.links) {
+      // More comprehensive data validation
+      if (graphData?.nodes?.length > 0 && graphData?.links?.length > 0) {
         setLocalGraphData(graphData);
         setIsLoading(false);
       } else {
-        console.warn('Invalid graph data received', graphData);
+        console.error('Invalid or empty graph data', {
+          nodes: graphData?.nodes,
+          links: graphData?.links,
+          fullData: graphData
+        });
+        // Set a default empty state to prevent rendering issues
+        setLocalGraphData({
+          nodes: [],
+          links: [],
+          metadata: {}
+        });
         setIsLoading(false);
       }
     }
