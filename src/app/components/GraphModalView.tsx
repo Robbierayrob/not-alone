@@ -68,10 +68,12 @@ export default function GraphModalView({ graphData }: GraphModalViewProps) {
         onNodeClick={(node: any) => setSelectedNode(node)}
         enableNodeDrag={true}
         d3Force="charge"
-        d3AlphaDecay={0.1}  // Increased to spread nodes more
-        d3VelocityDecay={0.5}  // Increased to reduce oscillation
-        warmupTicks={100}  // More warmup ticks
-        cooldownTicks={200}  // More cooldown ticks
+        d3AlphaDecay={0.05}  // Decreased to allow more node separation
+        d3VelocityDecay={0.3}  // Reduced to increase node movement
+        warmupTicks={200}  // More warmup for better initial layout
+        cooldownTicks={300}  // Extended cooldown for stable positioning
+        d3Force="charge"
+        d3ForceCharge={-150}  // Increased repulsion between nodes
         nodeCanvasObject={(node: any, ctx, globalScale) => {
           const label = node.name || 'Unnamed';
           const fontSize = 16/globalScale;
