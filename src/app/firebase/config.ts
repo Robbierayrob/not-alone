@@ -11,13 +11,13 @@ if (!process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID) {
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || '',
-  authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || '',
-  projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || '',
-  storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || '',
-  messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || '',
-  appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID || '',
-  measurementId: process.env.NEXT_PUBLIC_FIREBASE_MEASUREMENT_ID || '',
+  apiKey: "AIzaSyCULPTI0o9CEnr1ek6yRgCUgaVcH1zswNk",
+  authDomain: "notalone-de4fc.firebaseapp.com",
+  projectId: "notalone-de4fc",
+  storageBucket: "notalone-de4fc.firebasestorage.app",
+  messagingSenderId: "784029337452",
+  appId: "1:784029337452:web:9d75d1d9e61b9188e05549",
+  measurementId: "G-5XQNBH4V1B",
 };
 
 // Initialize Firebase
