@@ -104,12 +104,6 @@ export const apiService = {
         body: JSON.stringify({
           data: {
             userId: userId
-          },
-          context: {
-            auth: {
-              uid: userId,
-              token: token
-            }
           }
         }),
       });
@@ -117,9 +111,13 @@ export const apiService = {
       console.log('📡 Response Status:', response.status, response.statusText);
 
       if (!response.ok) {
-        const errorData = await response.json();
-        console.error('❌ API error:', errorData);
-        throw new Error(errorData.error?.message || 'Failed to load chats');
+        const errorText = await response.text();
+        console.error('❌ API error:', {
+          status: response.status,
+          statusText: response.statusText,
+          errorText
+        });
+        throw new Error(errorText || 'Failed to load chats');
       }
 
       const data = await response.json();
