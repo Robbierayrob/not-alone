@@ -1,4 +1,4 @@
-import * as functions from 'firebase-functions';
+import * as functions from 'firebase-functions/v2/https';
 import * as admin from 'firebase-admin';
 
 // Ensure Firebase Admin is initialized
@@ -32,7 +32,7 @@ interface ChatHistoryData {
   };
 }
 
-export const saveChatHistory = functions.https.onCall(async (data: any, context?: functions.https.CallableContext) => {
+export const saveChatHistory = functions.onCall(async (data: any, context?: functions.CallableContext) => {
   console.log('🔍 COMPREHENSIVE saveChatHistory function called:', {
     timestamp: new Date().toISOString(),
     hasAuth: !!context?.auth,
@@ -43,9 +43,9 @@ export const saveChatHistory = functions.https.onCall(async (data: any, context?
   console.log('🔬 Full Request Data:', JSON.stringify(data, null, 2));
 
   // Authenticate the request
-  if (!request.auth) {
+  if (!context?.auth) {
     console.error('❌ Authentication missing in saveChatHistory');
-    throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated');
+    throw new functions.HttpsError('unauthenticated', 'User must be authenticated');
   }
 
   const { 
@@ -53,7 +53,7 @@ export const saveChatHistory = functions.https.onCall(async (data: any, context?
     chatId, 
     messages, 
     timestamp 
-  } = request.data;
+  } = data;
 
   if (!userId || !chatId || !messages) {
     throw new functions.https.HttpsError('invalid-argument', 'Missing required fields');
