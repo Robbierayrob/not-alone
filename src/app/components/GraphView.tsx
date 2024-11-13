@@ -63,6 +63,12 @@ export default function GraphView({ graphData, isModal, isSidebar }: GraphViewPr
     linkCount: graphData?.links?.length || 0
   });
 
+  // Add defensive checks
+  if (!graphData || !graphData.nodes || !graphData.links) {
+    console.warn('Invalid graph data received', { graphData });
+    return <div className="text-center text-red-500">No graph data available</div>;
+  }
+
   const containerRef = useRef<HTMLDivElement>(null);
   const [dimensions, setDimensions] = useState({ width: 800, height: 600 });
   const [isClient, setIsClient] = useState(false);
@@ -139,33 +145,47 @@ export default function GraphView({ graphData, isModal, isSidebar }: GraphViewPr
           linkDirectionalParticles={2}
           linkDirectionalParticleSpeed={0.005}
           nodeCanvasObject={(node: any, ctx, globalScale) => {
-            const label = node.name;
+            const label = node.name || 'Unnamed';
             const fontSize = 14/globalScale;
             ctx.font = `${fontSize}px Sans-Serif`;
-            // Set color based on gender property, default to neutral color
-            const nodeColor = node.gender === 'male' ? '#4299E1' : // Blue for male
-                             node.gender === 'female' ? '#FF1493' : // Pink for female
-                             '#A0AEC0'; // Gray for undefined/other
+            
+            // More robust color selection
+            const nodeColor = 
+              node.gender === 'male' ? '#4299E1' :     // Blue for male
+              node.gender === 'female' ? '#FF1493' :   // Pink for female
+              node.gender === 'unknown' ? '#A0AEC0' :  // Gray for unknown
+              '#68D391';                               // Green for undefined/other
+
             ctx.fillStyle = nodeColor;
             ctx.beginPath();
             ctx.arc(node.x, node.y, 8, 0, 2 * Math.PI, false);
             ctx.fill();
             
-            // Add a background for text
+            // Add a background for text with more padding
             const textWidth = ctx.measureText(label).width;
             ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
             ctx.fillRect(
-              node.x - textWidth/2 - 2,
-              node.y + 8,
-              textWidth + 4,
-              fontSize + 4
+              node.x - textWidth/2 - 4,
+              node.y + 10,
+              textWidth + 8,
+              fontSize + 6
             );
             
-            // Draw text
+            // Draw text with better visibility
             ctx.fillStyle = '#000';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             ctx.fillText(label, node.x, node.y + 15);
+
+            // Optional: Add summary as tooltip/hover info
+            if (node.summary) {
+              ctx.fillStyle = 'rgba(0,0,0,0.6)';
+              ctx.font = `${fontSize - 2}px Sans-Serif`;
+              const summaryText = node.summary.length > 20 
+                ? node.summary.substring(0, 20) + '...' 
+                : node.summary;
+              ctx.fillText(summaryText, node.x, node.y + 30);
+            }
           }}
           linkCanvasObject={(link: any, ctx, globalScale) => {
             const start = link.source;

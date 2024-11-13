@@ -47,13 +47,23 @@ interface GraphSidebarProps {
 }
 
 export default function GraphSidebar({ isOpen, graphData }: GraphSidebarProps) {
-  const [localGraphData, setLocalGraphData] = useState(graphData);
+  const [localGraphData, setLocalGraphData] = useState<GraphSidebarProps['graphData']>({
+    nodes: [],
+    links: [],
+    metadata: {}
+  });
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (isOpen) {
-      setLocalGraphData(graphData);
-      setIsLoading(false);
+      // Ensure graphData is not null or undefined
+      if (graphData && graphData.nodes && graphData.links) {
+        setLocalGraphData(graphData);
+        setIsLoading(false);
+      } else {
+        console.warn('Invalid graph data received', graphData);
+        setIsLoading(false);
+      }
     }
   }, [isOpen, graphData]);
   return (
