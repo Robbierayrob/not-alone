@@ -53,27 +53,41 @@ export const getChatHistory = onCall(async (request: { data?: any } | unknown, c
     const querySnapshot = await query.get();
 
     // Transform query results into an array of chat histories
-    const chatHistories = querySnapshot.docs.map(doc => {
+    // Group chats by date and assign entry numbers
+    const chatsByDate = querySnapshot.docs.reduce((acc, doc) => {
       const data = doc.data();
-      return {
-        chatId: doc.id,
-        title: data.createdAt 
-          ? new Date(data.createdAt).toLocaleDateString('en-US', {
-              weekday: 'long', 
-              year: 'numeric', 
-              month: 'long', 
-              day: 'numeric'
-            }) 
-          : new Date().toLocaleDateString('en-US', {
-              weekday: 'long', 
-              year: 'numeric', 
-              month: 'long', 
-              day: 'numeric'
-            }),
-        createdAt: data.createdAt || new Date().toISOString(),
-        // Intentionally exclude messages to prevent overwhelming data transfer
-      };
-    });
+      const date = data.createdAt 
+        ? new Date(data.createdAt).toLocaleDateString('en-US', {
+            weekday: 'long', 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric'
+          })
+        : new Date().toLocaleDateString('en-US', {
+            weekday: 'long', 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric'
+          });
+      
+      if (!acc[date]) {
+        acc[date] = [];
+      }
+      acc[date].push(doc);
+      return acc;
+    }, {} as Record<string, any[]>);
+
+    const chatHistories = Object.entries(chatsByDate).flatMap(([date, docs]) => 
+      docs.map((doc, index) => {
+        const data = doc.data();
+        return {
+          chatId: doc.id,
+          title: `${date} - Entry #${index + 1}`,
+          createdAt: data.createdAt || new Date().toISOString(),
+          // Intentionally exclude messages to prevent overwhelming data transfer
+        };
+      })
+    );
 
     console.log(`✅ Retrieved chat histories for user: ${userId}`, {
       totalChats: chatHistories.length,
