@@ -158,11 +158,14 @@ export default function DiaryPage() {
     }
   };
 
-  // Initial load
+  // Initial load with user dependency
   useEffect(() => {
-    loadChats();
+    if (user) {
+      console.log('🔄 Triggering initial chat load', { userId: user.uid });
+      loadChats();
+    }
     scrollToBottom();
-  }, []);
+  }, [user]);
 
   // Scroll on new messages
   useEffect(() => {

@@ -12,9 +12,10 @@ interface ChatHistorySidebarProps {
     messages: Array<{role: string, content: string}>;
   }>;
   currentChatId: string;
-  onCreateNewChat: () => void;
+  onCreateNewChat: () => Promise<string>;  // Changed to async function
   onChatSelect: (chatId: string) => void;
   onDeleteChat: (chatId: string) => void;
+  onLoadChats?: () => void;  // Optional callback to trigger chat loading
 }
 
 export default function ChatHistorySidebar({
@@ -23,16 +24,29 @@ export default function ChatHistorySidebar({
   currentChatId,
   onCreateNewChat,
   onChatSelect,
-  onDeleteChat
+  onDeleteChat,
+  onLoadChats  // New optional prop
 }: ChatHistorySidebarProps) {
   const [deleteConfirmation, setDeleteConfirmation] = useState<string | null>(null);
+
+  // Trigger chat loading when component mounts or sidebar opens
+  useEffect(() => {
+    if (isSidebarOpen && onLoadChats) {
+      console.log('🔄 Triggering chat load from sidebar');
+      onLoadChats();
+    }
+  }, [isSidebarOpen, onLoadChats]);
 
   return (
     <div className={`${isSidebarOpen ? 'w-64' : 'w-0'} bg-gray-50 border-r border-gray-200 transition-all duration-300 overflow-hidden`}>
       <div className="p-4">
         <div className="mb-4">
           <button 
-            onClick={onCreateNewChat}
+            onClick={async () => {
+              const newChatId = await onCreateNewChat();
+              console.log('🆕 New chat created:', newChatId);
+              if (onLoadChats) onLoadChats();  // Reload chats after creating new chat
+            }}
             className="w-full px-4 py-2 rounded-lg border border-gray-200 hover:bg-gray-100 text-left"
           >
             + New Chat
