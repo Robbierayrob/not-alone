@@ -36,6 +36,15 @@ const chatSessions = new Map<string, {
 // Ensure Firebase Admin is initialized
 if (admin.apps.length === 0) {
   admin.initializeApp();
+  
+  // Connect to local Firestore emulator
+  if (process.env.FIRESTORE_EMULATOR_HOST) {
+    console.log('Connecting to Firestore Emulator:', process.env.FIRESTORE_EMULATOR_HOST);
+    admin.firestore().settings({
+      host: process.env.FIRESTORE_EMULATOR_HOST,
+      ssl: false
+    });
+  }
 }
 
 export const processChat = functions.https.onCall(async (request) => {
