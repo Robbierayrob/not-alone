@@ -41,6 +41,8 @@ if (admin.apps.length === 0) {
   });
 }
 
+export { saveChatHistory } from './chatHistory';
+
 export const processChat = firebaseFunctions.https.onCall(async (request: firebaseFunctions.https.CallableRequest) => {
   console.log('🚀 Incoming request:', {
     auth: request.auth ? 'Authenticated' : 'Not authenticated',
