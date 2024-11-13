@@ -5,14 +5,15 @@ import { getFunctions, httpsCallable } from 'firebase/functions';
 import { initializeApp } from 'firebase/app';
 
 // Initialize Firebase client app (if not already done)
-const firebaseConfig = {
-  apiKey: process.env.FIREBASE_API_KEY,
-  authDomain: process.env.FIREBASE_AUTH_DOMAIN,
-  projectId: process.env.FIREBASE_PROJECT_ID,
-  // Add other config as needed
-};
-const clientApp = initializeApp(firebaseConfig);
-const functions = getFunctions(clientApp);
+// Use emulator configuration for local development
+const clientApp = initializeApp({
+  projectId: 'demo-project',
+  apiKey: 'local-api-key'
+});
+const functions = getFunctions(clientApp, 'localhost');
+// Set emulator host if needed
+functions.host = 'localhost';
+functions.port = 5001;
 
 // Initialize Vertex AI
 const vertex = new VertexAI({
