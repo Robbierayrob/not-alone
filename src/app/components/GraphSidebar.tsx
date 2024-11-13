@@ -79,16 +79,17 @@ export default function GraphSidebar({ isOpen, graphData }: GraphSidebarProps) {
         setLocalGraphData(processedGraphData);
         setIsLoading(false);
       } else {
-        console.error('Invalid or empty graph data', {
-          nodes: processedGraphData?.nodes,
-          links: processedGraphData?.links,
+        console.warn('Potentially invalid graph data, attempting partial render', {
+          nodesCount: processedGraphData?.nodes?.length || 0,
+          linksCount: processedGraphData?.links?.length || 0,
           fullData: processedGraphData
         });
-        // Set a default empty state to prevent rendering issues
+        
+        // Attempt to render with available data, even if incomplete
         setLocalGraphData({
-          nodes: [],
-          links: [],
-          metadata: {}
+          nodes: processedGraphData?.nodes || [],
+          links: processedGraphData?.links || [],
+          metadata: processedGraphData?.metadata || {}
         });
         setIsLoading(false);
       }
