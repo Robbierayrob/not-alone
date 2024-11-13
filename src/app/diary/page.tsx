@@ -407,7 +407,20 @@ export default function DiaryPage() {
       <div className="h-screen flex relative">
         <ProfileSidebar
           isOpen={isProfileSidebarOpen}
-          profiles={graphData.nodes}
+          profiles={graphData.nodes.map(node => ({
+            id: node.id,
+            name: node.name,
+            gender: node.gender || 'Unknown',
+            age: node.age || 0,
+            summary: node.summary || 'No summary available',
+            details: node.details ? {
+              occupation: node.details.occupation || 'Not specified',
+              interests: node.details.interests || [],
+              personality: node.details.personality || 'Not described',
+              background: node.details.background || 'No background information',
+              emotionalState: node.details.emotionalState || 'Neutral'
+            } : undefined
+          }))}
         />
         
         <ChatHistorySidebar 
