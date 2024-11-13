@@ -33,8 +33,14 @@ interface ChatHistoryData {
 }
 
 export const saveChatHistory = functions.https.onCall(async (request: functions.https.CallableRequest) => {
+  console.log('🔍 saveChatHistory function called with:', {
+    hasAuth: !!request.auth,
+    requestData: request.data
+  });
+
   // Authenticate the request
   if (!request.auth) {
+    console.error('❌ Authentication missing in saveChatHistory');
     throw new functions.https.HttpsError('unauthenticated', 'User must be authenticated');
   }
 

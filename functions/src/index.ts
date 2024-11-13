@@ -158,8 +158,20 @@ export const processChat = firebaseFunctions.https.onCall(async (request: fireba
     console.log('📤 Sending response:', finalResponse);
     // Attempt to save chat history
     try {
-      const saveChatHistoryFunction = httpsCallable(getFunctions(clientApp), 'saveChatHistory');
-      await saveChatHistoryFunction({
+      console.log('🔍 Attempting to save chat history with:', {
+        userId,
+        chatId: sessionChatId,
+        messageCount: 2,
+        timestamp: new Date().toISOString()
+      });
+
+      const functions = getFunctions(clientApp);
+      console.log('🔍 Available Firebase Functions:', Object.keys(functions));
+
+      const saveChatHistoryFunction = httpsCallable(functions, 'saveChatHistory');
+      console.log('🔍 Save Chat History Function:', !!saveChatHistoryFunction);
+
+      const result = await saveChatHistoryFunction({
         userId,
         chatId: sessionChatId,
         messages: [
@@ -168,8 +180,15 @@ export const processChat = firebaseFunctions.https.onCall(async (request: fireba
         ],
         timestamp: new Date().toISOString()
       });
+
+      console.log('✅ Chat history save result:', result);
     } catch (saveError) {
-      console.error('❌ Failed to save chat history:', saveError);
+      console.error('❌ Detailed save chat history error:', {
+        errorName: saveError.name,
+        errorCode: saveError.code,
+        errorMessage: saveError.message,
+        fullError: saveError
+      });
       // Non-critical error, so we'll continue with the main response
     }
 
