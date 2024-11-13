@@ -130,7 +130,7 @@ export const apiService = {
 
       // Sort chats by lastUpdated in descending order
       const sortedChats = (data.chatHistories || [])
-        .sort((a, b) => new Date(b.lastUpdated).getTime() - new Date(a.lastUpdated).getTime());
+        .sort((a: { lastUpdated: string | number | Date; }, b: { lastUpdated: string | number | Date; }) => new Date(b.lastUpdated).getTime() - new Date(a.lastUpdated).getTime());
 
       return sortedChats;
     } catch (error) {
