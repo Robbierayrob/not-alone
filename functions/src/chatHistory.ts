@@ -31,7 +31,7 @@ export const saveChatHistory = onCall(async (request: unknown, context?: Callabl
   const { userId, chatId, messages } = data as {
     userId?: string, 
     chatId?: string, 
-    messages?: any[]
+    messages?: Array<{role: string, content: string, timestamp: string}>
   };
 
   console.log('🔍 Extracted Data:', { userId, chatId, messagesCount: messages?.length });
@@ -43,23 +43,39 @@ export const saveChatHistory = onCall(async (request: unknown, context?: Callabl
   }
 
   try {
-    // Simplest possible Firestore save
     const docRef = firestore
       .collection('chat_histories')
       .doc(chatId);
 
+    // Check if document exists and retrieve existing messages
+    const docSnapshot = await docRef.get();
+    const existingData = docSnapshot.data();
+    const existingMessages = existingData?.messages || [];
+
+    // Append new messages to existing messages
+    const updatedMessages = [
+      ...existingMessages,
+      ...messages
+    ];
+
+    // Save updated chat history
     await docRef.set({
       userId,
       chatId,
-      messages,
-      createdAt: new Date().toISOString()
+      messages: updatedMessages,
+      createdAt: existingData?.createdAt || new Date().toISOString(),
+      lastUpdated: new Date().toISOString()
     }, { merge: true });
 
-    console.log(`✅ Chat history saved: ${chatId}`);
+    console.log(`✅ Chat history saved/updated: ${chatId}`, {
+      totalMessageCount: updatedMessages.length,
+      newMessagesAdded: messages.length
+    });
 
     return { 
       success: true, 
-      message: 'Chat history saved' 
+      message: 'Chat history saved',
+      totalMessages: updatedMessages.length
     };
 
   } catch (error) {
