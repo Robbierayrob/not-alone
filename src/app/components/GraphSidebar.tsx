@@ -43,7 +43,7 @@ interface GraphSidebarProps {
       lastUpdated?: string;
       version?: string;
     };
-  };
+  } | { result?: any };
 }
 
 export default function GraphSidebar({ isOpen, graphData }: GraphSidebarProps) {
@@ -55,23 +55,34 @@ export default function GraphSidebar({ isOpen, graphData }: GraphSidebarProps) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
+    // Extract graph data, handling nested result structure
+    const extractGraphData = (data: any) => {
+      if (data && 'result' in data && data.result) {
+        return data.result;
+      }
+      return data;
+    };
+
+    const processedGraphData = extractGraphData(graphData);
+
     console.log('GraphSidebar useEffect triggered', { 
       isOpen, 
       graphData, 
-      hasNodes: !!graphData?.nodes, 
-      hasLinks: !!graphData?.links 
+      processedGraphData,
+      hasNodes: !!processedGraphData?.nodes, 
+      hasLinks: !!processedGraphData?.links 
     });
 
     if (isOpen) {
       // More comprehensive data validation
-      if (graphData?.nodes?.length > 0 && graphData?.links?.length > 0) {
-        setLocalGraphData(graphData);
+      if (processedGraphData?.nodes?.length > 0 && processedGraphData?.links?.length > 0) {
+        setLocalGraphData(processedGraphData);
         setIsLoading(false);
       } else {
         console.error('Invalid or empty graph data', {
-          nodes: graphData?.nodes,
-          links: graphData?.links,
-          fullData: graphData
+          nodes: processedGraphData?.nodes,
+          links: processedGraphData?.links,
+          fullData: processedGraphData
         });
         // Set a default empty state to prevent rendering issues
         setLocalGraphData({

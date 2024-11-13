@@ -49,40 +49,51 @@ interface GraphData {
 }
 
 interface GraphViewProps {
-  graphData: GraphData;
+  graphData: GraphData | { result?: GraphData };
   isModal?: boolean;
   isSidebar?: boolean;
 }
 
 export default function GraphView({ graphData, isModal, isSidebar }: GraphViewProps) {
+  // Extract graph data, handling nested result structure
+  const extractGraphData = (data: GraphData | { result?: GraphData }): GraphData => {
+    if (data && 'result' in data && data.result) {
+      return data.result;
+    }
+    return data as GraphData;
+  };
+
+  const processedGraphData = extractGraphData(graphData);
+
   console.log('🔍 GraphView Rendering', { 
     graphData, 
+    processedGraphData,
     isModal, 
     isSidebar,
-    nodeCount: graphData?.nodes?.length || 0,
-    linkCount: graphData?.links?.length || 0
+    nodeCount: processedGraphData?.nodes?.length || 0,
+    linkCount: processedGraphData?.links?.length || 0
   });
 
   // More robust defensive checks
-  if (!graphData || !Array.isArray(graphData.nodes) || !Array.isArray(graphData.links)) {
+  if (!processedGraphData || !Array.isArray(processedGraphData.nodes) || !Array.isArray(processedGraphData.links)) {
     console.error('Invalid graph data structure', { 
-      graphData,
-      nodeType: typeof graphData?.nodes,
-      linkType: typeof graphData?.links
+      processedGraphData,
+      nodeType: typeof processedGraphData?.nodes,
+      linkType: typeof processedGraphData?.links
     });
     return (
       <div className="text-center text-red-500 p-4">
         <p>Invalid graph data</p>
-        <pre className="text-xs mt-2">{JSON.stringify(graphData, null, 2)}</pre>
+        <pre className="text-xs mt-2">{JSON.stringify(processedGraphData, null, 2)}</pre>
       </div>
     );
   }
 
   // Ensure at least some nodes and links exist
-  if (graphData.nodes.length === 0 || graphData.links.length === 0) {
+  if (processedGraphData.nodes.length === 0 || processedGraphData.links.length === 0) {
     console.warn('Graph data is empty', { 
-      nodeCount: graphData.nodes.length, 
-      linkCount: graphData.links.length 
+      nodeCount: processedGraphData.nodes.length, 
+      linkCount: processedGraphData.links.length 
     });
     return (
       <div className="text-center text-yellow-500 p-4">
@@ -156,7 +167,7 @@ export default function GraphView({ graphData, isModal, isSidebar }: GraphViewPr
       />
       {isClient && (
         <ForceGraph2D
-          graphData={graphData}
+          graphData={processedGraphData}
           width={dimensions.width}
           height={dimensions.height}
           backgroundColor="#ffffff"
