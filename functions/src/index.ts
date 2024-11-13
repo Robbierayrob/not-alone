@@ -163,7 +163,7 @@ export const processChat = firebaseFunctions.https.onCall(async (request: fireba
     console.log('📤 Sending response:', finalResponse);
     // Attempt to save chat history
     try {
-      const saveChatHistoryFunction = httpsCallable(clientFunctions, 'saveChatHistory');
+      const saveChatHistoryFunction = httpsCallable(getFunctions(clientApp), 'saveChatHistory');
       await saveChatHistoryFunction({
         userId,
         chatId: sessionChatId,
