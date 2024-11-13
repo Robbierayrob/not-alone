@@ -73,6 +73,7 @@ export default function SuggestionCards({
   }
 
   const handleSuggestionClick = (text: string) => {
+    // Instead of sending directly, just update the input
     onSuggestionClick(text);
   };
 
