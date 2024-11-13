@@ -16,12 +16,6 @@ if (admin.apps.length === 0) {
 
 const firestore = admin.firestore();
 
-interface ChatMessage {
-  role: 'user' | 'model';
-  content: string;
-  timestamp: string;
-}
-
 export const saveChatHistory = onCall(async (data: unknown, context?: CallableContext) => {
   console.log('🔍 Saving Chat History', { data });
 
