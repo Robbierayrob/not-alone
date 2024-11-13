@@ -16,42 +16,10 @@ export default function GraphSidebar({ isOpen, graphData }: GraphSidebarProps) {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const loadGraphData = async () => {
-      if (isOpen) {
-        setIsLoading(true);
-        try {
-          // First try to load from mock-relationships.json
-          const response = await fetch('http://localhost:3001/api/chat', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              message: '',
-              chatId: 'default-chat'
-            }),
-          });
-          
-          if (!response.ok) {
-            throw new Error('Failed to load graph data');
-          }
-          
-          const data = await response.json();
-          if (data.graphData && Object.keys(data.graphData).length > 0) {
-            setLocalGraphData(data.graphData);
-          } else {
-            setLocalGraphData(graphData); // Fallback to props data
-          }
-        } catch (error) {
-          console.error('Error loading graph data:', error);
-          setLocalGraphData(graphData); // Fallback to props data
-        } finally {
-          setIsLoading(false);
-        }
-      }
-    };
-
-    loadGraphData();
+    if (isOpen) {
+      setLocalGraphData(graphData);
+      setIsLoading(false);
+    }
   }, [isOpen, graphData]);
   return (
     <div className={`fixed right-0 top-0 h-full ${isOpen ? 'w-[600px]' : 'w-0'} bg-gray-50 border-l border-gray-200 transition-all duration-300 overflow-hidden z-40 flex flex-col`}>

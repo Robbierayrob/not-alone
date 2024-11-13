@@ -99,16 +99,16 @@ export default function DiaryPage() {
   useEffect(() => {
     const fetchGraphData = async () => {
       try {
-        const data = await apiService.fetchGraphData(currentChatId);
-        if (data.graphData) {
-          setGraphData(data.graphData);
+        if (user && userToken) {
+          const data = await apiService.fetchGraphData(user.uid, userToken, currentChatId);
+          setGraphData(data);
         }
       } catch (error) {
         console.error('Error fetching graph data:', error);
       }
     };
     fetchGraphData();
-  }, [currentChatId]);
+  }, [user, userToken, currentChatId]);
   const [deleteConfirmation, setDeleteConfirmation] = useState<string | null>(null);
   const [toast, setToast] = useState<{
     message: string;
