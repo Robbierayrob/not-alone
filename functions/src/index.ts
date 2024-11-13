@@ -1,6 +1,18 @@
 import * as functions from 'firebase-functions';
 import { VertexAI } from '@google-cloud/vertexai';
 import * as admin from 'firebase-admin';
+import { getFunctions, httpsCallable } from 'firebase/functions';
+import { initializeApp } from 'firebase/app';
+
+// Initialize Firebase client app (if not already done)
+const firebaseConfig = {
+  apiKey: process.env.FIREBASE_API_KEY,
+  authDomain: process.env.FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.FIREBASE_PROJECT_ID,
+  // Add other config as needed
+};
+const clientApp = initializeApp(firebaseConfig);
+const functions = getFunctions(clientApp);
 
 // Initialize Vertex AI
 const vertex = new VertexAI({
@@ -140,7 +152,7 @@ export const processChat = functions.https.onCall(async (request) => {
     console.log('📤 Sending response:', finalResponse);
     // Attempt to save chat history
     try {
-      const saveChatHistoryFunction = functions.httpsCallable('saveChatHistory');
+      const saveChatHistoryFunction = httpsCallable(functions, 'saveChatHistory');
       await saveChatHistoryFunction({
         userId,
         chatId: sessionChatId,
