@@ -175,10 +175,10 @@ export default function GraphView({ graphData, isModal, isSidebar }: GraphViewPr
           linkDirectionalParticleSpeed={0.005}
           enableNodeDrag={true}
           d3Force="charge" 
-          d3AlphaDecay={0.05}
-          d3VelocityDecay={0.3}
-          warmupTicks={50}
-          cooldownTicks={100}
+          d3AlphaDecay={0.1}  // Increased to spread nodes more
+          d3VelocityDecay={0.5}  // Increased to reduce oscillation
+          warmupTicks={100}  // More warmup ticks
+          cooldownTicks={200}  // More cooldown ticks
           nodeCanvasObject={(node: any, ctx, globalScale) => {
             const label = node.name || 'Unnamed';
             const fontSize = 16/globalScale;
@@ -197,7 +197,7 @@ export default function GraphView({ graphData, isModal, isSidebar }: GraphViewPr
             ctx.shadowBlur = 6;
             ctx.fillStyle = nodeColor;
             ctx.beginPath();
-            ctx.arc(node.x, node.y, 10, 0, 2 * Math.PI, false);
+            ctx.arc(node.x, node.y, 15, 0, 2 * Math.PI, false);  // Increased node size
             ctx.fill();
             ctx.shadowBlur = 0;
 
