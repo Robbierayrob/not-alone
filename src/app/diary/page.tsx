@@ -551,31 +551,10 @@ export default function DiaryPage() {
               isSidebarOpen={isSidebarOpen}
               isProfileSidebarOpen={isProfileSidebarOpen}
               isGraphViewOpen={isGraphViewOpen}
-              onSuggestionClick={async (text) => {
-                const userMessage = { role: 'user', content: text };
-                setMessages(prev => [...prev, userMessage]);
+              onSuggestionClick={(text) => {
+                // Simply populate the input without sending
+                setInput(text);
                 setShowSuggestions(false);
-                setIsLoading(true);
-
-                try {
-                  const data = await apiService.sendMessage(text, user.accessToken, currentChatId);
-                  console.log('Suggestion click received API response:', data);
-                  if (data && data.message) {
-                    const aiMessage = { role: 'assistant', content: data.message };
-                    setMessages(prev => [...prev, aiMessage]);
-                    
-                    // Dynamically reload chats to update sidebar
-                    if (user) {
-                      await loadChats();
-                    }
-                  } else {
-                    console.error('Invalid response format:', data);
-                  }
-                } catch (error) {
-                  console.error('Error:', error);
-                } finally {
-                  setIsLoading(false);
-                }
               }}
             />
           </div>
