@@ -1,6 +1,10 @@
 import * as functions from 'firebase-functions';
 import * as admin from 'firebase-admin';
 
+// Hardcoded environment variables
+const FIRESTORE_EMULATOR_HOST = 'localhost:8080';
+const GOOGLE_CLOUD_PROJECT = 'notalone-de4fc';
+
 // Ensure Firebase Admin is initialized
 if (admin.apps.length === 0) {
   admin.initializeApp();

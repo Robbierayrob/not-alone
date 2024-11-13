@@ -6,8 +6,9 @@ import { initializeApp as initializeClientApp } from 'firebase/app';
 import * as dotenv from 'dotenv';
 import * as path from 'path';
 
-// Load environment variables from project root
-dotenv.config({ path: path.resolve(__dirname, '.env.local') });
+// Hardcoded environment variables
+const GOOGLE_CLOUD_PROJECT = 'notalone-de4fc';
+const FIRESTORE_EMULATOR_HOST = 'localhost:8080';
 
 // Initialize Firebase client app (if not already done)
 // Use emulator configuration for local development
