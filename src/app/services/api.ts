@@ -161,7 +161,8 @@ export const apiService = {
         const rawResponse = await response.text();
         console.log('📦 Raw Response Text', rawResponse);
         
-        responseData = JSON.parse(rawResponse);
+        const parsedResponse = JSON.parse(rawResponse);
+        responseData = parsedResponse.result; // Extract from result object
         console.log('📦 Parsed Response Data', {
           responseType: typeof responseData,
           keys: Object.keys(responseData),
