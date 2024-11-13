@@ -50,29 +50,22 @@ export const getChatHistory = onCall(async (request) => {
     const collectionNames = collectionsSnapshot.map(collection => collection.id);
     console.log('🔍 Available Collections:', collectionNames);
 
-    // Try multiple collection names
-    const possibleCollections = ['chat_histories', 'chats', 'conversations'];
-    let querySnapshot;
+    // Focus on chat_histories collection
+    const baseQuery = firestore.collection('chat_histories')
+      .where('userId', '==', userId)
+      .orderBy('lastUpdated', 'desc');
+    
+    const query = chatId 
+      ? baseQuery.where('chatId', '==', chatId)
+      : baseQuery;
+    
+    const querySnapshot = await query.get();
 
-    for (const collectionName of possibleCollections) {
-      const baseQuery = firestore.collection(collectionName)
-        .where('userId', '==', userId)
-        .orderBy('lastUpdated', 'desc');
-      
-      const query = chatId 
-        ? baseQuery.where('chatId', '==', chatId)
-        : baseQuery;
-      
-      querySnapshot = await query.get();
-
-      console.log(`🔎 Querying collection: ${collectionName}`, {
-        documentsFound: querySnapshot.docs.length
-      });
-
-      if (querySnapshot.docs.length > 0) {
-        break;
-      }
-    }
+    console.log('🔎 Querying chat_histories collection', {
+      documentsFound: querySnapshot.docs.length,
+      userId,
+      chatId
+    });
 
     if (!querySnapshot || querySnapshot.docs.length === 0) {
       console.warn('❗ No chat histories found for user');

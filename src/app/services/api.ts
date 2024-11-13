@@ -104,7 +104,9 @@ export const apiService = {
         },
         body: JSON.stringify({
           data: {
-            userId: userId
+            userId: userId,
+            // Explicitly pass no chatId to retrieve all chats
+            chatId: undefined
           }
         }),
       });
