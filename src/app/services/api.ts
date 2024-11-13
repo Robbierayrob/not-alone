@@ -119,11 +119,11 @@ export const apiService = {
       let responseData;
       try {
         const rawResponse = await response.text();
-        console.log('🔍 Raw Response:', rawResponse);
+        console.log('🔍 Raw Full Response:', rawResponse);
         const parsedResponse = JSON.parse(rawResponse);
-        console.log('🔍 Parsed Full Response:', parsedResponse);
+        console.log('🔍 Parsed Full Response:', JSON.stringify(parsedResponse, null, 2));
         responseData = parsedResponse.result; // Extract from result object
-        console.log('🔍 Extracted Result:', responseData);
+        console.log('🔍 Extracted Full Result:', JSON.stringify(responseData, null, 2));
       } catch (parseError) {
         console.error('❌ JSON Parsing Error', {
           error: parseError,
@@ -133,24 +133,35 @@ export const apiService = {
       }
 
       // Validate response structure
-      if (!responseData || !responseData.nodes || !responseData.links) {
+      if (!responseData) {
         console.warn('⚠️ Unexpected Response Structure', {
           responseData,
           rawKeys: responseData ? Object.keys(responseData) : 'No keys'
         });
-        return { nodes: [], links: [] };
+        return { 
+          nodes: [], 
+          links: [], 
+          metadata: {}, 
+          userId: null, 
+          fullRawData: null 
+        };
       }
 
-      console.log('✅ Graph Data Retrieved', {
-        totalNodes: responseData.nodes.length,
-        totalLinks: responseData.links.length
+      console.log('✅ Full Profile History Data Retrieved', {
+        totalNodes: responseData.nodes?.length || 0,
+        totalLinks: responseData.links?.length || 0,
+        metadata: responseData.metadata,
+        userId: responseData.userId
       });
 
       console.groupEnd();
 
       return {
-        nodes: responseData.nodes,
-        links: responseData.links
+        nodes: responseData.nodes || [],
+        links: responseData.links || [],
+        metadata: responseData.metadata || {},
+        userId: responseData.userId || null,
+        fullRawData: responseData  // Include the entire raw data for comprehensive access
       };
     } catch (error) {
       console.error('❌ Complete fetchGraphData Error', {
