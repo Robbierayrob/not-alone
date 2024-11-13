@@ -184,6 +184,17 @@ export default function GraphView({ graphData, isModal, isSidebar }: GraphViewPr
             d3ForceCharge: -350,  // Further increased repulsion between nodes
             d3ForceLink: (link: any) => link.value || 1,  // Use link value for distance
             linkDistance: 150,  // Explicitly set minimum link distance
+            
+            // Custom node positioning initialization
+            initNodePosition: (node: any, index: number) => {
+              const radius = 300;  // Larger initial spread radius
+              const angle = (index / processedGraphData.nodes.length) * 2 * Math.PI;
+              
+              node.x = radius * Math.cos(angle);
+              node.y = radius * Math.sin(angle);
+              
+              return node;
+            },
           } as ForceGraphProps<any, any>}
           nodeCanvasObject={(node: any, ctx: CanvasRenderingContext2D, globalScale: number) => {
             const label = node.name || 'Unnamed';
