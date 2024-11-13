@@ -8,7 +8,7 @@ if (admin.apps.length === 0) {
   
   // Connect to local Firestore emulator
   console.log('Connecting to Firestore Emulator: localhost:8080');
-  firestore().settings({
+  admin.firestore().settings({
     host: 'localhost:8080',
     ssl: false
   });
