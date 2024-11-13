@@ -67,21 +67,95 @@ export const apiService = {
     }
   },
 
-  async fetchGraphData(chatId: string) {
+  async fetchGraphData(userId: string, token: string, chatId: string) {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/chat`, {
+      // Detailed request configuration logging
+      console.group('🔍 fetchGraphData Detailed Diagnostics');
+      
+      if (!token) {
+        console.error('❌ No authentication token');
+        throw new Error('Authentication token is required');
+      }
+
+      if (!userId) {
+        console.error('❌ No user ID provided');
+        throw new Error('User ID is required');
+      }
+
+      const requestConfig = {
+        url: 'http://127.0.0.1:5001/notalone-de4fc/us-central1/saveProfileHistory',
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({
-          message: '',
-          chatId
-        }),
+        body: {
+          data: {
+            userId: userId,
+            chatId: chatId
+          }
+        }
+      };
+
+      // Perform fetch with enhanced error tracking
+      const response = await fetch(requestConfig.url, {
+        method: 'POST',
+        headers: requestConfig.headers,
+        body: JSON.stringify(requestConfig.body),
       });
-      return await response.json();
+
+      // Comprehensive error handling for non-OK responses
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('❌ HTTP Error Response', {
+          status: response.status,
+          statusText: response.statusText,
+          errorText
+        });
+        throw new Error(`HTTP Error: ${response.status} - ${errorText || 'Unknown error'}`);
+      }
+
+      // Detailed response parsing
+      let responseData;
+      try {
+        const rawResponse = await response.text();
+        const parsedResponse = JSON.parse(rawResponse);
+        responseData = parsedResponse.result; // Extract from result object
+      } catch (parseError) {
+        console.error('❌ JSON Parsing Error', {
+          error: parseError,
+          responseText: await response.text()
+        });
+        throw new Error('Failed to parse response JSON');
+      }
+
+      // Validate response structure
+      if (!responseData || !responseData.nodes || !responseData.links) {
+        console.warn('⚠️ Unexpected Response Structure', {
+          responseData,
+          rawKeys: responseData ? Object.keys(responseData) : 'No keys'
+        });
+        return { nodes: [], links: [] };
+      }
+
+      console.log('✅ Graph Data Retrieved', {
+        totalNodes: responseData.nodes.length,
+        totalLinks: responseData.links.length
+      });
+
+      console.groupEnd();
+
+      return {
+        nodes: responseData.nodes,
+        links: responseData.links
+      };
     } catch (error) {
-      console.error('Error fetching graph data:', error);
+      console.error('❌ Complete fetchGraphData Error', {
+        errorName: error instanceof Error ? error.name : 'Unknown Error',
+        errorMessage: error instanceof Error ? error.message : error,
+        errorStack: error instanceof Error ? error.stack : 'No stack trace'
+      });
+      console.groupEnd();
       throw error;
     }
   },
