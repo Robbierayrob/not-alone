@@ -55,29 +55,57 @@ export default function GraphModalView({ graphData }: GraphModalViewProps) {
         nodeData={selectedNode}
       />
       {typeof window !== 'undefined' && <ForceGraph2D
-        graphData={graphData}
-        width={dimensions.width}
-        height={dimensions.height}
-        backgroundColor="#ffffff"
-        nodeAutoColorBy="group"
-        nodeLabel="name"
-        linkLabel="label"
-        linkDirectionalParticles={2}
-        linkDirectionalParticleSpeed={0.005}
-        zoom={1.5}
-        onNodeClick={(node: any) => setSelectedNode(node)}
-        enableNodeDrag={true}
-        d3AlphaDecay={0.05}  // Decreased to allow more node separation
-        d3VelocityDecay={0.3}  // Reduced to increase node movement
-        warmupTicks={200}  // More warmup for better initial layout
-        cooldownTicks={300}  // Extended cooldown for stable positioning
-        d3ForceCharge={-150}  // Increased repulsion between nodes
-        nodeCanvasObject={(node: any, ctx: { font: string; shadowColor: string; shadowBlur: number; fillStyle: string; beginPath: () => void; arc: (arg0: any, arg1: any, arg2: number, arg3: number, arg4: number, arg5: boolean) => void; fill: () => void; strokeStyle: string; lineWidth: number; stroke: () => void; measureText: (arg0: any) => { (): any; new(): any; width: any; }; roundRect: (arg0: number, arg1: any, arg2: any, arg3: number, arg4: number) => void; textAlign: string; textBaseline: string; fillText: (arg0: any, arg1: any, arg2: any) => void; }, globalScale: number) => {
+        {...{
+          graphData: graphData,
+          width: dimensions.width,
+          height: dimensions.height,
+          backgroundColor: "#ffffff",
+          nodeAutoColorBy: "group",
+          nodeLabel: "name",
+          linkLabel: "label",
+          onNodeClick: (node: any) => setSelectedNode(node),
+          linkDirectionalParticles: 2,
+          linkDirectionalParticleSpeed: 0.005,
+          enableNodeDrag: true,
+          d3AlphaDecay: 0.003,
+          d3VelocityDecay: 0.05,
+          warmupTicks: 1000,
+          cooldownTicks: 1500,
+          d3Force: (d3: { force: (arg0: string) => { (): any; new(): any; distance: { (arg0: (link: any) => number): { (): any; new(): any; strength: { (arg0: number): void; new(): any; }; }; new(): any; }; strength: { (arg0: number): { (): any; new(): any; distanceMax: { (arg0: number): void; new(): any; }; }; new(): any; }; }; }) => {
+            // Configure link force with custom distance
+            d3.force('link')
+              .distance((link: { value: number; }) => {
+                // You can customize this based on your link properties
+                return link.value ? link.value * 200 : 200; // Base distance of 400px
+              })
+              .strength(0.5); // Adjust strength of the link force (0-1)
+
+            // Add repulsive force between nodes
+            d3.force('charge')
+              .strength(-2000)
+              .distanceMax(1000);
+            return d3;
+          },
+          d3ForceLink: (link: any) => Math.max(link.value * 3, 300), // Minimum 300px distance
+          linkDistance: 1000, // Significantly larger minimum distance
+          
+          // Custom node positioning initialization
+          initNodePosition: (node: any, index: number) => {
+            const radius = 600;  // Larger initial spread radius
+            const angle = (index / graphData.nodes.length) * 2 * Math.PI;
+            
+            node.x = radius * Math.cos(angle);
+            node.y = radius * Math.sin(angle);
+            
+            return node;
+          },
+        } as ForceGraphProps<any, any>}
+        nodeCanvasObject={(node: any, ctx: CanvasRenderingContext2D, globalScale: number) => {
           const label = node.name || 'Unnamed';
           const fontSize = 16/globalScale;
           const summaryFontSize = 12/globalScale;
           ctx.font = `${fontSize}px 'IBM Plex Sans', Sans-Serif`;
-            
+          
           // Enhanced color selection with more vibrant and consistent palette
           const nodeColor = 
             node.gender === 'male' ? 'rgba(66, 153, 225, 0.8)' :     // Soft Blue
@@ -143,7 +171,7 @@ export default function GraphModalView({ graphData }: GraphModalViewProps) {
             ctx.fillText(summaryText, node.x, node.y + 45);
           }
         }}
-        linkCanvasObject={(link: any, ctx: { font: string; fillStyle: string; textAlign: string; textBaseline: string; fillText: (arg0: any, arg1: any, arg2: any) => void; }, globalScale: number) => {
+        linkCanvasObject={(link: any, ctx: CanvasRenderingContext2D, globalScale: number) => {
           const start = link.source;
           const end = link.target;
           const label = link.label;
