@@ -1,9 +1,7 @@
 import * as firebaseFunctions from 'firebase-functions';
 import { VertexAI } from '@google-cloud/vertexai';
 import * as admin from 'firebase-admin';
-import { getFunctions } from 'firebase/functions';
-import { httpsCallable } from 'firebase/functions';
-import { connectFunctionsEmulator } from 'firebase/functions';
+import { getFunctions, httpsCallable, connectFunctionsEmulator, HttpsCallableReference } from 'firebase/functions';
 import { initializeApp as initializeClientApp } from 'firebase/app';
 
 // Initialize Firebase client app (if not already done)
@@ -190,7 +188,7 @@ export const processChat = firebaseFunctions.https.onCall(async (request: fireba
       const availableFunctions = await functions.httpsCallable('__getFunctions')();
       console.log('🔍 Registered Cloud Functions:', availableFunctions);
 
-      const saveChatHistoryFunction = httpsCallable(functions, 'saveChatHistory');
+      const saveChatHistoryFunction: HttpsCallableReference = httpsCallable(functions, 'saveChatHistory');
       console.log('🔍 Save Chat History Function Details:', {
         functionExists: !!saveChatHistoryFunction,
         functionType: typeof saveChatHistoryFunction
