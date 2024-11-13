@@ -1,5 +1,6 @@
 import * as functions from 'firebase-functions';
 import { VertexAI } from '@google-cloud/vertexai';
+import * as admin from 'firebase-admin';
 
 // Initialize Vertex AI
 const vertex = new VertexAI({
@@ -17,9 +18,7 @@ const chatSessions = new Map<string, {
   history: Array<{role: string, parts: Array<{text: string}>}>;
 }>();
 
-import * as functions from 'firebase-functions';
-import { VertexAI } from '@google-cloud/vertexai';
-import * as admin from 'firebase-admin';
+
 
 // Ensure Firebase Admin is initialized
 if (admin.apps.length === 0) {
