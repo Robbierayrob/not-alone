@@ -28,7 +28,7 @@ export const saveChatHistory = onCall(async (request: unknown, context?: Callabl
   // Handle nested data structure
   const data = (request as any).data || request;
 
-  const { userId, chatId, messages } = data as {
+  const { userId, chatId, messages = [] } = data as {
     userId?: string, 
     chatId?: string, 
     messages?: Array<{role: string, content: string, timestamp: string}>
@@ -52,10 +52,10 @@ export const saveChatHistory = onCall(async (request: unknown, context?: Callabl
     const existingData = docSnapshot.data();
     const existingMessages = existingData?.messages || [];
 
-    // Append new messages to existing messages
+    // Append new messages to existing messages, ensuring messages is always an array
     const updatedMessages = [
       ...existingMessages,
-      ...messages
+      ...(messages || [])
     ];
 
     // Save updated chat history
