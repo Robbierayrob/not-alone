@@ -13,13 +13,39 @@ interface GraphData {
     id: string;
     name: string;
     val: number;
-    color?: string;
+    gender?: string;
+    age?: number;
+    summary?: string;
+    details?: {
+      occupation?: string;
+      interests?: string[];
+      personality?: string;
+      background?: string;
+      emotionalState?: string;
+    };
   }>;
   links: Array<{
     source: string;
     target: string;
     value: number;
+    label?: string;
+    details?: {
+      relationshipType?: string;
+      duration?: string;
+      status?: string;
+      sentiment?: string;
+      interactions?: Array<{
+        date?: string;
+        type?: string;
+        description?: string;
+        impact?: string;
+      }>;
+    };
   }>;
+  metadata?: {
+    lastUpdated?: string;
+    version?: string;
+  };
 }
 
 interface GraphViewProps {

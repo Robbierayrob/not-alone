@@ -6,7 +6,20 @@ import { createPortal } from 'react-dom';
 interface NodeDetailsModalProps {
   isOpen: boolean;
   onClose: () => void;
-  nodeData: any;
+  nodeData: {
+    id: string;
+    name: string;
+    gender?: string;
+    age?: number;
+    summary?: string;
+    details?: {
+      occupation?: string;
+      interests?: string[];
+      personality?: string;
+      background?: string;
+      emotionalState?: string;
+    };
+  };
 }
 
 export default function NodeDetailsModal({ isOpen, onClose, nodeData }: NodeDetailsModalProps) {
