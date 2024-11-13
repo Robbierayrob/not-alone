@@ -89,14 +89,7 @@ export const apiService = {
     try {
       // Extensive pre-request logging
       console.group('🔍 loadChats Detailed Diagnostics');
-      console.log('🔑 Input Validation', {
-        userIdProvided: !!userId,
-        userIdType: typeof userId,
-        userIdLength: userId?.length,
-        tokenProvided: !!token,
-        tokenType: typeof token,
-        tokenLength: token?.length
-      });
+    
 
       if (!token) {
         console.error('❌ No authentication token');
@@ -124,12 +117,7 @@ export const apiService = {
         }
       };
 
-      console.log('📡 Request Configuration', {
-        url: requestConfig.url,
-        method: requestConfig.method,
-        bodyUserId: requestConfig.body.data.userId,
-        bodyUserIdType: typeof requestConfig.body.data.userId
-      });
+      
 
       // Perform fetch with enhanced error tracking
       const response = await fetch(GET_CHAT_HISTORY_URL, {
@@ -138,11 +126,7 @@ export const apiService = {
         body: JSON.stringify(requestConfig.body),
       });
 
-      console.log('🌐 Response Details', {
-        status: response.status,
-        statusText: response.statusText,
-        headers: Object.fromEntries(response.headers.entries())
-      });
+     
 
       // Comprehensive error handling for non-OK responses
       if (!response.ok) {
@@ -159,17 +143,11 @@ export const apiService = {
       let responseData;
       try {
         const rawResponse = await response.text();
-        console.log('📦 Raw Response Text', rawResponse);
+        
         
         const parsedResponse = JSON.parse(rawResponse);
         responseData = parsedResponse.result; // Extract from result object
-        console.log('📦 Parsed Response Data', {
-          responseType: typeof responseData,
-          keys: Object.keys(responseData),
-          chatHistoriesType: typeof responseData.chatHistories,
-          chatHistoriesLength: responseData.chatHistories?.length,
-          chatHistoriesContent: responseData.chatHistories
-        });
+       
       } catch (parseError) {
         console.error('❌ JSON Parsing Error', {
           error: parseError,
