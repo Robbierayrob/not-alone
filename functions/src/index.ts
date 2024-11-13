@@ -2,19 +2,32 @@ import * as firebaseFunctions from 'firebase-functions';
 import { VertexAI } from '@google-cloud/vertexai';
 import * as admin from 'firebase-admin';
 import { getFunctions, httpsCallable, connectFunctionsEmulator, Functions } from 'firebase/functions';
-import { initializeApp as initializeClientApp } from 'firebase/app';
+import { initializeApp as initializeClientApp, getApps, deleteApp } from 'firebase/app';
 
-// Initialize Firebase client app (if not already done)
-// Use emulator configuration for local development
-const clientApp = initializeClientApp({
-  projectId: 'demo-project',
-  apiKey: 'local-api-key'
-});
+// Utility function to safely initialize Firebase client app
+function getOrInitializeClientApp(projectId: string, apiKey: string) {
+  const existingApps = getApps();
+  
+  // If an app already exists, delete it first
+  if (existingApps.length > 0) {
+    console.log('🔧 Deleting existing Firebase client apps');
+    existingApps.forEach(app => deleteApp(app));
+  }
 
-// Configure Firebase Functions to use local emulator
-const functions = getFunctions(clientApp);
-connectFunctionsEmulator(functions, 'localhost', 5001);
-console.log('🔧 Configured Firebase Functions to use local emulator');
+  const clientApp = initializeClientApp({
+    projectId: projectId,
+    apiKey: apiKey
+  });
+
+  const functions = getFunctions(clientApp);
+  connectFunctionsEmulator(functions, 'localhost', 5001);
+  console.log('🔧 Configured Firebase Functions to use local emulator');
+
+  return { clientApp, functions };
+}
+
+// Initialize Firebase client app with project-specific configuration
+const { clientApp, functions } = getOrInitializeClientApp('notalone-de4fc', 'local-api-key');
 
 // Initialize Vertex AI
 const vertex = new VertexAI({
@@ -194,14 +207,8 @@ export const processChat = firebaseFunctions.https.onCall(async (request: fireba
           name: adminApp.name
         });
 
-        // Reconfigure client app to match admin app
-        const clientApp = initializeClientApp({
-          projectId: projectId,
-          apiKey: 'local-api-key'
-        });
-
-        const functions = getFunctions(clientApp);
-        connectFunctionsEmulator(functions, 'localhost', 5001);
+        // Use the existing client app or reinitialize if needed
+        const { clientApp, functions } = getOrInitializeClientApp(projectId, 'local-api-key');
 
         const saveChatHistoryFunction = httpsCallable(functions as Functions, 'saveChatHistory');
         console.log('🔍 Save Chat History Function Details:', {
