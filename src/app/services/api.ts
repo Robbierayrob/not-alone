@@ -150,7 +150,7 @@ export const apiService = {
 
       console.log('🗂️ Processed Chats:', {
         totalChats: sortedChats.length,
-        chatDetails: sortedChats.map(chat => ({
+        chatDetails: sortedChats.map((chat: { id: any; title: any; messageCount: any; }) => ({
           id: chat.id,
           title: chat.title,
           messageCount: chat.messageCount
