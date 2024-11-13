@@ -122,7 +122,7 @@ export const apiService = {
     });
   }
 
-  async loadChats(userId: string, token: string) {
+  loadChats: async (userId: string, token: string) => {
     try {
       // Extensive pre-request logging
       console.group('🔍 loadChats Detailed Diagnostics');
