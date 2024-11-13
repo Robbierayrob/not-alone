@@ -6,6 +6,7 @@ import DeleteConfirmationModal from './DeleteConfirmationModal';
 interface ChatHistorySidebarProps {
   isSidebarOpen: boolean;
   chats: Array<{
+    id: string;
     chatId: string;  // Changed from 'id' to 'chatId' for consistency
     title: string;
     createdAt: string;
