@@ -176,12 +176,12 @@ export default function GraphView({ graphData, isModal, isSidebar }: GraphViewPr
             linkDirectionalParticles: 2,
             linkDirectionalParticleSpeed: 0.005,
             enableNodeDrag: true,
-            d3AlphaDecay: 0.05,  // Decreased to allow more node separation
-            d3VelocityDecay: 0.3,  // Reduced to increase node movement
-            warmupTicks: 200,  // More warmup for better initial layout
-            cooldownTicks: 300,  // Extended cooldown for stable positioning
+            d3AlphaDecay: 0.02,  // Further reduced for more node separation
+            d3VelocityDecay: 0.2,  // Reduced to increase node movement
+            warmupTicks: 300,  // Increased warmup for better initial layout
+            cooldownTicks: 500,  // Extended cooldown for stable positioning
             d3Force: "charge" as any,
-            d3ForceCharge: -150,  // Increased repulsion between nodes
+            d3ForceCharge: -250,  // Significantly increased repulsion between nodes
           } as ForceGraphProps<any, any>}
           nodeCanvasObject={(node: any, ctx: CanvasRenderingContext2D, globalScale: number) => {
             const label = node.name || 'Unnamed';
