@@ -186,21 +186,19 @@ export default function GraphView({ graphData, isModal, isSidebar }: GraphViewPr
               node.gender === 'unknown' ? 'rgba(160, 174, 192, 0.8)' : // Soft Gray
               'rgba(104, 211, 145, 0.8)';                               // Soft Green
 
-            // Draw node with gradient and shadow
-            const gradient = ctx.createRadialGradient(
-              node.x, node.y, 0, 
-              node.x, node.y, 12
-            );
-            gradient.addColorStop(0, nodeColor);
-            gradient.addColorStop(1, 'rgba(255, 255, 255, 0.2)');
-            
+            // Draw node with solid color and subtle shadow
             ctx.shadowColor = 'rgba(0, 0, 0, 0.2)';
-            ctx.shadowBlur = 10;
-            ctx.fillStyle = gradient;
+            ctx.shadowBlur = 6;
+            ctx.fillStyle = nodeColor;
             ctx.beginPath();
             ctx.arc(node.x, node.y, 10, 0, 2 * Math.PI, false);
             ctx.fill();
             ctx.shadowBlur = 0;
+
+            // Add a subtle border
+            ctx.strokeStyle = 'rgba(0, 0, 0, 0.1)';
+            ctx.lineWidth = 1;
+            ctx.stroke();
 
             // Name Label with enhanced background
             ctx.font = `bold ${fontSize}px 'IBM Plex Sans', Sans-Serif`;
