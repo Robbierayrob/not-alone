@@ -187,6 +187,44 @@ export const apiService = {
     }
   },
 
+  // New method to load specific chat messages
+  loadChatMessages: async (userId: string, token: string, chatId: string) => {
+    try {
+      console.log('🔍 Loading messages for chat:', chatId);
+
+      const response = await fetch(GET_CHAT_HISTORY_URL, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          data: {
+            userId: userId,
+            chatId: chatId
+          }
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const responseData = await response.json();
+      const chatHistory = responseData.result.chatHistories[0];
+
+      console.log('✅ Chat Messages Retrieved', {
+        chatId,
+        messageCount: chatHistory.messages.length
+      });
+
+      return chatHistory.messages;
+    } catch (error) {
+      console.error('❌ Error loading chat messages:', error);
+      throw error;
+    }
+  },
+
   async createNewChat() {
     try {
       const response = await fetch(`${API_BASE_URL}/api/chats/new`, {

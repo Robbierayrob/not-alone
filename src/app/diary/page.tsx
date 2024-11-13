@@ -134,6 +134,19 @@ export default function DiaryPage() {
     }
   };
 
+  // New method to load messages for a specific chat
+  const loadChatMessages = async (chatId: string) => {
+    try {
+      if (user) {
+        const messages = await apiService.loadChatMessages(user.uid, await user.getIdToken(), chatId);
+        setMessages(messages);
+        setCurrentChatId(chatId);
+      }
+    } catch (error) {
+      console.error('Error loading chat messages:', error);
+    }
+  };
+
   const deleteChat = async (chatId: string) => {
     try {
       const data = await apiService.deleteChat(chatId);
@@ -291,6 +304,7 @@ export default function DiaryPage() {
           onCreateNewChat={async () => await createNewChat()}
           onChatSelect={setCurrentChatId}
           onDeleteChat={deleteChat}
+          onLoadChatMessages={loadChatMessages}  // Add the new method
         />
   
         {/* Main chat area */}

@@ -16,6 +16,7 @@ interface ChatHistorySidebarProps {
   onChatSelect: (chatId: string) => void;
   onDeleteChat: (chatId: string) => void;
   onLoadChats?: () => void;  // Optional callback to trigger chat loading
+  onLoadChatMessages?: (chatId: string) => void;  // New prop to load specific chat messages
 }
 
 export default function ChatHistorySidebar({
@@ -25,7 +26,8 @@ export default function ChatHistorySidebar({
   onCreateNewChat,
   onChatSelect,
   onDeleteChat,
-  onLoadChats  // New optional prop
+  onLoadChats,  // New optional prop
+  onLoadChatMessages  // New optional prop
 }: ChatHistorySidebarProps) {
   const [deleteConfirmation, setDeleteConfirmation] = useState<string | null>(null);
 
@@ -61,7 +63,13 @@ export default function ChatHistorySidebar({
           {chats.map((chat, index) => (
             <div key={`${chat.id}-${index}`} className="relative group">
               <button
-                onClick={() => onChatSelect(chat.id)}
+                onClick={() => {
+                  onChatSelect(chat.id);
+                  // If onLoadChatMessages is provided, load messages for this chat
+                  if (onLoadChatMessages) {
+                    onLoadChatMessages(chat.id);
+                  }
+                }}
                 className={`w-full px-4 py-3 rounded-lg text-left hover:bg-gray-100 
                   ${currentChatId === chat.id ? 'bg-gray-100' : ''} transition-colors`}
               >
