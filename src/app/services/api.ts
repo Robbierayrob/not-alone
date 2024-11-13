@@ -119,8 +119,11 @@ export const apiService = {
       let responseData;
       try {
         const rawResponse = await response.text();
+        console.log('🔍 Raw Response:', rawResponse);
         const parsedResponse = JSON.parse(rawResponse);
+        console.log('🔍 Parsed Full Response:', parsedResponse);
         responseData = parsedResponse.result; // Extract from result object
+        console.log('🔍 Extracted Result:', responseData);
       } catch (parseError) {
         console.error('❌ JSON Parsing Error', {
           error: parseError,
