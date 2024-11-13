@@ -1,8 +1,9 @@
 import * as firebaseFunctions from 'firebase-functions';
 import { VertexAI } from '@google-cloud/vertexai';
 import * as admin from 'firebase-admin';
-import { getFunctions, httpsCallable } from 'firebase/functions';
+import { getFunctions, connectFunctionsEmulator, httpsCallable } from 'firebase/functions';
 import { initializeApp as initializeClientApp } from 'firebase/app';
+
 // Initialize Firebase client app (if not already done)
 // Use emulator configuration for local development
 const clientApp = initializeClientApp({
@@ -12,11 +13,8 @@ const clientApp = initializeClientApp({
 
 // Configure Firebase Functions to use local emulator
 const functions = getFunctions(clientApp);
-// Use connectFunctionsEmulator for proper type-safe emulator configuration
-import { connectFunctionsEmulator } from 'firebase/functions';
 connectFunctionsEmulator(functions, 'localhost', 5001);
 console.log('🔧 Configured Firebase Functions to use local emulator');
-// Remove unused clientFunctions
 
 // Initialize Vertex AI
 const vertex = new VertexAI({
