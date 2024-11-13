@@ -444,6 +444,20 @@ body {
   max-width: min(600px, 85%);
 }
 
+/* Chat History Sidebar Title Styles */
+.chat-history-title {
+  @apply text-sm font-medium text-gray-800 truncate transition-colors duration-200 
+         hover:text-primary hover:bg-gray-100 rounded-md px-2 py-1;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chat-history-subtitle {
+  @apply text-xs text-gray-500 mt-1 truncate;
+}
+
 .user-message {
   @apply bg-primary text-white self-end rounded-br-sm;
   margin-left: auto;

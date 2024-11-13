@@ -66,8 +66,8 @@ export default function ChatHistorySidebar({
                   ${currentChatId === chat.id ? 'bg-gray-100' : ''} transition-colors`}
               >
                 <div className="flex flex-col">
-                  <span className="font-medium truncate">{chat.title || `Chat ${index + 1}`}</span>
-                  <span className="text-sm text-gray-500">
+                  <span className="chat-history-title">{chat.title || `Chat ${index + 1}`}</span>
+                  <span className="chat-history-subtitle">
                     {new Date(chat.createdAt).toLocaleDateString()}
                   </span>
                 </div>

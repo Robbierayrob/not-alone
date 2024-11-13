@@ -35,9 +35,15 @@ export const generateChatTitles = (chats: ChatEntry[]): ChatEntry[] => {
         ? ` (Chat ${chatIndex + 1})` 
         : '';
       
+      // Generate a dynamic title based on the first user message
+      const firstUserMessage = chat.messages.find(msg => msg.role === 'user')?.content || 'New Conversation';
+      const truncatedMessage = firstUserMessage.length > 50 
+        ? firstUserMessage.substring(0, 50) + '...' 
+        : firstUserMessage;
+      
       return {
         ...chat,
-        title: `${date.toLocaleDateString()} at ${timeString}${titleSuffix}`
+        title: truncatedMessage
       };
     });
   });
