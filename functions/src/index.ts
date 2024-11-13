@@ -57,7 +57,7 @@ export const processChat = firebaseFunctions.https.onCall(async (request: fireba
   // Authentication check
   if (!request.auth) {
     console.error('❌ Authentication missing');
-    throw new functions.https.HttpsError('unauthenticated', 'Authentication required');
+    throw new firebaseFunctions.https.HttpsError('unauthenticated', 'Authentication required');
   }
 
   // Validate message
