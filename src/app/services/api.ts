@@ -158,12 +158,16 @@ export const apiService = {
       // Detailed response parsing
       let responseData;
       try {
-        responseData = await response.json();
+        const rawResponse = await response.text();
+        console.log('📦 Raw Response Text', rawResponse);
+        
+        responseData = JSON.parse(rawResponse);
         console.log('📦 Parsed Response Data', {
           responseType: typeof responseData,
           keys: Object.keys(responseData),
           chatHistoriesType: typeof responseData.chatHistories,
-          chatHistoriesLength: responseData.chatHistories?.length
+          chatHistoriesLength: responseData.chatHistories?.length,
+          chatHistoriesContent: responseData.chatHistories
         });
       } catch (parseError) {
         console.error('❌ JSON Parsing Error', {
@@ -178,7 +182,8 @@ export const apiService = {
         console.warn('⚠️ Unexpected Response Structure', {
           responseData,
           hasSuccess: responseData?.success,
-          hasMessage: responseData?.message
+          hasMessage: responseData?.message,
+          rawKeys: responseData ? Object.keys(responseData) : 'No keys'
         });
         return [];
       }
