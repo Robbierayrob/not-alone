@@ -33,31 +33,60 @@ interface ChatHistoryData {
   };
 }
 
-export const saveChatHistory = onCall(async (data: any, context?: CallableContext) => {
+export const saveChatHistory = onCall(async (data: unknown, context?: CallableContext) => {
   console.log('🔍 COMPREHENSIVE saveChatHistory function called:', {
     timestamp: new Date().toISOString(),
     hasAuth: !!context?.auth,
-    requestData: JSON.stringify(data, null, 2)
+    requestDataType: typeof data
   });
 
-  // Log the entire request object for maximum visibility
-  console.log('🔬 Full Request Data:', JSON.stringify(data, null, 2));
-
-  // Authenticate the request
-  if (!context?.auth) {
-    console.error('❌ Authentication missing in saveChatHistory');
-    throw new HttpsError('unauthenticated', 'User must be authenticated');
+  // Validate input data structure
+  if (typeof data !== 'object' || data === null) {
+    console.error('❌ Invalid data type in saveChatHistory');
+    throw new HttpsError('invalid-argument', 'Invalid data structure');
   }
 
+  // Type-safe destructuring with runtime checks
   const { 
     userId, 
     chatId, 
     messages, 
     timestamp 
-  } = data;
+  } = data as {
+    userId?: string, 
+    chatId?: string, 
+    messages?: ChatMessage[], 
+    timestamp?: string
+  };
 
-  if (!userId || !chatId || !messages) {
-    throw new HttpsError('invalid-argument', 'Missing required fields');
+  // Comprehensive validation
+  if (!userId || typeof userId !== 'string') {
+    console.error('❌ Invalid or missing userId');
+    throw new HttpsError('invalid-argument', 'Invalid user ID');
+  }
+
+  if (!chatId || typeof chatId !== 'string') {
+    console.error('❌ Invalid or missing chatId');
+    throw new HttpsError('invalid-argument', 'Invalid chat ID');
+  }
+
+  if (!Array.isArray(messages) || messages.length === 0) {
+    console.error('❌ Invalid or empty messages array');
+    throw new HttpsError('invalid-argument', 'Invalid messages');
+  }
+
+  // Additional message validation
+  const invalidMessages = messages.some(msg => 
+    !msg || 
+    typeof msg !== 'object' || 
+    !['user', 'model'].includes(msg.role) || 
+    typeof msg.content !== 'string' || 
+    typeof msg.timestamp !== 'string'
+  );
+
+  if (invalidMessages) {
+    console.error('❌ Messages contain invalid entries');
+    throw new HttpsError('invalid-argument', 'Invalid message format');
   }
 
   try {
