@@ -4,6 +4,8 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 import NodeDetailsModal from './NodeDetailsModal';
 import { ForceGraphProps } from 'react-force-graph-2d';
+import * as d3 from 'd3';
+
 
 const ForceGraph2D = dynamic<ForceGraphProps<any, any>>(() => import('react-force-graph-2d'), {
   ssr: false
@@ -176,18 +178,31 @@ export default function GraphView({ graphData, isModal, isSidebar }: GraphViewPr
             linkDirectionalParticles: 2,
             linkDirectionalParticleSpeed: 0.005,
             enableNodeDrag: true,
-            d3AlphaDecay: 0.01,  // Even further reduced for more node separation
-            d3VelocityDecay: 0.1,  // Reduced to increase node movement
-            warmupTicks: 500,  // Extended warmup for better initial layout
-            cooldownTicks: 800,  // Extended cooldown for stable positioning
-            d3Force: "charge" as any,
-            d3ForceCharge: -350,  // Further increased repulsion between nodes
-            d3ForceLink: (link: any) => link.value || 1,  // Use link value for distance
-            linkDistance: 150,  // Explicitly set minimum link distance
+            d3AlphaDecay: 0.003,
+            d3VelocityDecay: 0.05,
+            warmupTicks: 1000,
+            cooldownTicks: 1500,
+            d3Force: (d3: { force: (arg0: string) => { (): any; new(): any; distance: { (arg0: (link: any) => number): { (): any; new(): any; strength: { (arg0: number): void; new(): any; }; }; new(): any; }; strength: { (arg0: number): { (): any; new(): any; distanceMax: { (arg0: number): void; new(): any; }; }; new(): any; }; }; }) => {
+              // Configure link force with custom distance
+              d3.force('link')
+                .distance((link: { value: number; }) => {
+                  // You can customize this based on your link properties
+                  return link.value ? link.value * 200 : 200; // Base distance of 400px
+                })
+                .strength(0.5); // Adjust strength of the link force (0-1)
+
+              // Add repulsive force between nodes
+              d3.force('charge')
+                .strength(-2000)
+                .distanceMax(1000);
+              return d3;
+            },
+            d3ForceLink: (link: any) => Math.max(link.value * 3, 300), // Minimum 300px distance
+            linkDistance: 1500, // Significantly larger minimum distance
             
             // Custom node positioning initialization
             initNodePosition: (node: any, index: number) => {
-              const radius = 300;  // Larger initial spread radius
+              const radius = 600;  // Larger initial spread radius
               const angle = (index / processedGraphData.nodes.length) * 2 * Math.PI;
               
               node.x = radius * Math.cos(angle);
