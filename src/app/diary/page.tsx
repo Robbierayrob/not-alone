@@ -239,6 +239,11 @@ export default function DiaryPage() {
         if (currentChatId === 'default-chat') {
           setCurrentChatId(result.chatId);
         }
+        
+        // Dynamically reload chats to update sidebar
+        if (user) {
+          await loadChats();
+        }
       }
     } finally {
       setIsLoading(false);
@@ -410,6 +415,11 @@ export default function DiaryPage() {
                   if (data && data.message) {
                     const aiMessage = { role: 'assistant', content: data.message };
                     setMessages(prev => [...prev, aiMessage]);
+                    
+                    // Dynamically reload chats to update sidebar
+                    if (user) {
+                      await loadChats();
+                    }
                   } else {
                     console.error('Invalid response format:', data);
                   }
