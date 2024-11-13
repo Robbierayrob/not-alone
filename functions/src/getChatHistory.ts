@@ -56,9 +56,10 @@ export const getChatHistory = onCall(async (request: { data?: any } | unknown, c
     const chatHistories = querySnapshot.docs.map(doc => {
       const data = doc.data();
       return {
-        id: doc.id,
-        ...data,
-        messages: data.messages || []
+        chatId: doc.id,
+        title: data.title || 'Untitled Chat',
+        createdAt: data.createdAt || new Date().toISOString(),
+        // Intentionally exclude messages to prevent overwhelming data transfer
       };
     });
 
