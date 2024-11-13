@@ -175,45 +175,75 @@ export default function GraphView({ graphData, isModal, isSidebar }: GraphViewPr
           linkDirectionalParticleSpeed={0.005}
           nodeCanvasObject={(node: any, ctx, globalScale) => {
             const label = node.name || 'Unnamed';
-            const fontSize = 14/globalScale;
-            ctx.font = `${fontSize}px Sans-Serif`;
+            const fontSize = 16/globalScale;
+            const summaryFontSize = 12/globalScale;
+            ctx.font = `${fontSize}px 'IBM Plex Sans', Sans-Serif`;
             
-            // More robust color selection
+            // Enhanced color selection with more vibrant and consistent palette
             const nodeColor = 
-              node.gender === 'male' ? '#4299E1' :     // Blue for male
-              node.gender === 'female' ? '#FF1493' :   // Pink for female
-              node.gender === 'unknown' ? '#A0AEC0' :  // Gray for unknown
-              '#68D391';                               // Green for undefined/other
+              node.gender === 'male' ? 'rgba(66, 153, 225, 0.8)' :     // Soft Blue
+              node.gender === 'female' ? 'rgba(255, 20, 147, 0.8)' :   // Deep Pink
+              node.gender === 'unknown' ? 'rgba(160, 174, 192, 0.8)' : // Soft Gray
+              'rgba(104, 211, 145, 0.8)';                               // Soft Green
 
-            ctx.fillStyle = nodeColor;
+            // Draw node with gradient and shadow
+            const gradient = ctx.createRadialGradient(
+              node.x, node.y, 0, 
+              node.x, node.y, 12
+            );
+            gradient.addColorStop(0, nodeColor);
+            gradient.addColorStop(1, 'rgba(255, 255, 255, 0.2)');
+            
+            ctx.shadowColor = 'rgba(0, 0, 0, 0.2)';
+            ctx.shadowBlur = 10;
+            ctx.fillStyle = gradient;
             ctx.beginPath();
-            ctx.arc(node.x, node.y, 8, 0, 2 * Math.PI, false);
+            ctx.arc(node.x, node.y, 10, 0, 2 * Math.PI, false);
+            ctx.fill();
+            ctx.shadowBlur = 0;
+
+            // Name Label with enhanced background
+            ctx.font = `bold ${fontSize}px 'IBM Plex Sans', Sans-Serif`;
+            const textWidth = ctx.measureText(label).width;
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+            ctx.beginPath();
+            ctx.roundRect(
+              node.x - textWidth/2 - 6, 
+              node.y + 15, 
+              textWidth + 12, 
+              fontSize + 8, 
+              4  // Border radius
+            );
             ctx.fill();
             
-            // Add a background for text with more padding
-            const textWidth = ctx.measureText(label).width;
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-            ctx.fillRect(
-              node.x - textWidth/2 - 4,
-              node.y + 10,
-              textWidth + 8,
-              fontSize + 6
-            );
-            
-            // Draw text with better visibility
             ctx.fillStyle = '#000';
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            ctx.fillText(label, node.x, node.y + 15);
+            ctx.fillText(label, node.x, node.y + 20);
 
-            // Optional: Add summary as tooltip/hover info
+            // Summary with improved readability
             if (node.summary) {
-              ctx.fillStyle = 'rgba(0,0,0,0.6)';
-              ctx.font = `${fontSize - 2}px Sans-Serif`;
-              const summaryText = node.summary.length > 20 
-                ? node.summary.substring(0, 20) + '...' 
+              ctx.font = `${summaryFontSize}px 'IBM Plex Sans', Sans-Serif`;
+              const summaryText = node.summary.length > 30 
+                ? node.summary.substring(0, 30) + '...' 
                 : node.summary;
-              ctx.fillText(summaryText, node.x, node.y + 30);
+              
+              ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
+              const summaryWidth = ctx.measureText(summaryText).width;
+              
+              ctx.beginPath();
+              ctx.roundRect(
+                node.x - summaryWidth/2 - 4, 
+                node.y + 40, 
+                summaryWidth + 8, 
+                summaryFontSize + 6, 
+                3  // Border radius
+              );
+              ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
+              ctx.fill();
+              
+              ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+              ctx.fillText(summaryText, node.x, node.y + 45);
             }
           }}
           linkCanvasObject={(link: any, ctx, globalScale) => {
