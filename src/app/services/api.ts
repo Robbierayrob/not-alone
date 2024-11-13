@@ -262,14 +262,58 @@ export const apiService = {
     }
   },
 
-  async deleteChat(chatId: string) {
+  async deleteChat(userId: string, token: string, chatId: string) {
     try {
-      const response = await fetch(`${API_BASE_URL}/api/chats/${chatId}`, {
-        method: 'DELETE'
+      console.log('🗑️ Attempting to delete chat:', {
+        userId,
+        chatId,
+        tokenProvided: !!token
       });
-      return await response.json();
+
+      if (!token) {
+        console.error('❌ No authentication token');
+        throw new Error('Authentication token is required');
+      }
+
+      const response = await fetch(LOCAL_FUNCTION_URL.replace('processChat', 'deleteChatHistory'), {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({
+          data: {
+            userId,
+            chatId
+          }
+        }),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('❌ Delete Chat Error Response', {
+          status: response.status,
+          statusText: response.statusText,
+          errorText
+        });
+        throw new Error(`HTTP Error: ${response.status} - ${errorText || 'Unknown error'}`);
+      }
+
+      const responseData = await response.json();
+
+      console.log('✅ Chat Deletion Response:', {
+        success: responseData.result?.success,
+        message: responseData.result?.message,
+        chatId: responseData.result?.chatId
+      });
+
+      return responseData.result;
     } catch (error) {
-      console.error('Error deleting chat:', error);
+      console.error('❌ Complete deleteChat Error', {
+        errorName: error instanceof Error ? error.name : 'Unknown Error',
+        errorMessage: error instanceof Error ? error.message : error,
+        errorStack: error instanceof Error ? error.stack : 'No stack trace'
+      });
       throw error;
     }
   }
