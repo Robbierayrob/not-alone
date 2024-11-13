@@ -122,7 +122,8 @@ export const apiService = {
         console.log('🔍 Raw Full Response:', rawResponse);
         const parsedResponse = JSON.parse(rawResponse);
         console.log('🔍 Parsed Full Response:', JSON.stringify(parsedResponse, null, 2));
-        responseData = parsedResponse.result; // Extract from result object
+        // Correctly extract nested result with actual graph data
+        responseData = parsedResponse.result?.result || parsedResponse.result;
         console.log('🔍 Extracted Full Result:', JSON.stringify(responseData, null, 2));
       } catch (parseError) {
         console.error('❌ JSON Parsing Error', {
