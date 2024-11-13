@@ -68,6 +68,7 @@ if (admin.apps.length === 0) {
 export { saveChatHistory } from './chatHistory';
 export { getChatHistory } from './getChatHistory';
 export { deleteChatHistory } from './deleteChatHistory';
+export { analyzeProfileFromChat } from './profileAnalysis';
 
 export const processChat = firebaseFunctions.https.onCall(async (request: firebaseFunctions.https.CallableRequest) => {
   console.log('🚀 Incoming request:', {
