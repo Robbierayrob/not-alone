@@ -31,6 +31,10 @@ yarn-error.log*
 
 # env files (can opt-in for commiting if needed)
 .env*
+.env.local
+.env.development
+.env.test
+.env.production
 
 # vercel
 .vercel
@@ -39,4 +43,9 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 .aider*
-.env
+
+# security and credentials
+/config/serviceAccount.json
+/config/*.key
+/config/*.pem
+/config/credentials/*

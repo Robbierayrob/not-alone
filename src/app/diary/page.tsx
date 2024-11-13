@@ -1,9 +1,11 @@
 'use client';
 
-import { useState, FormEvent, useRef, useEffect } from 'react';
+import { useState, FormEvent, useRef, useEffect, useCallback } from 'react';
+import { Toast } from '../components/Toast';
 import { useRouter } from 'next/navigation';
 import { onAuthStateChanged } from 'firebase/auth';
 import { auth } from '../firebase/config';
+import { apiService } from '../services/api';
 import DeleteConfirmationModal from '../components/DeleteConfirmationModal';
 import GraphView from '../components/GraphView';
 import GraphSidebar from '../components/GraphSidebar';
@@ -15,14 +17,21 @@ import AuthModal from '../components/AuthModal';
 
 
 
+
 export default function DiaryPage() {
   const router = useRouter();
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [user, setUser] = useState<any>(null);
+  const [userToken, setUserToken] = useState<string | null>(null);
   
   // Check authentication status and session timeout
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        // Get the ID token and store it in state
+        const token = await user.getIdToken();
+        setUserToken(token);
+      }
       if (user) {
         // Get the user's last activity timestamp from localStorage
         const lastActivity = localStorage.getItem('lastActivityTime');
@@ -32,16 +41,19 @@ export default function DiaryPage() {
         if (lastActivity && (currentTime - parseInt(lastActivity)) > SESSION_TIMEOUT) {
           // Session has expired
           await auth.signOut();
+          await resetChatState();  // Reset chat state on sign out
           setUser(null);
           setIsAuthModalOpen(true);
           localStorage.removeItem('lastActivityTime');
         } else {
           // Update last activity time
           localStorage.setItem('lastActivityTime', currentTime.toString());
+          await resetChatState();  // Reset chat state on sign in
           setUser(user);
           setIsAuthModalOpen(false);
         }
       } else {
+        await resetChatState();  // Reset chat state when no user
         setUser(null);
         setIsAuthModalOpen(true);
       }
@@ -68,7 +80,7 @@ export default function DiaryPage() {
   }, []);
 
   // State management
-  const [messages, setMessages] = useState<Array<{role: string, content: string}>>([]);
+  const [messages, setMessages] = useState<Array<{role: string, content: string, isTyping?: boolean}>>([]);
   const [showSuggestions, setShowSuggestions] = useState(true);
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -76,9 +88,48 @@ export default function DiaryPage() {
   const [isProfileSidebarOpen, setIsProfileSidebarOpen] = useState(false);
   const [isGraphViewOpen, setIsGraphViewOpen] = useState(false);
   const [isGraphModalOpen, setIsGraphModalOpen] = useState(false);
-  const [graphData, setGraphData] = useState({
+  const [graphData, setGraphData] = useState<{
+    nodes: Array<{
+      id: string;
+      name: string;
+      val: number;
+      gender?: string;
+      age?: number;
+      summary?: string;
+      details?: {
+        occupation?: string;
+        interests?: string[];
+        personality?: string;
+        background?: string;
+        emotionalState?: string;
+      };
+    }>;
+    links: Array<{
+      source: string;
+      target: string;
+      value: number;
+      label?: string;
+      details?: {
+        relationshipType?: string;
+        duration?: string;
+        status?: string;
+        sentiment?: string;
+        interactions?: Array<{
+          date?: string;
+          type?: string;
+          description?: string;
+          impact?: string;
+        }>;
+      };
+    }>;
+    metadata?: {
+      lastUpdated?: string;
+      version?: string;
+    };
+  }>({
     nodes: [],
-    links: []
+    links: [],
+    metadata: {}
   });
 
   const [currentChatId, setCurrentChatId] = useState('default-chat');
@@ -87,29 +138,55 @@ export default function DiaryPage() {
   useEffect(() => {
     const fetchGraphData = async () => {
       try {
-        const response = await fetch('http://localhost:3001/api/chat', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            message: '',
-            chatId: currentChatId
-          }),
-        });
-        const data = await response.json();
-        if (data.graphData) {
-          setGraphData(data.graphData);
+        if (user && userToken) {
+          console.log('Fetching graph data for:', { 
+            userId: user.uid, 
+            chatId: currentChatId 
+          });
+          
+          const data = await apiService.fetchGraphData(user.uid, userToken, currentChatId);
+          
+          console.log('Raw graph data received:', {
+            nodes: data?.nodes?.length || 0,
+            links: data?.links?.length || 0,
+            metadata: data?.metadata
+          });
+
+          // Ensure data has valid structure before setting
+          const validatedData = {
+            nodes: Array.isArray(data?.nodes) ? data.nodes : [],
+            links: Array.isArray(data?.links) ? data.links : [],
+            metadata: data?.metadata || {}
+          };
+
+          setGraphData(validatedData);
         }
       } catch (error) {
         console.error('Error fetching graph data:', error);
+        // Set empty graph data on error
+        setGraphData({
+          nodes: [],
+          links: [],
+          metadata: {}
+        });
       }
     };
     fetchGraphData();
-  }, [currentChatId]);
+  }, [user, userToken, currentChatId]);
   const [deleteConfirmation, setDeleteConfirmation] = useState<string | null>(null);
+  const [toast, setToast] = useState<{
+    message: string;
+    type?: 'success' | 'error' | 'warning';
+  } | null>(null);
+
+  const showToast = useCallback((message: string, type: 'success' | 'error' | 'warning' = 'success') => {
+    setToast({ message, type });
+    setTimeout(() => setToast(null), 3000);
+  }, []);
   const [chats, setChats] = useState<Array<{
     id: string;
+    chatId: string;
+    userId: string;
     title: string;
     createdAt: string;
     messages: Array<{role: string, content: string}>;
@@ -129,58 +206,97 @@ export default function DiaryPage() {
   // Load chat history
   const loadChats = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/chats');
-      const data = await response.json();
-      setChats(data);
+      if (user) {
+        const data = await apiService.loadChats(user.uid, await user.getIdToken());
+        // Sort chats by createdAt timestamp in descending order (newest first)
+        const sortedChats = data.map(chat => ({
+          id: chat.id || chat.chatId,  // Fallback to chatId if id is undefined
+          chatId: chat.chatId,
+          userId: chat.userId,
+          title: chat.messageCount > 0 
+            ? chat.messages[0].content.substring(0, 50) + '...' 
+            : 'New Chat',
+          createdAt: chat.createdAt,
+          messages: chat.messages.map(msg => ({
+            role: msg.role,
+            content: msg.content
+          }))
+        })).sort((a, b) => 
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
+        setChats(sortedChats);
+      }
     } catch (error) {
       console.error('Error loading chats:', error);
     }
   };
 
-  // Create new chat
-  const deleteChat = async (chatId: string) => {
+  // New method to load messages for a specific chat
+  const loadChatMessages = async (chatId: string) => {
     try {
-      const response = await fetch(`http://localhost:3001/api/chats/${chatId}`, {
-        method: 'DELETE'
-      });
-      
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+      if (user) {
+        const messages = await apiService.loadChatMessages(user.uid, await user.getIdToken(), chatId);
+        setMessages(messages);
+        setCurrentChatId(chatId);
       }
-      
-      const data = await response.json();
-      
+    } catch (error) {
+      console.error('Error loading chat messages:', error);
+    }
+  };
+
+  const deleteChat = async (userId: string, token: string, chatId: string) => {
+    try {
+      const result = await apiService.deleteChat(userId, token, chatId);
       if (currentChatId === chatId) {
         setCurrentChatId('default-chat');
         setMessages([]);
       }
-      setChats(data.chats);
-      setDeleteConfirmation(null);
+      await loadChats();
     } catch (error) {
-      console.error('Error deleting chat:', error instanceof Error ? error.message : String(error));
-      setDeleteConfirmation(null);
+      console.error('Error deleting chat:', error);
     }
+  };
+
+  const resetChatState = async () => {
+    setMessages([]);
+    setCurrentChatId('default-chat');
+    setChats([]);
+    setShowSuggestions(true);
+    setInput('');
+    setIsLoading(false);
+    setGraphData({ nodes: [], links: [] });
   };
 
   const createNewChat = async () => {
     try {
-      const response = await fetch('http://localhost:3001/api/chats/new', {
-        method: 'POST'
-      });
-      const data = await response.json();
-      setCurrentChatId(data.chatId);
+      const chatId = `chat-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+      setCurrentChatId(chatId);
       setMessages([]);
       loadChats();
+      return chatId;
     } catch (error) {
       console.error('Error creating new chat:', error);
+      return 'default-chat';
     }
   };
 
-  // Initial load
+  // Initial load with user dependency
   useEffect(() => {
-    loadChats();
+    const initializeChats = async () => {
+      if (user) {
+        console.log('🔄 Triggering initial chat load', { userId: user.uid });
+        try {
+          await resetChatState();  // Reset state first
+          await loadChats();
+        } catch (error) {
+          console.error('Failed to load chats:', error);
+        }
+      }
+    };
+
+    initializeChats();
     scrollToBottom();
-  }, []);
+  }, [user]);
 
   // Scroll on new messages
   useEffect(() => {
@@ -197,30 +313,61 @@ export default function DiaryPage() {
     setInput('');
     setIsLoading(true);
 
-    try {
-      const response = await fetch('http://localhost:3001/api/chat', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          message: input,
-          chatId: currentChatId
-        }),
-      });
-
-      const data = await response.json();
-      
-      if (response.ok) {
-        setMessages(prev => [...prev, { role: 'assistant', content: data.message }]);
-        if (data.graphData) {
-          setGraphData(data.graphData);
+    const sendMessageWithRetry = async (message: string, retries = 3) => {
+      try {
+        const result = await apiService.sendMessage(
+          message, 
+          user.accessToken, 
+          currentChatId !== 'default-chat' ? currentChatId : undefined
+        );
+        
+        // Check if result contains an error message
+        if (result.error) {
+          if (result.error.includes('Too many requests') && retries > 0) {
+            // Wait 5 seconds and retry
+            await new Promise(resolve => setTimeout(resolve, 5000));
+            return sendMessageWithRetry(message, retries - 1);
+          }
+          
+          setMessages(prev => [...prev, { 
+            role: 'system', 
+            content: result.error 
+          }]);
+          return null;
         }
-      } else {
-        console.error('Error:', data.error);
+        
+        return result;
+      } catch (error: unknown) {
+        if (retries > 0) {
+          // Wait 5 seconds and retry
+          await new Promise(resolve => setTimeout(resolve, 5000));
+          return sendMessageWithRetry(message, retries - 1);
+        }
+        
+        const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+        console.error('Error:', errorMessage);
+        setMessages(prev => [...prev, { 
+          role: 'system', 
+          content: `Sorry, an error occurred after multiple attempts: ${errorMessage}. Please try again later.` 
+        }]);
+        return null;
       }
-    } catch (error) {
-      console.error('Error:', error);
+    };
+
+    try {
+      const result = await sendMessageWithRetry(input);
+      
+      if (result) {
+        setMessages(prev => [...prev, { role: 'assistant', content: result.message }]);
+        if (currentChatId === 'default-chat') {
+          setCurrentChatId(result.chatId);
+        }
+        
+        // Dynamically reload chats to update sidebar
+        if (user) {
+          await loadChats();
+        }
+      }
     } finally {
       setIsLoading(false);
     }
@@ -250,19 +397,57 @@ export default function DiaryPage() {
 
   return (
     <main>
+      {toast && (
+        <Toast 
+          message={toast.message} 
+          type={toast.type} 
+          onClose={() => setToast(null)} 
+        />
+      )}
       <div className="h-screen flex relative">
         <ProfileSidebar
           isOpen={isProfileSidebarOpen}
-          profiles={graphData.nodes}
+          profiles={graphData.nodes.map(node => ({
+            id: node.id,
+            name: node.name,
+            gender: node.gender || 'Unknown',
+            age: node.age || 0,
+            summary: node.summary || 'No summary available',
+            details: node.details ? {
+              occupation: node.details.occupation || 'Not specified',
+              interests: node.details.interests || [],
+              personality: node.details.personality || 'Not described',
+              background: node.details.background || 'No background information',
+              emotionalState: node.details.emotionalState || 'Neutral'
+            } : undefined
+          }))}
         />
         
         <ChatHistorySidebar 
           isSidebarOpen={isSidebarOpen}
           chats={chats}
           currentChatId={currentChatId}
-          onCreateNewChat={createNewChat}
+          onCreateNewChat={async () => await createNewChat()}
           onChatSelect={setCurrentChatId}
-          onDeleteChat={deleteChat}
+          onDeleteChat={async (chatId: string) => {
+            try {
+              if (user && userToken) {
+                await apiService.deleteChat(user.uid, userToken, chatId);
+                if (currentChatId === chatId) {
+                  setCurrentChatId('default-chat');
+                  setMessages([]);
+                }
+                await loadChats();
+                showToast('Chat successfully deleted', 'success');
+              }
+            } catch (error) {
+              console.error('Error deleting chat:', error);
+              showToast('Failed to delete chat', 'error');
+            }
+          }}
+          onLoadChatMessages={loadChatMessages}
+          userId={user.uid}
+          token={userToken || ''}
         />
   
         {/* Main chat area */}
@@ -331,6 +516,39 @@ export default function DiaryPage() {
             </button>
           </div>
   
+          {/* Add typing animation styles */}
+          <style jsx global>{`
+            .typing-animation {
+              opacity: 1;
+              transition: opacity 0.2s;
+            }
+            .cursor-blink::after {
+              content: '▋';
+              display: inline-block;
+              margin-left: 2px;
+              animation: cursor-blink 1s step-start infinite;
+            }
+            @keyframes cursor-blink {
+              50% { opacity: 0; }
+            }
+            .message {
+              transition: all 0.2s ease-out;
+            }
+            .message.animate-slide-in {
+              animation: slideIn 0.3s ease-out forwards;
+            }
+            @keyframes slideIn {
+              from {
+                opacity: 0;
+                transform: translateY(10px);
+              }
+              to {
+                opacity: 1;
+                transform: translateY(0);
+              }
+            }
+          `}</style>
+
           {/* Pulsating Circle */}
           <div className={`absolute inset-0 flex items-center justify-center pointer-events-none transition-opacity duration-300 ${isLoading ? 'opacity-100' : 'opacity-30'}`}>
             <div className="pulsating-circle"></div>
@@ -347,32 +565,9 @@ export default function DiaryPage() {
               isProfileSidebarOpen={isProfileSidebarOpen}
               isGraphViewOpen={isGraphViewOpen}
               onSuggestionClick={(text) => {
-                const userMessage = { role: 'user', content: text };
-                setMessages(prev => [...prev, userMessage]);
+                // Simply populate the input without sending
+                setInput(text);
                 setShowSuggestions(false);
-                setIsLoading(true);
-
-                fetch('http://localhost:3001/api/chat', {
-                  method: 'POST',
-                  headers: {
-                    'Content-Type': 'application/json',
-                  },
-                  body: JSON.stringify({
-                    message: text,
-                    chatId: currentChatId
-                  }),
-                })
-                  .then(response => response.json())
-                  .then(data => {
-                    if (data.message) {
-                      setMessages(prev => [...prev, { role: 'assistant', content: data.message }]);
-                      if (data.graphData) {
-                        setGraphData(data.graphData);
-                      }
-                    }
-                  })
-                  .catch(error => console.error('Error:', error))
-                  .finally(() => setIsLoading(false));
               }}
             />
           </div>

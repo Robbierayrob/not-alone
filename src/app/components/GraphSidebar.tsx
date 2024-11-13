@@ -6,52 +6,98 @@ import GraphView from './GraphView';
 interface GraphSidebarProps {
   isOpen: boolean;
   graphData: {
-    nodes: Array<any>;
-    links: Array<any>;
-  };
+    nodes: Array<{
+      id: string;
+      name: string;
+      val: number;
+      gender?: string;
+      age?: number;
+      summary?: string;
+      details?: {
+        occupation?: string;
+        interests?: string[];
+        personality?: string;
+        background?: string;
+        emotionalState?: string;
+      };
+    }>;
+    links: Array<{
+      source: string;
+      target: string;
+      value: number;
+      label?: string;
+      details?: {
+        relationshipType?: string;
+        duration?: string;
+        status?: string;
+        sentiment?: string;
+        interactions?: Array<{
+          date?: string;
+          type?: string;
+          description?: string;
+          impact?: string;
+        }>;
+      };
+    }>;
+    metadata?: {
+      lastUpdated?: string;
+      version?: string;
+    };
+  } | { result?: any };
 }
 
 export default function GraphSidebar({ isOpen, graphData }: GraphSidebarProps) {
-  const [localGraphData, setLocalGraphData] = useState(graphData);
+  const [localGraphData, setLocalGraphData] = useState<GraphSidebarProps['graphData']>({
+    nodes: [],
+    links: [],
+    metadata: {}
+  });
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const loadGraphData = async () => {
-      if (isOpen) {
-        setIsLoading(true);
-        try {
-          // First try to load from mock-relationships.json
-          const response = await fetch('http://localhost:3001/api/chat', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              message: '',
-              chatId: 'default-chat'
-            }),
-          });
-          
-          if (!response.ok) {
-            throw new Error('Failed to load graph data');
-          }
-          
-          const data = await response.json();
-          if (data.graphData && Object.keys(data.graphData).length > 0) {
-            setLocalGraphData(data.graphData);
-          } else {
-            setLocalGraphData(graphData); // Fallback to props data
-          }
-        } catch (error) {
-          console.error('Error loading graph data:', error);
-          setLocalGraphData(graphData); // Fallback to props data
-        } finally {
-          setIsLoading(false);
-        }
+    // Extract graph data, handling nested result structure
+    const extractGraphData = (data: any) => {
+      if (data && 'result' in data && data.result) {
+        return data.result;
       }
+      return data;
     };
 
-    loadGraphData();
+    const processedGraphData = extractGraphData(graphData);
+
+    console.log('GraphSidebar useEffect triggered', { 
+      isOpen, 
+      graphData, 
+      processedGraphData,
+      hasNodes: !!processedGraphData?.nodes, 
+      hasLinks: !!processedGraphData?.links 
+    });
+
+    if (isOpen) {
+      // More comprehensive data validation
+      if (processedGraphData?.nodes?.length > 0) {
+        setLocalGraphData({
+          nodes: processedGraphData.nodes,
+          links: processedGraphData.links || [], // Allow empty links
+          metadata: processedGraphData.metadata || {}
+        });
+        setIsLoading(false);
+      } else {
+        console.warn('No nodes found in graph data', {
+          nodesCount: processedGraphData?.nodes?.length || 0,
+          linksCount: processedGraphData?.links?.length || 0,
+          fullData: processedGraphData
+        });
+        
+        // Set empty state if no nodes
+        setLocalGraphData({
+          nodes: [],
+          links: [],
+          metadata: {}
+        });
+        setIsLoading(false);
+      }
+    }
   }, [isOpen, graphData]);
   return (
     <div className={`fixed right-0 top-0 h-full ${isOpen ? 'w-[600px]' : 'w-0'} bg-gray-50 border-l border-gray-200 transition-all duration-300 overflow-hidden z-40 flex flex-col`}>

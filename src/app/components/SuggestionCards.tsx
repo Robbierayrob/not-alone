@@ -73,6 +73,7 @@ export default function SuggestionCards({
   }
 
   const handleSuggestionClick = (text: string) => {
+    // Simply populate the input without sending
     onSuggestionClick(text);
   };
 

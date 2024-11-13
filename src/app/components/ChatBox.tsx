@@ -8,7 +8,7 @@ import ProfileSettingsModal from './ProfileSettingsModal';
 import SupportModal from './SupportModal';
 
 interface ChatBoxProps {
-  messages: Array<{role: string, content: string}>;
+  messages: Array<{role: string, content: string, isTyping?: boolean}>;
   input: string;
   isLoading: boolean;
   onInputChange: (value: string) => void;
@@ -41,20 +41,27 @@ export default function ChatBox({
     if (messages.length > prevMessagesLengthRef.current) {
       const lastMessage = messages[messages.length - 1];
       
-      if (lastMessage.role === 'user' && lastMessageRef.current) {
-        // Always scroll to user messages
+      if (lastMessage.content.length >= 400 && secondLastMessageRef.current) {
+        // Scroll to second last message for long messages
+        secondLastMessageRef.current.scrollIntoView({
+          behavior: 'smooth',
+          block: 'start'
+        });
+      } else if (lastMessageRef.current) {
+        // Default scroll to last message
         lastMessageRef.current.scrollIntoView({
           behavior: 'smooth',
           block: 'end'
         });
-      } else if (lastMessage.role === 'assistant' && secondLastMessageRef.current) {
-        // Only scroll for assistant messages longer than 400 characters
-        if (lastMessage.content.length > 400) {
-          secondLastMessageRef.current.scrollIntoView({
-            behavior: 'smooth',
-            block: 'start'
-          });
-        }
+      }
+
+      // Always ensure loading animation is visible if it exists
+      const loadingElement = document.querySelector('.typing-indicator');
+      if (loadingElement) {
+        loadingElement.scrollIntoView({
+          behavior: 'smooth',
+          block: 'nearest'
+        });
       }
     }
     prevMessagesLengthRef.current = messages.length;
@@ -102,7 +109,7 @@ export default function ChatBox({
               >
                 <div className={`prose prose-sm md:prose-base max-w-none break-words ${
                   message.role === 'user' ? 'prose-invert' : ''
-                } ${message.role === 'assistant' ? 'typing-animation' : ''}`}>
+                }`}>
                   <ReactMarkdown>
                     {message.content}
                   </ReactMarkdown>
@@ -110,6 +117,15 @@ export default function ChatBox({
               </div>
             );
           })}
+          {isLoading && (
+            <div className="message assistant-message inline-flex animate-slide-in">
+              <div className="typing-indicator">
+                <span></span>
+                <span></span>
+                <span></span>
+              </div>
+            </div>
+          )}
         </div>
       </div>
 

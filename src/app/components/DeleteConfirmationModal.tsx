@@ -9,7 +9,7 @@ interface DeleteConfirmationModalProps {
 export default function DeleteConfirmationModal({ 
   isOpen, 
   onClose, 
-  onConfirm 
+  onConfirm
 }: DeleteConfirmationModalProps) {
   if (!isOpen) return null;
 
