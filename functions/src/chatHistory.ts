@@ -59,6 +59,9 @@ export const saveChatHistory = onCall(async (data: unknown, context?: CallableCo
     timestamp?: string
   };
 
+  // Provide a default timestamp if not provided
+  const safeTimestamp = timestamp || new Date().toISOString();
+
   // Comprehensive validation
   if (!userId || typeof userId !== 'string') {
     console.error('❌ Invalid or missing userId');
@@ -101,7 +104,7 @@ export const saveChatHistory = onCall(async (data: unknown, context?: CallableCo
       chatId,
       messages,
       metadata: {
-        createdAt: timestamp,
+        createdAt: safeTimestamp,
         messageCount: messages.length,
         lastInteractionTime: messages[messages.length - 1].timestamp
       }
