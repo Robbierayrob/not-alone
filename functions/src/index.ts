@@ -21,10 +21,12 @@ function getOrInitializeClientApp(projectId: string, apiKey: string) {
 
   const functions = getFunctions(clientApp);
   
-  // Only connect emulator if not already connected
-  if (!functions._host) {
+  // Safely connect to emulator
+  try {
     connectFunctionsEmulator(functions, 'localhost', 5001);
     console.log('🔧 Configured Firebase Functions to use local emulator');
+  } catch (error) {
+    console.warn('⚠️ Failed to connect to Functions emulator:', error);
   }
 
   return { clientApp, functions };
