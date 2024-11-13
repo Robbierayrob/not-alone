@@ -41,18 +41,14 @@ export const getChatHistory = onCall(async (request: { data?: any } | unknown, c
     throw new HttpsError('invalid-argument', 'User ID is required');
   }
 
-  // Optional: If chatId is provided, fetch specific chat history
-  const baseQuery = firestore.collection('chat_histories')
-    .where('userId', '==', userId);
-  
-  const query = chatId 
-    ? baseQuery.where('chatId', '==', chatId)
-    : baseQuery;
-
   try {
-    // Query Firestore for all chat histories belonging to the user
-    const chatHistoriesRef = firestore.collection('chat_histories');
-    const query = chatHistoriesRef.where('userId', '==', userId);
+    // Optional: If chatId is provided, fetch specific chat history
+    const baseQuery = firestore.collection('chat_histories')
+      .where('userId', '==', userId);
+    
+    const query = chatId 
+      ? baseQuery.where('chatId', '==', chatId)
+      : baseQuery;
     
     const querySnapshot = await query.get();
 
