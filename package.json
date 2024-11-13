@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build && eslint . --quiet",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "build:skip-lint": "next build"
   },
   "dependencies": {
     "@google-cloud/vertexai": "^1.9.0",
