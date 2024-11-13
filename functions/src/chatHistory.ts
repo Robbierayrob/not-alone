@@ -33,10 +33,17 @@ interface ChatHistoryData {
 }
 
 export const saveChatHistory = functions.https.onCall(async (request: functions.https.CallableRequest) => {
-  console.log('🔍 saveChatHistory function called with:', {
+  console.log('🔍 COMPREHENSIVE saveChatHistory function called:', {
+    timestamp: new Date().toISOString(),
     hasAuth: !!request.auth,
-    requestData: request.data
+    requestData: JSON.stringify(request.data, null, 2),
+    requestHeaders: request.headers,
+    requestMethod: request.method
   });
+
+  // Log the entire request object for maximum visibility
+  console.log('🔬 Full Request Object:', JSON.stringify(request, (key, value) => 
+    key === 'auth' ? '[REDACTED]' : value, 2));
 
   // Authenticate the request
   if (!request.auth) {

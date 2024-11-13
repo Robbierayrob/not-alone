@@ -165,20 +165,38 @@ export const processChat = firebaseFunctions.https.onCall(async (request: fireba
     console.log('📤 Sending response:', finalResponse);
     // Attempt to save chat history
     try {
-      console.log('🔍 Attempting to save chat history with:', {
+      console.log('🔍 Attempting to save chat history with DETAILED logging:', {
         userId,
         chatId: sessionChatId,
         messageCount: 2,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
+        clientAppConfig: clientApp.options
+      });
+
+      // Explicitly log Firebase configuration
+      console.log('🔧 Firebase Client Configuration:', {
+        projectId: clientApp.options.projectId,
+        apiKey: clientApp.options.apiKey,
+        authDomain: clientApp.options.authDomain,
+        emulatorHost: 'localhost',
+        emulatorPort: 5001
       });
 
       const functions = getFunctions(clientApp);
-      console.log('🔍 Available Firebase Functions:', Object.keys(functions));
+      console.log('🔍 Firebase Functions Object Keys:', Object.keys(functions));
+      console.log('🔍 Firebase Functions Instance:', functions);
+
+      // Detailed function registration check
+      const availableFunctions = await functions.httpsCallable('__getFunctions')();
+      console.log('🔍 Registered Cloud Functions:', availableFunctions);
 
       const saveChatHistoryFunction = httpsCallable(functions, 'saveChatHistory');
-      console.log('🔍 Save Chat History Function:', !!saveChatHistoryFunction);
+      console.log('🔍 Save Chat History Function Details:', {
+        functionExists: !!saveChatHistoryFunction,
+        functionType: typeof saveChatHistoryFunction
+      });
 
-      const result = await saveChatHistoryFunction({
+      const chatHistoryPayload = {
         userId,
         chatId: sessionChatId,
         messages: [
@@ -186,20 +204,30 @@ export const processChat = firebaseFunctions.https.onCall(async (request: fireba
           { role: 'model', content: aiResponse, timestamp: new Date().toISOString() }
         ],
         timestamp: new Date().toISOString()
-      });
+      };
+
+      console.log('📤 Chat History Payload:', JSON.stringify(chatHistoryPayload, null, 2));
+
+      const result = await saveChatHistoryFunction(chatHistoryPayload);
 
       console.log('✅ Chat history save result:', result);
     } catch (saveError: unknown) {
+      console.error('❌ COMPREHENSIVE Save Chat History Error:', {
+        errorType: typeof saveError,
+        errorInstance: saveError instanceof Error,
+        fullErrorObject: saveError,
+        stringRepresentation: String(saveError)
+      });
+
       if (saveError instanceof Error) {
-        console.error('❌ Detailed save chat history error:', {
+        console.error('❌ Detailed Error Breakdown:', {
           errorName: saveError.name,
           errorCode: (saveError as any).code,
           errorMessage: saveError.message,
-          fullError: saveError
+          errorStack: saveError.stack
         });
-      } else {
-        console.error('❌ Unknown error saving chat history:', saveError);
       }
+      
       // Non-critical error, so we'll continue with the main response
     }
 
