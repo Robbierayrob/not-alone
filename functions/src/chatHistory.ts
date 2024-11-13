@@ -62,7 +62,10 @@ export const saveChatHistory = onCall(async (data: any, context?: CallableContex
 
   try {
     // Create a document in the chat history collection
-    const chatHistoryRef = firestore.collection('chatHistories').doc(chatId);
+    // Create a root-level collection for all chat histories
+    const rootChatHistoryRef = firestore
+      .collection('notalone_chat_histories')
+      .doc(chatId);
     
     const chatHistoryData: ChatHistoryData = {
       userId,
@@ -75,17 +78,26 @@ export const saveChatHistory = onCall(async (data: any, context?: CallableContex
       }
     };
 
-    // Save the entire chat history
-    await chatHistoryRef.set(chatHistoryData, { merge: true });
+    // Save the entire chat history in the root collection
+    await rootChatHistoryRef.set(chatHistoryData, { merge: true });
 
-    // Optionally, create a user-specific subcollection for easier querying
+    // Create a subcollection for user-specific chat histories
     const userChatHistoryRef = firestore
-      .collection('users')
+      .collection('notalone_users')
       .doc(userId)
-      .collection('chats')
+      .collection('chat_histories')
       .doc(chatId);
 
     await userChatHistoryRef.set(chatHistoryData, { merge: true });
+
+    // Optional: Add a reference to the user's chat history list
+    const userChatListRef = firestore
+      .collection('notalone_users')
+      .doc(userId);
+
+    await userChatListRef.set({
+      chatHistories: admin.firestore.FieldValue.arrayUnion(chatId)
+    }, { merge: true });
 
     console.log(`Chat history saved for user ${userId}, chat ${chatId}`);
 
