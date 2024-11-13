@@ -307,7 +307,7 @@ export default function DiaryPage() {
           currentChatId={currentChatId}
           onCreateNewChat={async () => await createNewChat()}
           onChatSelect={setCurrentChatId}
-          onDeleteChat={async (userId, token, chatId) => {
+          onDeleteChat={async (userId: string, token: string, chatId: string) => {
             try {
               await apiService.deleteChat(userId, token, chatId);
               if (currentChatId === chatId) {
