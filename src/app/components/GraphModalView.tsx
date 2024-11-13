@@ -66,6 +66,12 @@ export default function GraphModalView({ graphData }: GraphModalViewProps) {
         centerAt={{ x: 0, y: 0 }}
         zoom={1.5}
         onNodeClick={(node: any) => setSelectedNode(node)}
+        enableNodeDrag={true}
+        d3Force="charge"
+        d3AlphaDecay={0.05}
+        d3VelocityDecay={0.3}
+        warmupTicks={50}
+        cooldownTicks={100}
         nodeCanvasObject={(node: any, ctx, globalScale) => {
           const label = node.name || 'Unnamed';
           const fontSize = 16/globalScale;
