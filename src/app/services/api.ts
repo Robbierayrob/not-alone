@@ -69,17 +69,17 @@ export const apiService = {
 
   async fetchGraphData(userId: string, token: string, chatId: string) {
     try {
-      // Detailed request configuration logging
       console.group('🔍 fetchGraphData Detailed Diagnostics');
       
+      // Validate input parameters
       if (!token) {
         console.error('❌ No authentication token');
-        throw new Error('Authentication token is required');
+        return this.createEmptyGraphData('Authentication token is required');
       }
 
       if (!userId) {
         console.error('❌ No user ID provided');
-        throw new Error('User ID is required');
+        return this.createEmptyGraphData('User ID is required');
       }
 
       const requestConfig = {
@@ -112,7 +112,7 @@ export const apiService = {
           statusText: response.statusText,
           errorText
         });
-        throw new Error(`HTTP Error: ${response.status} - ${errorText || 'Unknown error'}`);
+        return this.createEmptyGraphData(`HTTP Error: ${response.status} - ${errorText || 'Unknown error'}`);
       }
 
       // Detailed response parsing
@@ -129,7 +129,7 @@ export const apiService = {
           error: parseError,
           responseText: await response.text()
         });
-        throw new Error('Failed to parse response JSON');
+        return this.createEmptyGraphData('Failed to parse response JSON');
       }
 
       // Validate response structure
@@ -138,18 +138,21 @@ export const apiService = {
           responseData,
           rawKeys: responseData ? Object.keys(responseData) : 'No keys'
         });
-        return { 
-          nodes: [], 
-          links: [], 
-          metadata: {}, 
-          userId: null, 
-          fullRawData: null 
-        };
+        return this.createEmptyGraphData('No data received');
       }
 
+      // Sanitize and validate nodes and links
+      const sanitizedNodes = Array.isArray(responseData.nodes) 
+        ? responseData.nodes.filter(node => node && node.id && node.name)
+        : [];
+
+      const sanitizedLinks = Array.isArray(responseData.links) 
+        ? responseData.links.filter(link => link && link.source && link.target)
+        : [];
+
       console.log('✅ Full Profile History Data Retrieved', {
-        totalNodes: responseData.nodes?.length || 0,
-        totalLinks: responseData.links?.length || 0,
+        totalNodes: sanitizedNodes.length,
+        totalLinks: sanitizedLinks.length,
         metadata: responseData.metadata,
         userId: responseData.userId
       });
@@ -157,11 +160,17 @@ export const apiService = {
       console.groupEnd();
 
       return {
-        nodes: responseData.nodes || [],
-        links: responseData.links || [],
-        metadata: responseData.metadata || {},
+        nodes: sanitizedNodes,
+        links: sanitizedLinks,
+        metadata: {
+          ...responseData.metadata,
+          lastUpdated: new Date().toISOString(),
+          version: '1.1',
+          totalNodes: sanitizedNodes.length,
+          totalLinks: sanitizedLinks.length
+        },
         userId: responseData.userId || null,
-        fullRawData: responseData  // Include the entire raw data for comprehensive access
+        fullRawData: responseData
       };
     } catch (error) {
       console.error('❌ Complete fetchGraphData Error', {
@@ -170,8 +179,27 @@ export const apiService = {
         errorStack: error instanceof Error ? error.stack : 'No stack trace'
       });
       console.groupEnd();
-      throw error;
+      return this.createEmptyGraphData(
+        error instanceof Error ? error.message : 'Unknown error occurred'
+      );
     }
+  },
+
+  // Helper method to create a consistent empty graph data structure
+  createEmptyGraphData(errorMessage?: string) {
+    return {
+      nodes: [],
+      links: [],
+      metadata: {
+        lastUpdated: new Date().toISOString(),
+        version: '1.1',
+        error: errorMessage || 'No error',
+        totalNodes: 0,
+        totalLinks: 0
+      },
+      userId: null,
+      fullRawData: null
+    };
   },
 
   // Chat history related API calls
