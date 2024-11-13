@@ -63,7 +63,7 @@ export const processChat = firebaseFunctions.https.onCall(async (request: fireba
   // Validate message
   if (!request.data?.message) {
     console.error('❌ Message missing in request data');
-    throw new functions.https.HttpsError('invalid-argument', 'Message is required');
+    throw new firebaseFunctions.https.HttpsError('invalid-argument', 'Message is required');
   }
 
   try {
