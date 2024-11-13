@@ -41,16 +41,19 @@ export default function DiaryPage() {
         if (lastActivity && (currentTime - parseInt(lastActivity)) > SESSION_TIMEOUT) {
           // Session has expired
           await auth.signOut();
+          await resetChatState();  // Reset chat state on sign out
           setUser(null);
           setIsAuthModalOpen(true);
           localStorage.removeItem('lastActivityTime');
         } else {
           // Update last activity time
           localStorage.setItem('lastActivityTime', currentTime.toString());
+          await resetChatState();  // Reset chat state on sign in
           setUser(user);
           setIsAuthModalOpen(false);
         }
       } else {
+        await resetChatState();  // Reset chat state when no user
         setUser(null);
         setIsAuthModalOpen(true);
       }
