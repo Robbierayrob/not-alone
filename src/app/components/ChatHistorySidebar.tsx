@@ -37,6 +37,11 @@ export default function ChatHistorySidebar({
     }
   }, [isSidebarOpen, onLoadChats]);
 
+  // Prevent setState during render
+  const handleDeleteClick = (chatId: string) => {
+    setDeleteConfirmation(chatId);
+  };
+
   return (
     <div className={`${isSidebarOpen ? 'w-64' : 'w-0'} bg-gray-50 border-r border-gray-200 transition-all duration-300 overflow-hidden`}>
       <div className="p-4">
@@ -53,15 +58,15 @@ export default function ChatHistorySidebar({
           </button>
         </div>
         <div className="space-y-2">
-          {chats.map((chat) => (
-            <div key={chat.id} className="relative group">
+          {chats.map((chat, index) => (
+            <div key={`${chat.id}-${index}`} className="relative group">
               <button
                 onClick={() => onChatSelect(chat.id)}
                 className={`w-full px-4 py-3 rounded-lg text-left hover:bg-gray-100 
                   ${currentChatId === chat.id ? 'bg-gray-100' : ''} transition-colors`}
               >
                 <div className="flex flex-col">
-                  <span className="font-medium truncate">{chat.title}</span>
+                  <span className="font-medium truncate">{chat.title || `Chat ${index + 1}`}</span>
                   <span className="text-sm text-gray-500">
                     {new Date(chat.createdAt).toLocaleDateString()}
                   </span>
@@ -70,7 +75,7 @@ export default function ChatHistorySidebar({
               <button
                 onClick={(e) => {
                   e.stopPropagation();
-                  setDeleteConfirmation(chat.id);
+                  handleDeleteClick(chat.id);
                 }}
                 className="absolute right-2 top-1/2 -translate-y-1/2 opacity-0 group-hover:opacity-100 
                   p-2 text-gray-400 hover:text-red-500 transition-all"
@@ -85,7 +90,7 @@ export default function ChatHistorySidebar({
 
           {deleteConfirmation && (
             <DeleteConfirmationModal
-              key={deleteConfirmation}
+              key={`delete-${deleteConfirmation}`}
               isOpen={true}
               onClose={() => setDeleteConfirmation(null)}
               onConfirm={() => {
