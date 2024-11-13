@@ -15,6 +15,8 @@ if (admin.apps.length === 0) {
   });
 }
 
+const firestore = admin.firestore();
+
 // Initialize Vertex AI
 const vertex = new VertexAI({
   project: 'notalone-de4fc',
@@ -138,17 +140,19 @@ export const analyzeProfileFromChat = onCall(async (request: unknown, context?: 
 
     const profileAnalysis = JSON.parse(jsonMatch[1]);
 
-    // Save profile analysis using profileHistory function
-    const saveProfileHistoryFunction = admin.functions().httpsCallable('saveProfileHistory');
-    const saveResult = await saveProfileHistoryFunction({
-      userId,
+    // Save profile analysis directly to Firestore
+    const profileHistoryRef = firestore
+      .collection('profile_histories')
+      .doc(userId);
+
+    await profileHistoryRef.set({
       ...profileAnalysis,
       metadata: {
         sourceType: 'chat_analysis',
         sourceId: chatId,
         analyzedAt: new Date().toISOString()
       }
-    });
+    }, { merge: true });
 
     console.log('✅ Profile Analysis Saved:', {
       userId,
