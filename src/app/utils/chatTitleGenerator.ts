@@ -1,4 +1,5 @@
 export interface ChatEntry {
+  id: string;
   chatId: string;
   userId: string;
   createdAt: string;
