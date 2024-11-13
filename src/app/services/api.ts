@@ -87,18 +87,29 @@ export const apiService = {
   // Chat history related API calls
   async loadChats(userId: string, token: string) {
     try {
+      console.log('🔍 Attempting to load chats', { 
+        userId, 
+        tokenLength: token.length 
+      });
+
+      const requestBody = {
+        data: {
+          userId: userId
+        }
+      };
+
+      console.log('📦 Request Body:', JSON.stringify(requestBody, null, 2));
+
       const response = await fetch(GET_CHAT_HISTORY_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify({
-          data: {
-            userId: userId
-          }
-        })
+        body: JSON.stringify(requestBody)
       });
+
+      console.log('📡 Response Status:', response.status, response.statusText);
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -107,9 +118,15 @@ export const apiService = {
       }
 
       const data = await response.json();
+      
+      console.log('✅ Loaded Chats:', {
+        totalChats: data.chatHistories?.length || 0,
+        chatHistories: data.chatHistories
+      });
+
       return data.chatHistories || [];
     } catch (error) {
-      console.error('Error loading chats:', error);
+      console.error('❌ Error loading chats:', error);
       throw error;
     }
   },
