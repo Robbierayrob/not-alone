@@ -16,14 +16,18 @@ if (admin.apps.length === 0) {
 
 const firestore = admin.firestore();
 
-export const getChatHistory = onCall(async (request: { data?: any } | unknown, context?: CallableContext) => {
+export const getChatHistory = onCall(async (request: { data?: any, context?: any } | unknown, context?: CallableContext) => {
+  // Handle both direct context and nested context
+  const effectiveContext = (request as { context?: any }).context || context;
+  
   console.log('🔍 Retrieving Chat History', {
-    auth: context?.auth ? 'Authenticated' : 'Not authenticated',
+    auth: effectiveContext?.auth ? 'Authenticated' : 'Not authenticated',
     data: request,
+    effectiveContext
   });
 
   // Authentication check
-  if (!context?.auth) {
+  if (!effectiveContext?.auth) {
     console.error('❌ Authentication missing');
     throw new HttpsError('unauthenticated', 'Authentication required');
   }
@@ -43,10 +47,10 @@ export const getChatHistory = onCall(async (request: { data?: any } | unknown, c
   };
 
   // Validate that the requested userId matches the authenticated user
-  if (!userId || userId !== context.auth.uid) {
+  if (!userId || userId !== effectiveContext.auth.uid) {
     console.error('❌ Unauthorized user access', { 
       requestedUserId: userId, 
-      authenticatedUserId: context.auth.uid 
+      authenticatedUserId: effectiveContext.auth.uid 
     });
     throw new HttpsError('permission-denied', 'You can only access your own chat histories');
   }

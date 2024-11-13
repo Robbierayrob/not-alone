@@ -96,19 +96,22 @@ export const apiService = {
         tokenLength: token.length
       });
 
-      const requestBody = {
-        data: {
-          userId: userId
-        }
-      };
-
       const response = await fetch(GET_CHAT_HISTORY_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
         },
-        body: JSON.stringify(requestBody)
+        body: JSON.stringify({
+          data: {
+            userId: userId
+          },
+          context: {
+            auth: {
+              uid: userId,
+              token: token
+            }
+          }
+        }),
       });
 
       console.log('📡 Response Status:', response.status, response.statusText);
