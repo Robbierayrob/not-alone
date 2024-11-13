@@ -16,7 +16,7 @@ interface ChatHistorySidebarProps {
   currentChatId: string;
   onCreateNewChat: () => Promise<string>;
   onChatSelect: (chatId: string) => void;
-  onDeleteChat: (userId: string, token: string, chatId: string) => void;
+  onDeleteChat: (chatId: string) => void;
   onLoadChats?: () => void;
   onLoadChatMessages?: (chatId: string) => void;
   userId: string;  // Make userId required
@@ -114,13 +114,10 @@ export default function ChatHistorySidebar({
               onClose={() => setDeleteConfirmation(null)}
               onConfirm={() => {
                 if (deleteConfirmation) {
-                  onDeleteChat(userId, token, deleteConfirmation);
+                  onDeleteChat(deleteConfirmation);
                   setDeleteConfirmation(null);
                 }
               }}
-              chatId={deleteConfirmation}
-              userId={userId}
-              token={token}
             />
           )}
         </div>
