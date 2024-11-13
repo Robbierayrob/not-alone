@@ -160,10 +160,18 @@ export default function DiaryPage() {
 
   // Initial load with user dependency
   useEffect(() => {
-    if (user) {
-      console.log('🔄 Triggering initial chat load', { userId: user.uid });
-      loadChats();
-    }
+    const initializeChats = async () => {
+      if (user) {
+        console.log('🔄 Triggering initial chat load', { userId: user.uid });
+        try {
+          await loadChats();
+        } catch (error) {
+          console.error('Failed to load chats:', error);
+        }
+      }
+    };
+
+    initializeChats();
     scrollToBottom();
   }, [user]);
 

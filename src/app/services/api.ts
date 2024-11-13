@@ -128,7 +128,11 @@ export const apiService = {
         chatHistories: data.chatHistories
       });
 
-      return data.chatHistories || [];
+      // Sort chats by lastUpdated in descending order
+      const sortedChats = (data.chatHistories || [])
+        .sort((a, b) => new Date(b.lastUpdated).getTime() - new Date(a.lastUpdated).getTime());
+
+      return sortedChats;
     } catch (error) {
       console.error('❌ Error loading chats:', error);
       throw error;

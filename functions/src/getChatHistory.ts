@@ -45,9 +45,10 @@ export const getChatHistory = onCall(async (request) => {
   }
 
   try {
-    // Optional: If chatId is provided, fetch specific chat history
+    // Fetch chat histories for the specific user
     const baseQuery = firestore.collection('chat_histories')
-      .where('userId', '==', userId);
+      .where('userId', '==', userId)
+      .orderBy('lastUpdated', 'desc');
     
     const query = chatId 
       ? baseQuery.where('chatId', '==', chatId)
@@ -55,42 +56,18 @@ export const getChatHistory = onCall(async (request) => {
     
     const querySnapshot = await query.get();
 
-    // Transform query results into an array of chat histories
-    // Group chats by date and assign entry numbers
-    const chatsByDate = querySnapshot.docs.reduce((acc, doc) => {
+    const chatHistories = querySnapshot.docs.map(doc => {
       const data = doc.data();
-      const date = data.createdAt 
-        ? new Date(data.createdAt).toLocaleDateString('en-US', {
-            weekday: 'long', 
-            year: 'numeric', 
-            month: 'long', 
-            day: 'numeric'
-          })
-        : new Date().toLocaleDateString('en-US', {
-            weekday: 'long', 
-            year: 'numeric', 
-            month: 'long', 
-            day: 'numeric'
-          });
-      
-      if (!acc[date]) {
-        acc[date] = [];
-      }
-      acc[date].push(doc);
-      return acc;
-    }, {} as Record<string, any[]>);
-
-    const chatHistories = Object.entries(chatsByDate).flatMap(([date, docs]) => 
-      docs.map((doc, index) => {
-        const data = doc.data();
-        return {
-          chatId: doc.id,
-          title: `${date} - Entry #${index + 1}`,
-          createdAt: data.createdAt || new Date().toISOString(),
-          // Intentionally exclude messages to prevent overwhelming data transfer
-        };
-      })
-    );
+      return {
+        chatId: doc.id,
+        userId: data.userId,
+        title: data.title || `Chat on ${new Date(data.createdAt).toLocaleDateString()}`,
+        createdAt: data.createdAt || new Date().toISOString(),
+        lastUpdated: data.lastUpdated || data.createdAt,
+        messages: data.messages || [], // Include messages array
+        messageCount: (data.messages || []).length
+      };
+    });
 
     console.log(`✅ Retrieved chat histories for user: ${userId}`, {
       totalChats: chatHistories.length,
