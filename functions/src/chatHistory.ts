@@ -45,7 +45,7 @@ export const saveChatHistory = onCall(async (data: any, context?: CallableContex
   // Authenticate the request
   if (!context?.auth) {
     console.error('❌ Authentication missing in saveChatHistory');
-    throw new functions.HttpsError('unauthenticated', 'User must be authenticated');
+    throw new HttpsError('unauthenticated', 'User must be authenticated');
   }
 
   const { 
