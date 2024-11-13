@@ -4,9 +4,10 @@ import * as admin from 'firebase-admin';
 import { getFunctions, httpsCallable } from 'firebase/functions';
 import { initializeApp as initializeClientApp } from 'firebase/app';
 import * as dotenv from 'dotenv';
+import * as path from 'path';
 
-// Load environment variables
-dotenv.config({ path: '.env' });
+// Load environment variables from project root
+dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
 // Initialize Firebase client app (if not already done)
 // Use emulator configuration for local development
