@@ -211,14 +211,27 @@ export const apiService = {
       }
 
       const responseData = await response.json();
-      const chatHistory = responseData.result.chatHistories[0];
+      const chatHistories = responseData.result.chatHistories;
+
+      // Find the specific chat by chatId
+      const chatHistory = chatHistories.find((chat: any) => chat.chatId === chatId);
+
+      if (!chatHistory) {
+        console.error('❌ No chat found with ID:', chatId);
+        return [];
+      }
 
       console.log('✅ Chat Messages Retrieved', {
         chatId,
         messageCount: chatHistory.messages.length
       });
 
-      return chatHistory.messages;
+      // Sort messages by timestamp to ensure chronological order
+      const sortedMessages = chatHistory.messages.sort((a: any, b: any) => 
+        new Date(a.timestamp).getTime() - new Date(b.timestamp).getTime()
+      );
+
+      return sortedMessages;
     } catch (error) {
       console.error('❌ Error loading chat messages:', error);
       throw error;
