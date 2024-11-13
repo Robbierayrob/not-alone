@@ -67,6 +67,18 @@ export const saveProfileHistory = onCall(async (request: unknown, context?: Call
     metadata?: Record<string, any>
   };
 
+  // If no nodes/links provided, attempt to retrieve from profile_histories
+  if (nodes.length === 0 || links.length === 0) {
+    const profileHistoryRef = firestore.collection('profile_histories').doc(userId);
+    const profileHistoryDoc = await profileHistoryRef.get();
+    
+    if (profileHistoryDoc.exists) {
+      const profileHistoryData = profileHistoryDoc.data();
+      nodes.push(...(profileHistoryData?.nodes || []));
+      links.push(...(profileHistoryData?.links || []));
+    }
+  }
+
   console.log('🔍 Extracted Profile Data:', { 
     userId, 
     nodesCount: nodes.length, 
