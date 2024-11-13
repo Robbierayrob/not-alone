@@ -1,19 +1,20 @@
-import * as functions from 'firebase-functions';
+import * as firebaseFunctions from 'firebase-functions';
 import { VertexAI } from '@google-cloud/vertexai';
 import * as admin from 'firebase-admin';
 import { getFunctions, httpsCallable } from 'firebase/functions';
-import { initializeApp } from 'firebase/app';
+import { initializeApp as initializeClientApp } from 'firebase/app';
+import * as dotenv from 'dotenv';
+
+// Load environment variables
+dotenv.config({ path: '.env' });
 
 // Initialize Firebase client app (if not already done)
 // Use emulator configuration for local development
-const clientApp = initializeApp({
+const clientApp = initializeClientApp({
   projectId: 'demo-project',
   apiKey: 'local-api-key'
 });
-const functions = getFunctions(clientApp, 'localhost');
-// Set emulator host if needed
-functions.host = 'localhost';
-functions.port = 5001;
+const clientFunctions = getFunctions(clientApp, 'localhost');
 
 // Initialize Vertex AI
 const vertex = new VertexAI({
@@ -47,7 +48,7 @@ if (admin.apps.length === 0) {
   }
 }
 
-export const processChat = functions.https.onCall(async (request) => {
+export const processChat = firebaseFunctions.https.onCall(async (request: firebaseFunctions.https.CallableRequest) => {
   console.log('🚀 Incoming request:', {
     auth: request.auth ? 'Authenticated' : 'Not authenticated',
     data: request.data,
