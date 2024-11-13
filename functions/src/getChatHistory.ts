@@ -1,5 +1,4 @@
 import { onCall, HttpsError } from 'firebase-functions/v2/https';
-import { CallableContext } from 'firebase-functions/lib/common/providers/https';
 import * as admin from 'firebase-admin';
 
 // Ensure Firebase Admin is initialized
@@ -16,46 +15,34 @@ if (admin.apps.length === 0) {
 
 const firestore = admin.firestore();
 
-export const getChatHistory = onCall(async (request: { data?: any, context?: any } | unknown, context?: CallableContext) => {
-  // Handle both direct context and nested context
-  const effectiveContext = (request as { context?: any }).context || context;
-  
-  console.log('🔍 Retrieving Chat History', {
-    auth: effectiveContext?.auth ? 'Authenticated' : 'Not authenticated',
-    data: request,
-    effectiveContext
+export const getChatHistory = onCall(async (request) => {
+  console.log('🚀 Incoming request:', {
+    auth: request.auth ? 'Authenticated' : 'Not authenticated',
+    data: request.data,
   });
 
   // Authentication check
-  if (!effectiveContext?.auth) {
+  if (!request.auth) {
     console.error('❌ Authentication missing');
     throw new HttpsError('unauthenticated', 'Authentication required');
   }
 
-  // Basic validation
-  if (!request || typeof request !== 'object') {
-    console.error('❌ Invalid request');
-    throw new HttpsError('invalid-argument', 'Invalid request');
+  // Validate request data
+  if (!request.data || !request.data.userId) {
+    console.error('❌ User ID missing');
+    throw new HttpsError('invalid-argument', 'User ID is required');
   }
 
-  // Handle nested data structure
-  const data = (request as { data?: any }).data || request;
-
-  const { userId, chatId } = data as {
-    userId?: string, 
-    chatId?: string
-  };
+  const { userId, chatId } = request.data;
 
   // Validate that the requested userId matches the authenticated user
-  if (!userId || userId !== effectiveContext.auth.uid) {
+  if (userId !== request.auth.uid) {
     console.error('❌ Unauthorized user access', { 
       requestedUserId: userId, 
-      authenticatedUserId: effectiveContext.auth.uid 
+      authenticatedUserId: request.auth.uid 
     });
     throw new HttpsError('permission-denied', 'You can only access your own chat histories');
   }
-
-  console.log('🔍 Extracting User ID:', { userId });
 
   try {
     // Optional: If chatId is provided, fetch specific chat history
