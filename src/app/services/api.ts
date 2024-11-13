@@ -5,7 +5,7 @@ export const GET_CHAT_HISTORY_URL = 'http://127.0.0.1:5001/notalone-de4fc/us-cen
 
 export const apiService = {
   // Chat related API calls
-  async sendMessage(message: string, token: string, chatId?: string) {
+  sendMessage: async (message: string, token: string, chatId?: string) => {
     try {
       if (!token) {
         throw new Error('Authentication token is required');
@@ -86,7 +86,7 @@ export const apiService = {
 
   // Chat history related API calls
   // Helper function to generate meaningful chat titles
-  private generateChatTitle(chats: any[]): any[] {
+  private generateChatTitle = (chats: any[]): any[] => {
     // Group chats by date
     const chatsByDate: { [key: string]: any[] } = {};
     
@@ -101,7 +101,7 @@ export const apiService = {
     });
 
     // Sort and assign titles
-    return Object.keys(chatsByDate).flatMap((dateKey, dateIndex) => {
+    return Object.keys(chatsByDate).flatMap((dateKey) => {
       const dateSortedChats = chatsByDate[dateKey].sort((a, b) => 
         new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
       );
@@ -186,7 +186,7 @@ export const apiService = {
       }
 
       // Validate response structure
-      if (!responseData || !responseData?.chatHistories) {
+      if (!responseData || !responseData.chatHistories) {
         console.warn('⚠️ Unexpected Response Structure', {
           responseData,
           hasSuccess: responseData?.success,
@@ -197,7 +197,7 @@ export const apiService = {
       }
 
       // Generate meaningful titles
-      const chatHistoriesWithTitles = this.generateChatTitle(responseData.chatHistories || []);
+      const chatHistoriesWithTitles = this.generateChatTitle(responseData.chatHistories);
 
       console.log('✅ Chat Histories Retrieved', {
         totalChats: chatHistoriesWithTitles.length,
