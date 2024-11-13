@@ -33,7 +33,7 @@ function getOrInitializeClientApp(projectId: string, apiKey: string) {
 }
 
 // Initialize Firebase client app with project-specific configuration
-const { clientApp: _clientApp, functions } = getOrInitializeClientApp('notalone-de4fc', 'local-api-key');
+const { clientApp: _clientApp } = getOrInitializeClientApp('notalone-de4fc', 'local-api-key');
 
 // Initialize Vertex AI
 const vertex = new VertexAI({

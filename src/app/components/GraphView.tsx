@@ -3,9 +3,9 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import dynamic from 'next/dynamic';
 import NodeDetailsModal from './NodeDetailsModal';
-import { ForceGraphProps } from 'react-force-graph-2d';
+import { ForceGraphProps, ForceGraph2DProps } from 'react-force-graph-2d';
 
-const ForceGraph2D = dynamic<ForceGraphProps<any, any>>(() => import('react-force-graph-2d'), {
+const ForceGraph2D = dynamic<ForceGraph2DProps>(() => import('react-force-graph-2d'), {
   ssr: false
 });
 
@@ -181,7 +181,7 @@ export default function GraphView({ graphData, isModal, isSidebar }: GraphViewPr
           cooldownTicks={300}  // Extended cooldown for stable positioning
           d3Force="charge"
           d3ForceCharge={-150}  // Increased repulsion between nodes
-          nodeCanvasObject={(node: any, ctx, globalScale) => {
+          nodeCanvasObject={(node: any, ctx: { font: string; shadowColor: string; shadowBlur: number; fillStyle: string; beginPath: () => void; arc: (arg0: any, arg1: any, arg2: number, arg3: number, arg4: number, arg5: boolean) => void; fill: () => void; strokeStyle: string; lineWidth: number; stroke: () => void; measureText: (arg0: any) => { (): any; new(): any; width: any; }; roundRect: (arg0: number, arg1: any, arg2: any, arg3: number, arg4: number) => void; textAlign: string; textBaseline: string; fillText: (arg0: any, arg1: any, arg2: any) => void; }, globalScale: number) => {
             const label = node.name || 'Unnamed';
             const fontSize = 16/globalScale;
             const summaryFontSize = 12/globalScale;
@@ -252,7 +252,7 @@ export default function GraphView({ graphData, isModal, isSidebar }: GraphViewPr
               ctx.fillText(summaryText, node.x, node.y + 45);
             }
           }}
-          linkCanvasObject={(link: any, ctx, globalScale) => {
+          linkCanvasObject={(link: any, ctx: { font: string; fillStyle: string; textAlign: string; textBaseline: string; fillText: (arg0: any, arg1: any, arg2: any) => void; }, globalScale: number) => {
             const start = link.source;
             const end = link.target;
             const label = link.label;

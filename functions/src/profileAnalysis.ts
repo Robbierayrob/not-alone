@@ -45,16 +45,7 @@ export const analyzeProfileFromChat = onCall(async (request: unknown, context?: 
     messages?: Array<{role: string, content: string, timestamp: string}>
   };
 
-  // Fetch chat history if messages are not provided
-  if (messages.length === 0) {
-    const chatHistoryRef = firestore.collection('chat_histories').doc(chatId);
-    const chatHistoryDoc = await chatHistoryRef.get();
-    
-    if (chatHistoryDoc.exists) {
-      const chatHistoryData = chatHistoryDoc.data();
-      messages.push(...(chatHistoryData?.messages || []));
-    }
-  }
+
 
   console.log('🔍 Extracted Data:', { userId, chatId, messagesCount: messages?.length });
 

@@ -144,11 +144,11 @@ export const apiService = {
 
       // Sanitize and validate nodes and links
       const sanitizedNodes = Array.isArray(responseData.nodes) 
-        ? responseData.nodes.filter(node => node && node.id && node.name)
+        ? responseData.nodes.filter((node: { id: any; name: any; }) => node && node.id && node.name)
         : [];
 
       const sanitizedLinks = Array.isArray(responseData.links) 
-        ? responseData.links.filter(link => link && link.source && link.target)
+        ? responseData.links.filter((link: { source: any; target: any; }) => link && link.source && link.target)
         : [];
 
       console.log('✅ Full Profile History Data Retrieved', {
