@@ -4,18 +4,33 @@ import { useState, useCallback, useEffect } from 'react';
 import { User } from 'firebase/auth';
 import { apiService } from '../services/api';
 
+// Enhanced type definitions
+interface ChatMessage {
+  role: string;
+  content: string;
+  isTyping?: boolean;
+}
+
+interface ChatEntry {
+  id: string;
+  chatId: string;
+  userId: string;
+  title: string;
+  createdAt: string;
+  messages: ChatMessage[];
+}
+
+// Extend User type to include custom properties
+interface ExtendedUser extends User {
+  uid: string;
+  accessToken?: string;
+}
+
 // Comprehensive chat state management hook
-export function useChatState(user: User | null, userToken: string | null) {
+export function useChatState(user: ExtendedUser | null, userToken: string | null) {
   // State for managing chat-related data
-  const [messages, setMessages] = useState<Array<{role: string, content: string, isTyping?: boolean}>>([]);
-  const [chats, setChats] = useState<Array<{
-    id: string;
-    chatId: string;
-    userId: string;
-    title: string;
-    createdAt: string;
-    messages: Array<{role: string, content: string}>;
-  }>>([]);
+  const [messages, setMessages] = useState<ChatMessage[]>([]);
+  const [chats, setChats] = useState<ChatEntry[]>([]);
   const [currentChatId, setCurrentChatId] = useState('default-chat');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -33,9 +48,12 @@ export function useChatState(user: User | null, userToken: string | null) {
 
         setChats(sortedChats);
         console.log('✅ Chats Loaded:', sortedChats.length);
+        return sortedChats;
       }
+      return [];
     } catch (error) {
       console.error('❌ Error Loading Chats:', error);
+      return [];
     }
   }, [user, userToken]);
 
