@@ -35,13 +35,14 @@ export default function DiaryPage() {
     messages, 
     chats, 
     currentChatId, 
-    isLoading: chatLoading, 
+    isLoading, 
     loadChats, 
     createNewChat, 
     loadChatMessages, 
     resetChatState, 
     setMessages, 
-    setCurrentChatId 
+    setCurrentChatId,
+    setIsLoading 
   } = useChatState(user, userToken);
 
   const { 
@@ -91,7 +92,7 @@ export default function DiaryPage() {
       try {
         const result = await apiService.sendMessage(
           message, 
-          user.accessToken, 
+          user?.accessToken || '', 
           currentChatId !== 'default-chat' ? currentChatId : undefined
         );
         
@@ -130,13 +131,13 @@ export default function DiaryPage() {
 
     try {
       const result = await sendMessageWithRetry(input);
-      
+    
       if (result) {
         setMessages(prev => [...prev, { role: 'assistant', content: result.message }]);
         if (currentChatId === 'default-chat') {
           setCurrentChatId(result.chatId);
         }
-        
+      
         // Dynamically reload chats to update sidebar
         if (user) {
           await loadChats();
