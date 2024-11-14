@@ -47,7 +47,9 @@ export default function DiaryPage() {
 
   const { 
     graphData, 
-    isLoading: graphLoading 
+    isLoading: graphLoading,
+    error: graphError,
+    refreshGraphData 
   } = useGraphState(user, userToken, currentChatId);
 
   // State for UI components
@@ -87,6 +89,9 @@ export default function DiaryPage() {
     setShowSuggestions(false);
     setInput('');
     setIsLoading(true);
+
+    // Reset graph data to trigger refresh after message
+    refreshGraphData();
 
     const sendMessageWithRetry = async (message: string, retries = 3) => {
       try {
@@ -138,9 +143,12 @@ export default function DiaryPage() {
           setCurrentChatId(result.chatId);
         }
       
-        // Dynamically reload chats to update sidebar
+        // Dynamically reload chats and graph data
         if (user) {
-          await loadChats();
+          await Promise.all([
+            loadChats(),
+            refreshGraphData()
+          ]);
         }
       }
     } finally {
@@ -172,6 +180,15 @@ export default function DiaryPage() {
 
   return (
     <main>
+      {/* Graph Error Toast */}
+      {graphError && (
+        <Toast 
+          message={`Graph Data Error: ${graphError}`} 
+          type="error" 
+          onClose={() => {}} 
+        />
+      )}
+
       {toast && (
         <Toast 
           message={toast.message} 
