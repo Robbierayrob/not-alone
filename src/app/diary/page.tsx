@@ -52,6 +52,13 @@ export default function DiaryPage() {
     refreshGraphData 
   } = useGraphState(user, userToken, currentChatId);
 
+  // Automatically open graph sidebar when meaningful graph data is loaded
+  useEffect(() => {
+    if (graphData && graphData.nodes.length > 0 && !graphError) {
+      setIsGraphViewOpen(true);
+    }
+  }, [graphData, graphError]);
+
   // State for UI components
   const [showSuggestions, setShowSuggestions] = useState(true);
   const [input, setInput] = useState('');
