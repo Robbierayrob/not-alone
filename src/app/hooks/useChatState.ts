@@ -1,0 +1,104 @@
+'use client';
+
+import { useState, useCallback, useEffect } from 'react';
+import { User } from 'firebase/auth';
+import { apiService } from '../services/api';
+
+// Comprehensive chat state management hook
+export function useChatState(user: User | null, userToken: string | null) {
+  // State for managing chat-related data
+  const [messages, setMessages] = useState<Array<{role: string, content: string, isTyping?: boolean}>>([]);
+  const [chats, setChats] = useState<Array<{
+    id: string;
+    chatId: string;
+    userId: string;
+    title: string;
+    createdAt: string;
+    messages: Array<{role: string, content: string}>;
+  }>>([]);
+  const [currentChatId, setCurrentChatId] = useState('default-chat');
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Load chat history
+  const loadChats = useCallback(async () => {
+    try {
+      if (user && userToken) {
+        console.log('🔄 Loading Chats for User:', user.uid);
+        const data = await apiService.loadChats(user.uid, userToken);
+        
+        // Sort chats by creation time (newest first)
+        const sortedChats = data.sort((a, b) => 
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
+
+        setChats(sortedChats);
+        console.log('✅ Chats Loaded:', sortedChats.length);
+      }
+    } catch (error) {
+      console.error('❌ Error Loading Chats:', error);
+    }
+  }, [user, userToken]);
+
+  // Create a new chat
+  const createNewChat = useCallback(async () => {
+    try {
+      const chatId = `chat-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+      console.log('🆕 Creating New Chat:', chatId);
+      
+      setCurrentChatId(chatId);
+      setMessages([]);
+      
+      await loadChats();
+      return chatId;
+    } catch (error) {
+      console.error('❌ Error Creating Chat:', error);
+      return 'default-chat';
+    }
+  }, [loadChats]);
+
+  // Load messages for a specific chat
+  const loadChatMessages = useCallback(async (chatId: string) => {
+    try {
+      if (user && userToken) {
+        console.log('📬 Loading Messages for Chat:', chatId);
+        const messages = await apiService.loadChatMessages(user.uid, userToken, chatId);
+        
+        setMessages(messages);
+        setCurrentChatId(chatId);
+        console.log('✅ Messages Loaded:', messages.length);
+      }
+    } catch (error) {
+      console.error('❌ Error Loading Chat Messages:', error);
+    }
+  }, [user, userToken]);
+
+  // Reset chat state
+  const resetChatState = useCallback(() => {
+    console.log('🔄 Resetting Chat State');
+    setMessages([]);
+    setCurrentChatId('default-chat');
+    setChats([]);
+  }, []);
+
+  // Initial chat load effect
+  useEffect(() => {
+    if (user && userToken) {
+      loadChats();
+    }
+  }, [user, userToken, loadChats]);
+
+  return {
+    messages,
+    chats,
+    currentChatId,
+    isLoading,
+    loadChats,
+    createNewChat,
+    loadChatMessages,
+    resetChatState,
+    setMessages,
+    setChats,
+    setCurrentChatId,
+    setIsLoading
+  };
+}
