@@ -73,6 +73,7 @@ export default function DiaryPage() {
   const [isProfileSidebarOpen, setIsProfileSidebarOpen] = useState(false);
   const [isGraphViewOpen, setIsGraphViewOpen] = useState(false);
   const [isGraphModalOpen, setIsGraphModalOpen] = useState(false);
+  const [isCalendarVisible, setIsCalendarVisible] = useState(true);
   const [toast, setToast] = useState<{
     message: string;
     type?: 'success' | 'error' | 'warning';
@@ -195,7 +196,7 @@ export default function DiaryPage() {
 
   return (
     <main>
-      <CalendarCard />
+      {isCalendarVisible && <CalendarCard />}
       {/* Graph Error Toast */}
       {graphError && (
         <Toast 
@@ -285,6 +286,22 @@ export default function DiaryPage() {
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6a7.5 7.5 0 107.5 7.5h-7.5V6z" />
                 <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 10.5H21A7.5 7.5 0 0013.5 3v7.5z" />
+              </svg>
+            </button>
+            <button 
+              onClick={() => setIsCalendarVisible(!isCalendarVisible)}
+              className={`p-2 rounded-lg shadow-md transition-all duration-300 ${
+                isCalendarVisible 
+                  ? 'bg-primary text-white hover:bg-primary/90 border-2 border-white' 
+                  : 'bg-white hover:bg-gray-100 border-2 border-transparent'
+              }`}
+              aria-label={isCalendarVisible ? "Hide calendar" : "Show calendar"}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" className="w-6 h-6">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                <line x1="16" y1="2" x2="16" y2="6" />
+                <line x1="8" y1="2" x2="8" y2="6" />
+                <line x1="3" y1="10" x2="21" y2="10" />
               </svg>
             </button>
           </div>
