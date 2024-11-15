@@ -8,6 +8,7 @@ export default function CalendarCard() {
   const [currentDate, setCurrentDate] = useState<string>('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [todaysMood, setTodaysMood] = useState<string | null>(null);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     const updateDateTime = () => {
@@ -40,8 +41,14 @@ export default function CalendarCard() {
     // TODO: Send to server
   };
 
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return null;
+
   return (
-    <div className="calendar-card" onClick={() => !todaysMood && setIsModalOpen(true)}>
+    <div className="fixed top-4 right-4 z-50 calendar-card" onClick={() => !todaysMood && setIsModalOpen(true)}>
       <div className="calendar-icon">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" className="w-8 h-8">
           <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />

@@ -8,50 +8,36 @@ export default function MoodModal({ isOpen, onClose, onMoodSelect }: MoodModalPr
   if (!isOpen) return null;
 
   return (
-    <div className="mood-modal-overlay" onClick={onClose}>
-      <div className="mood-modal" onClick={e => e.stopPropagation()}>
-        <h2>How are you feeling today?</h2>
-        <div className="mood-options">
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[100]" onClick={onClose}>
+      <div className="bg-white rounded-2xl p-8 max-w-md w-full mx-4 shadow-2xl transform transition-all" onClick={e => e.stopPropagation()}>
+        <h2 className="text-2xl font-semibold text-center mb-4 text-gray-800">How are you feeling today?</h2>
+        <p className="text-center text-gray-600 mb-6">Select the emoji that best matches your current mood</p>
+        <div className="grid grid-cols-3 gap-6">
           <button 
-            className="mood-button" 
+            className="mood-button bg-green-50 hover:bg-green-100" 
             onClick={() => onMoodSelect('happy')}
             aria-label="Happy"
           >
-            <svg viewBox="0 0 24 24" className="mood-svg happy">
-              <circle cx="12" cy="12" r="10" />
-              <path d="M8 14s1.5 2 4 2 4-2 4-2" />
-              <circle cx="9" cy="9" r="1.5" />
-              <circle cx="15" cy="9" r="1.5" />
-            </svg>
-            <span>Happy</span>
+            <span className="text-4xl mb-2">😊</span>
+            <span className="text-green-700">Happy</span>
           </button>
           
           <button 
-            className="mood-button" 
+            className="mood-button bg-yellow-50 hover:bg-yellow-100" 
             onClick={() => onMoodSelect('neutral')}
             aria-label="Neutral"
           >
-            <svg viewBox="0 0 24 24" className="mood-svg neutral">
-              <circle cx="12" cy="12" r="10" />
-              <line x1="8" y1="14" x2="16" y2="14" />
-              <circle cx="9" cy="9" r="1.5" />
-              <circle cx="15" cy="9" r="1.5" />
-            </svg>
-            <span>Neutral</span>
+            <span className="text-4xl mb-2">😐</span>
+            <span className="text-yellow-700">Neutral</span>
           </button>
           
           <button 
-            className="mood-button" 
+            className="mood-button bg-red-50 hover:bg-red-100" 
             onClick={() => onMoodSelect('sad')}
             aria-label="Sad"
           >
-            <svg viewBox="0 0 24 24" className="mood-svg sad">
-              <circle cx="12" cy="12" r="10" />
-              <path d="M16 16s-1.5-2-4-2-4 2-4 2" />
-              <circle cx="9" cy="9" r="1.5" />
-              <circle cx="15" cy="9" r="1.5" />
-            </svg>
-            <span>Sad</span>
+            <span className="text-4xl mb-2">😢</span>
+            <span className="text-red-700">Sad</span>
           </button>
         </div>
       </div>
