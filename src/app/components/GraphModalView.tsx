@@ -112,7 +112,7 @@ export default function GraphModalView({ graphData }: GraphModalViewProps) {
           const nodeColor = 
             node.gender === 'male' ? 'rgba(66, 153, 225, 0.8)' :     // Soft Blue
             node.gender === 'female' ? 'rgba(255, 20, 147, 0.8)' :   // Deep Pink
-            node.gender === 'unknown' ? 'rgba(160, 174, 192, 0.8)' : // Soft Gray
+            node.gender === 'unknown' ? 'rgba(203, 166, 247, 0.7)' : // Soft Lavender
             'rgba(104, 211, 145, 0.8)';                               // Soft Green
 
           // Draw node with solid color and subtle shadow
@@ -120,7 +120,7 @@ export default function GraphModalView({ graphData }: GraphModalViewProps) {
           ctx.shadowBlur = 6;
           ctx.fillStyle = nodeColor;
           ctx.beginPath();
-          ctx.arc(node.x, node.y, 15, 0, 2 * Math.PI, false);  // Increased node size
+          ctx.arc(node.x, node.y, 25, 0, 2 * Math.PI, false);  // Increased clickable node size
           ctx.fill();
           ctx.shadowBlur = 0;
 
