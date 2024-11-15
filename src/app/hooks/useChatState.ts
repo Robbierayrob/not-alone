@@ -42,7 +42,20 @@ export function useChatState(user: ExtendedUser | null, userToken: string | null
         const data = await apiService.loadChats(user.uid, userToken);
         
         // Sort chats by creation time (newest first)
-        const sortedChats = data.sort((a, b) => 
+        const transformedChats: ChatEntry[] = data.map(chat => ({
+          id: chat.id || chat.chatId,
+          chatId: chat.chatId,
+          userId: chat.userId,
+          title: chat.title || `Chat from ${new Date(chat.createdAt).toLocaleDateString()}`,
+          createdAt: chat.createdAt,
+          messages: chat.messages.map(msg => ({
+            role: msg.role,
+            content: msg.content,
+            timestamp: msg.timestamp
+          }))
+        }));
+
+        const sortedChats = transformedChats.sort((a, b) => 
           new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
         );
 
