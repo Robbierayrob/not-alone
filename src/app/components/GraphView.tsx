@@ -226,7 +226,7 @@ export default function GraphView({ graphData, isModal, isSidebar }: GraphViewPr
 
             // Larger hit detection area
             const nodeRadius = 35;  // Increased hit detection radius
-            const visualRadius = 25;  // Smaller visual radius
+            const visualRadius = 15;  // Even smaller visual radius
 
             // Draw node with solid color and subtle shadow
             ctx.shadowColor = 'rgba(0, 0, 0, 0.2)';

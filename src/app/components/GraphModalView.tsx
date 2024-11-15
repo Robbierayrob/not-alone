@@ -120,7 +120,7 @@ export default function GraphModalView({ graphData }: GraphModalViewProps) {
           ctx.shadowBlur = 6;
           ctx.fillStyle = nodeColor;
           ctx.beginPath();
-          ctx.arc(node.x, node.y, 25, 0, 2 * Math.PI, false);  // Increased clickable node size
+          ctx.arc(node.x, node.y, 15, 0, 2 * Math.PI, false);  // Smaller visual node size
           ctx.fill();
           ctx.shadowBlur = 0;
 
