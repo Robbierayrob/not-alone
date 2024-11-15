@@ -46,7 +46,7 @@ export function useChatState(user: ExtendedUser | null, userToken: string | null
           id: chat.id || chat.chatId,
           chatId: chat.chatId,
           userId: chat.userId,
-          title: chat.title || `Chat from ${new Date(chat.createdAt).toLocaleDateString()}`,
+          title: (chat as any).title || `Chat from ${new Date(chat.createdAt).toLocaleDateString()}`,
           createdAt: chat.createdAt,
           messages: chat.messages.map(msg => ({
             role: msg.role,
