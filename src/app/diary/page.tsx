@@ -29,8 +29,18 @@ export default function DiaryPage() {
     user, 
     userToken, 
     isAuthModalOpen, 
-    setIsAuthModalOpen 
+    setIsAuthModalOpen,
+    getCurrentUserToken  // Destructure the new method
   } = useAuthState();
+
+  // Dynamic token retrieval method
+  const getAuthToken = async () => {
+    // Prioritize userToken from hook
+    if (userToken) return userToken;
+    
+    // Fallback to getting token directly
+    return await getCurrentUserToken() || '';
+  };
 
   const { 
     messages, 
@@ -103,9 +113,10 @@ export default function DiaryPage() {
 
     const sendMessageWithRetry = async (message: string, retries = 3) => {
       try {
+        const authToken = await getAuthToken();
         const result = await apiService.sendMessage(
           message, 
-          user?.accessToken || '', 
+          authToken, 
           currentChatId !== 'default-chat' ? currentChatId : undefined
         );
         

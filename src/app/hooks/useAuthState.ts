@@ -12,6 +12,20 @@ export function useAuthState() {
   const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
 
+  // Method to get the current user's ID token
+  const getCurrentUserToken = useCallback(async () => {
+    try {
+      if (user) {
+        const token = await user.getIdToken();
+        return token;
+      }
+      return null;
+    } catch (error) {
+      console.error('Error getting user token:', error);
+      return null;
+    }
+  }, [user]);
+
   // Session timeout configuration (24 hours)
   const SESSION_TIMEOUT = 24 * 60 * 60 * 1000;
 
@@ -85,6 +99,7 @@ export function useAuthState() {
     userToken,
     isAuthModalOpen,
     isLoading,
-    setIsAuthModalOpen
+    setIsAuthModalOpen,
+    getCurrentUserToken  // Add the new method
   };
 }
