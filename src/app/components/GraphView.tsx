@@ -223,9 +223,9 @@ export default function GraphView({ graphData, isModal, isSidebar }: GraphViewPr
               node.gender === 'unknown' ? 'rgba(203, 166, 247, 0.7)' : // Soft Lavender
               'rgba(104, 211, 145, 0.8)';                               // Soft Green
 
-            // Larger hit detection area
-            const nodeRadius = 100;  // Increased hit detection radius
-            const visualRadius = 15;  // Even smaller visual radius
+            // Larger hit detection area matching visual circle
+            const nodeRadius = 20;  // Hit detection radius matches visual radius
+            const visualRadius = 15;  // Visual node radius
 
             // Draw node with solid color and subtle shadow
             ctx.shadowColor = 'rgba(0, 0, 0, 0.2)';
@@ -236,8 +236,8 @@ export default function GraphView({ graphData, isModal, isSidebar }: GraphViewPr
             ctx.fill();
             ctx.shadowBlur = 0;
 
-            // Attach larger hit detection metadata
-            node.nodeRadius = nodeRadius;
+            // Attach hit detection metadata matching visual circle
+            node.__clickRadius = nodeRadius;
 
             // Add a subtle border
             ctx.strokeStyle = 'rgba(0, 0, 0, 0.1)';
