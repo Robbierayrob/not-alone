@@ -25,20 +25,13 @@ export default function CalendarCard() {
     updateDateTime();
     const interval = setInterval(updateDateTime, 1000);
     
-    // Load today's mood from localStorage
-    const today = new Date().toISOString().split('T')[0];
-    const savedMood = localStorage.getItem(`mood_${today}`);
-    if (savedMood) setTodaysMood(savedMood);
-
     return () => clearInterval(interval);
   }, []);
 
-  const handleMoodSelect = (mood: string) => {
-    const today = new Date().toISOString().split('T')[0];
-    localStorage.setItem(`mood_${today}`, mood);
+  const handleMoodSelect = async (mood: string) => {
     setTodaysMood(mood);
     setIsModalOpen(false);
-    // TODO: Send to server
+    // TODO: Implement Firebase upload here
   };
 
   useEffect(() => {
@@ -48,7 +41,7 @@ export default function CalendarCard() {
   if (!mounted) return null;
 
   return (
-    <div className="fixed top-4 right-4 z-50 calendar-card" onClick={() => !todaysMood && setIsModalOpen(true)}>
+    <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50 calendar-card" onClick={() => !todaysMood && setIsModalOpen(true)}>
       <div className="calendar-icon">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" className="w-8 h-8">
           <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
