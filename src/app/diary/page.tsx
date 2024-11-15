@@ -35,11 +35,7 @@ export default function DiaryPage() {
 
   // Dynamic token retrieval method
   const getAuthToken = async () => {
-    // Prioritize userToken from hook
-    if (userToken) return userToken;
-    
-    // Fallback to getting token directly
-    return await getCurrentUserToken() || '';
+    return userToken || await getCurrentUserToken() || '';
   };
 
   const { 
