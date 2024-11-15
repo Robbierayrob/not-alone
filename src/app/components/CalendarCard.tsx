@@ -41,7 +41,7 @@ export default function CalendarCard() {
   if (!mounted) return null;
 
   return (
-    <div className="calendar-card z-50" onClick={() => setIsModalOpen(true)}>
+    <div className="calendar-card z-50 fixed" onClick={() => setIsModalOpen(true)}>
       <div className="calendar-icon">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" className="w-8 h-8">
           <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
