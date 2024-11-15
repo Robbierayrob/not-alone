@@ -6,6 +6,7 @@ import SuggestionCards from './SuggestionCards';
 import ReactMarkdown from 'react-markdown';
 import ProfileSettingsModal from './ProfileSettingsModal';
 import SupportModal from './SupportModal';
+import ProfileTagSuggestions from './ProfileTagSuggestions';
 
 interface ChatBoxProps {
   messages: Array<{role: string, content: string, isTyping?: boolean}>;
@@ -17,6 +18,17 @@ interface ChatBoxProps {
   isProfileSidebarOpen: boolean;
   isGraphViewOpen: boolean;
   onSuggestionClick: (text: string) => void;
+  profiles: Array<{
+    id: string;
+    name: string;
+    details?: {
+      occupation: string;
+      interests: string[];
+      personality: string;
+      background: string;
+      emotionalState: string;
+    };
+  }>;
 }
 
 export default function ChatBox({ 
@@ -28,10 +40,13 @@ export default function ChatBox({
   isSidebarOpen,
   isProfileSidebarOpen,
   isGraphViewOpen,
-  onSuggestionClick
+  onSuggestionClick,
+  profiles
 }: ChatBoxProps) {
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [isSupportModalOpen, setIsSupportModalOpen] = useState(false);
+  const [tagSuggestionTerm, setTagSuggestionTerm] = useState('');
+  const [cursorPosition, setCursorPosition] = useState(0);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
   const lastMessageRef = useRef<HTMLDivElement>(null);
   const secondLastMessageRef = useRef<HTMLDivElement>(null);
@@ -154,13 +169,38 @@ export default function ChatBox({
                 </svg>
               </button>
             </div>
-            <input
-              type="text"
-              value={input}
-              onChange={(e) => onInputChange(e.target.value)}
-              placeholder="Examine your relationships..."
-              className="flex-1 p-4 md:p-5 pr-14 rounded-lg border border-gray-200 focus:border-primary focus:ring-2 focus:ring-pink-200 outline-none shadow-sm hover:shadow-md transition-all duration-300 text-base"
-            />
+            <div className="relative w-full">
+              <input
+                type="text"
+                value={input}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  onInputChange(value);
+                  
+                  // Check for @ tag
+                  const atIndex = value.lastIndexOf('@');
+                  if (atIndex !== -1) {
+                    setTagSuggestionTerm(value.slice(atIndex));
+                  } else {
+                    setTagSuggestionTerm('');
+                  }
+                  
+                  setCursorPosition(e.target.selectionStart || 0);
+                }}
+                placeholder="Examine your relationships..."
+                className="flex-1 p-4 md:p-5 pr-14 rounded-lg border border-gray-200 focus:border-primary focus:ring-2 focus:ring-pink-200 outline-none shadow-sm hover:shadow-md transition-all duration-300 text-base w-full"
+              />
+              <ProfileTagSuggestions
+                profiles={profiles}
+                searchTerm={tagSuggestionTerm}
+                onSelect={(selectedName) => {
+                  const beforeAt = input.slice(0, input.lastIndexOf('@'));
+                  const newInput = `${beforeAt}@${selectedName} `;
+                  onInputChange(newInput);
+                  setTagSuggestionTerm('');
+                }}
+              />
+            </div>
             <button
               type="submit"
               disabled={isLoading}
