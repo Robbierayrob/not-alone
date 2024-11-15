@@ -50,7 +50,7 @@ export default function MoodModal({ isOpen, onClose, onMoodSelect }: MoodModalPr
             onClick={() => onMoodSelect('happy')}
             aria-label="Happy"
           >
-            <span className="text-4xl mb-2">😊</span>
+            <span className="text-6xl mb-4">😊</span>
             <span className="text-green-700">Happy</span>
           </button>
           
@@ -59,7 +59,7 @@ export default function MoodModal({ isOpen, onClose, onMoodSelect }: MoodModalPr
             onClick={() => onMoodSelect('neutral')}
             aria-label="Neutral"
           >
-            <span className="text-4xl mb-2">😐</span>
+            <span className="text-6xl mb-4">😐</span>
             <span className="text-yellow-700">Neutral</span>
           </button>
           
@@ -68,7 +68,7 @@ export default function MoodModal({ isOpen, onClose, onMoodSelect }: MoodModalPr
             onClick={() => onMoodSelect('sad')}
             aria-label="Sad"
           >
-            <span className="text-4xl mb-2">😢</span>
+            <span className="text-6xl mb-4">😢</span>
             <span className="text-red-700">Sad</span>
           </button>
 
@@ -77,7 +77,7 @@ export default function MoodModal({ isOpen, onClose, onMoodSelect }: MoodModalPr
             onClick={() => onMoodSelect('none')}
             aria-label="Clear mood"
           >
-            <span className="text-4xl mb-2">❌</span>
+            <span className="text-6xl mb-4">❌</span>
             <span className="text-gray-700">Clear</span>
           </button>
         </div>
