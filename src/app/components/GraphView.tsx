@@ -187,14 +187,14 @@ export default function GraphView({ graphData, isModal, isSidebar }: GraphViewPr
               d3.force('link')
                 .distance((link: { value: number; }) => {
                   // You can customize this based on your link properties
-                  return link.value ? link.value * 200 : 200; // Base distance of 400px
+                  return link.value ? link.value * 300 : 400; // Increased base distance
                 })
-                .strength(0.5); // Adjust strength of the link force (0-1)
+                .strength(0.3); // Reduced link force strength
 
               // Add repulsive force between nodes
               d3.force('charge')
-                .strength(-2000)
-                .distanceMax(1000);
+                .strength(-1000)  // Reduced repulsive strength
+                .distanceMax(1500);  // Increased max distance
               return d3;
             },
             d3ForceLink: (link: any) => Math.max(link.value * 3, 300), // Minimum 300px distance
@@ -216,7 +216,7 @@ export default function GraphView({ graphData, isModal, isSidebar }: GraphViewPr
             const fontSize = 16/globalScale;
             const summaryFontSize = 12/globalScale;
             ctx.font = `${fontSize}px 'IBM Plex Sans', Sans-Serif`;
-            
+          
             // Enhanced color selection with more vibrant and consistent palette
             const nodeColor = 
               node.gender === 'male' ? 'rgba(66, 153, 225, 0.8)' :     // Soft Blue
@@ -224,14 +224,21 @@ export default function GraphView({ graphData, isModal, isSidebar }: GraphViewPr
               node.gender === 'unknown' ? 'rgba(203, 166, 247, 0.7)' : // Soft Lavender
               'rgba(104, 211, 145, 0.8)';                               // Soft Green
 
+            // Larger hit detection area
+            const nodeRadius = 35;  // Increased hit detection radius
+            const visualRadius = 25;  // Smaller visual radius
+
             // Draw node with solid color and subtle shadow
             ctx.shadowColor = 'rgba(0, 0, 0, 0.2)';
             ctx.shadowBlur = 6;
             ctx.fillStyle = nodeColor;
             ctx.beginPath();
-            ctx.arc(node.x, node.y, 25, 0, 2 * Math.PI, false);  // Increased clickable node size
+            ctx.arc(node.x, node.y, visualRadius, 0, 2 * Math.PI, false);  // Visual node size
             ctx.fill();
             ctx.shadowBlur = 0;
+
+            // Attach larger hit detection metadata
+            node.nodeRadius = nodeRadius;
 
             // Add a subtle border
             ctx.strokeStyle = 'rgba(0, 0, 0, 0.1)';
