@@ -244,24 +244,12 @@ export default function GraphView({ graphData, isModal, isSidebar }: GraphViewPr
             ctx.lineWidth = 1;
             ctx.stroke();
 
-            // Name Label with enhanced background
+            // Name Label inside node
             ctx.font = `bold ${fontSize}px 'IBM Plex Sans', Sans-Serif`;
-            const textWidth = ctx.measureText(label).width;
-            ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';  // Dark background
-            ctx.beginPath();
-            ctx.roundRect(
-              node.x - textWidth/2 - 6, 
-              node.y + 15, 
-              textWidth + 12, 
-              fontSize + 8, 
-              4  // Border radius
-            );
-            ctx.fill();
-              
             ctx.fillStyle = 'white';  // White text
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            ctx.fillText(label, node.x, node.y + 20);
+            ctx.fillText(label, node.x, node.y);
           }}
           linkCanvasObject={(link: any, ctx: CanvasRenderingContext2D, globalScale: number) => {
             const start = link.source;
