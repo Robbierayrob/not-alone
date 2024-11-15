@@ -10,6 +10,7 @@ import ChatHistorySidebar from '../components/ChatHistorySidebar';
 import ProfileSidebar from '../components/ProfileSidebar';
 import ChatBox from '../components/ChatBox';
 import AuthModal from '../components/AuthModal';
+import CalendarCard from '../components/CalendarCard';
 
 // New hook imports
 import { useAuthState } from '../hooks/useAuthState';
@@ -187,6 +188,7 @@ export default function DiaryPage() {
 
   return (
     <main>
+      <CalendarCard />
       {/* Graph Error Toast */}
       {graphError && (
         <Toast 
