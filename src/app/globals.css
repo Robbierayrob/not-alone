@@ -406,9 +406,13 @@ body {
 /* Calendar Card Styles */
 .calendar-card {
   @apply flex items-center gap-4 p-4 bg-white rounded-xl shadow-lg cursor-pointer 
-         transition-all duration-300 hover:shadow-xl max-w-[300px];
+         transition-all duration-300 hover:shadow-xl max-w-[300px] mx-auto;
   animation: slideDown 0.5s ease-out;
   transform: translateY(0);
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
 }
 
 .calendar-card:hover {
