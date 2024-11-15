@@ -369,8 +369,7 @@ export default function DiaryPage() {
                 // Simply populate the input without sending
                 setInput(text);
                 setShowSuggestions(false);
-              }}
-            />
+              } } profiles={[]}            />
           </div>
   
           <GraphSidebar isOpen={isGraphViewOpen} graphData={graphData} />
