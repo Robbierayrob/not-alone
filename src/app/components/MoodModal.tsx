@@ -24,7 +24,7 @@ export default function MoodModal({ isOpen, onClose, onMoodSelect }: MoodModalPr
       <div className="bg-white rounded-2xl p-8 max-w-md w-full mx-4 shadow-2xl transform transition-all" onClick={e => e.stopPropagation()}>
         <h2 className="text-2xl font-semibold text-center mb-4 text-gray-800">How are you feeling today?</h2>
         <p className="text-center text-gray-600 mb-6">Select the emoji that best matches your current mood</p>
-        <div className="grid grid-cols-3 gap-6">
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
           <button 
             className="mood-button bg-green-50 hover:bg-green-100" 
             onClick={() => onMoodSelect('happy')}
@@ -50,6 +50,15 @@ export default function MoodModal({ isOpen, onClose, onMoodSelect }: MoodModalPr
           >
             <span className="text-4xl mb-2">😢</span>
             <span className="text-red-700">Sad</span>
+          </button>
+
+          <button 
+            className="mood-button bg-gray-50 hover:bg-gray-100" 
+            onClick={() => onMoodSelect('none')}
+            aria-label="Clear mood"
+          >
+            <span className="text-4xl mb-2">❌</span>
+            <span className="text-gray-700">Clear</span>
           </button>
         </div>
       </div>
