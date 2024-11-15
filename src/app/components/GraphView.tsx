@@ -186,15 +186,15 @@ export default function GraphView({ graphData, isModal, isSidebar }: GraphViewPr
               // Configure link force with custom distance
               d3.force('link')
                 .distance((link: { value: number; }) => {
-                  // You can customize this based on your link properties
-                  return link.value ? link.value * 300 : 400; // Increased base distance
+                  // Significantly increased base distance
+                  return link.value ? link.value * 500 : 800; // Much larger base distance
                 })
-                .strength(0.3); // Reduced link force strength
+                .strength(0.2); // Further reduced link force strength
 
               // Add repulsive force between nodes
               d3.force('charge')
-                .strength(-1000)  // Reduced repulsive strength
-                .distanceMax(1500);  // Increased max distance
+                .strength(-1500)  // Increased repulsive strength
+                .distanceMax(2000);  // Increased max distance even further
               return d3;
             },
             d3ForceLink: (link: any) => Math.max(link.value * 3, 300), // Minimum 300px distance
