@@ -143,7 +143,7 @@ export default function GraphView({ graphData, isModal, isSidebar }: GraphViewPr
     width: dimensions.width,
     height: dimensions.height,
     backgroundColor: "#ffffff",
-    zoom: isSidebar ? 0.8 : 1,
+    zoom: isSidebar ? 0.8 : 12,
     centerAt: isSidebar ? undefined : { x: 0, y: 0 }
   };
 
@@ -225,7 +225,7 @@ export default function GraphView({ graphData, isModal, isSidebar }: GraphViewPr
               'rgba(104, 211, 145, 0.8)';                               // Soft Green
 
             // Larger hit detection area
-            const nodeRadius = 35;  // Increased hit detection radius
+            const nodeRadius = 100;  // Increased hit detection radius
             const visualRadius = 15;  // Even smaller visual radius
 
             // Draw node with solid color and subtle shadow
