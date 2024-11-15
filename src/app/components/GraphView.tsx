@@ -214,7 +214,6 @@ export default function GraphView({ graphData, isModal, isSidebar }: GraphViewPr
           nodeCanvasObject={(node: any, ctx: CanvasRenderingContext2D, globalScale: number) => {
             const label = node.name || 'Unnamed';
             const fontSize = 16/globalScale;
-            const summaryFontSize = 12/globalScale;
             ctx.font = `${fontSize}px 'IBM Plex Sans', Sans-Serif`;
           
             // Enhanced color selection with more vibrant and consistent palette
@@ -248,7 +247,7 @@ export default function GraphView({ graphData, isModal, isSidebar }: GraphViewPr
             // Name Label with enhanced background
             ctx.font = `bold ${fontSize}px 'IBM Plex Sans', Sans-Serif`;
             const textWidth = ctx.measureText(label).width;
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
+            ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';  // Dark background
             ctx.beginPath();
             ctx.roundRect(
               node.x - textWidth/2 - 6, 
@@ -258,36 +257,11 @@ export default function GraphView({ graphData, isModal, isSidebar }: GraphViewPr
               4  // Border radius
             );
             ctx.fill();
-            
-            ctx.fillStyle = '#000';
+              
+            ctx.fillStyle = 'white';  // White text
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
             ctx.fillText(label, node.x, node.y + 20);
-
-            // Summary with improved readability
-            if (node.summary) {
-              ctx.font = `${summaryFontSize}px 'IBM Plex Sans', Sans-Serif`;
-              const summaryText = node.summary.length > 30 
-                ? node.summary.substring(0, 30) + '...' 
-                : node.summary;
-              
-              ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-              const summaryWidth = ctx.measureText(summaryText).width;
-              
-              ctx.beginPath();
-              ctx.roundRect(
-                node.x - summaryWidth/2 - 4, 
-                node.y + 40, 
-                summaryWidth + 8, 
-                summaryFontSize + 6, 
-                3  // Border radius
-              );
-              ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-              ctx.fill();
-              
-              ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
-              ctx.fillText(summaryText, node.x, node.y + 45);
-            }
           }}
           linkCanvasObject={(link: any, ctx: CanvasRenderingContext2D, globalScale: number) => {
             const start = link.source;
