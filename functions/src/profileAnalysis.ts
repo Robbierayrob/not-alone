@@ -56,15 +56,38 @@ export const analyzeProfileFromChat = onCall(async (request: unknown, context?: 
   }
 
   try {
+    // First, try to get existing profile data
+    const profileHistoryRef = firestore.collection('profile_histories').doc(userId);
+    const profileDoc = await profileHistoryRef.get();
+    
+    let existingProfile = null;
+    if (profileDoc.exists) {
+      existingProfile = profileDoc.data();
+      console.log('📄 Found existing profile:', { 
+        nodesCount: existingProfile.nodes?.length || 0,
+        linksCount: existingProfile.links?.length || 0 
+      });
+    } else {
+      console.log('📄 No existing profile found, will create new one');
+    }
+
     // Prepare user messages for analysis
     const userMessages = messages
       .filter(msg => msg.role === 'user')
       .map(msg => msg.content)
       .join('\n\n');
 
+    // Prepare the context for the prompt
+    const contextSection = existingProfile ? `
+      Existing Profile Data (Please update this with new information):
+      ${JSON.stringify(existingProfile, null, 2)}
+      
+      New Conversation to Analyze:
+    ` : 'Please create a new profile based on this conversation:';
+
     // Prompt for structured profile analysis
     const prompt = `
-      Analyze the following conversation and extract a detailed profile and relationship graph:
+      ${contextSection}
 
       Conversation:
       ${userMessages}
@@ -113,7 +136,10 @@ export const analyzeProfileFromChat = onCall(async (request: unknown, context?: 
       }
 
       Instructions:
-      - Use the conversation to infer details
+      - If existing profile data is provided, update it with any new information from the conversation
+      - Preserve existing information that isn't contradicted by new information
+      - Add new nodes and links as discovered
+      - Update existing nodes and links if new details emerge
       - Be concise but informative
       - If information is uncertain, use reasonable assumptions
       - Ensure all fields are populated
