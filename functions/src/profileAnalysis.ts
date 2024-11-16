@@ -57,15 +57,15 @@ export const analyzeProfileFromChat = onCall(async (request: unknown, context?: 
 
   try {
     // First, try to get existing profile data
-    const profileHistoryRef = firestore.collection('profile_histories').doc(userId);
-    const profileDoc = await profileHistoryRef.get();
+    const existingProfileRef = firestore.collection('profile_histories').doc(userId);
+    const profileDoc = await existingProfileRef.get();
     
-    let existingProfile = null;
+    let existingProfile: any = null;
     if (profileDoc.exists) {
       existingProfile = profileDoc.data();
       console.log('📄 Found existing profile:', { 
-        nodesCount: existingProfile.nodes?.length || 0,
-        linksCount: existingProfile.links?.length || 0 
+        nodesCount: existingProfile?.nodes?.length || 0,
+        linksCount: existingProfile?.links?.length || 0 
       });
     } else {
       console.log('📄 No existing profile found, will create new one');
@@ -169,11 +169,11 @@ export const analyzeProfileFromChat = onCall(async (request: unknown, context?: 
     const profileAnalysis = JSON.parse(jsonMatch[1]);
 
     // Save profile analysis directly to Firestore
-    const profileHistoryRef = firestore
+    const updatedProfileRef = firestore
       .collection('profile_histories')
       .doc(userId);
 
-    await profileHistoryRef.set({
+    await updatedProfileRef.set({
       ...profileAnalysis,
       metadata: {
         sourceType: 'chat_analysis',
