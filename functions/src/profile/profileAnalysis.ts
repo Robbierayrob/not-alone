@@ -7,12 +7,13 @@ import { VertexAI } from '@google-cloud/vertexai';
 if (admin.apps.length === 0) {
   admin.initializeApp();
   
-  // Connect to local Firestore emulator
-  console.log('Connecting to Firestore Emulator: localhost:8080');
-  admin.firestore().settings({
-    host: 'localhost:8080',
-    ssl: false
-  });
+  if (process.env.FUNCTIONS_EMULATOR) { // Check if running in emulator
+    console.log('Connecting to Firestore Emulator: localhost:8080');
+    admin.firestore().settings({
+      host: 'localhost:8080',
+      ssl: false
+    });
+  }
 }
 
 const firestore = admin.firestore();
