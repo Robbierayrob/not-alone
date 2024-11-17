@@ -28,16 +28,6 @@ export default function Navigation() {
             >
               Diary
             </Link>
-            <Link 
-              href="/about"
-              className={`${
-                pathname === "/about" 
-                  ? "text-primary/90" 
-                  : "text-gray-600 hover:text-gray-900"
-              } transition-colors text-sm font-light`}
-            >
-              About
-            </Link>
           </div>
         </div>
       </div>
