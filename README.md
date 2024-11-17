@@ -25,6 +25,22 @@ firebase init emulators
 ```
 Select Auth, Firestore, and Functions emulators when prompted.
 
+### Install node modules
+
+1. Install the dependencies in root directory:
+```bash
+npm install
+```
+
+2. cd into the functions directory:
+```bash
+cd functions
+```
+
+3. Install the dependencies in functions directory:
+```bash
+npm install
+``` 
 ### Build the project
 
 1. Cd Into the functions directory:
@@ -38,13 +54,17 @@ npm run build
 ```
 
 ### Running the Application
+1. cd into the root directory:
+```bash
+cd ..
+```     
 
-1. Start the Next.js development server in the root directory:
+2. Start the Next.js development server in the root directory:
 ```bash
 npm run dev
 ```
 
-2. In a separate terminal, start the Firebase emulators:
+2. In a separate GIT terminal, start the Firebase emulators:
 ```bash
 cd functions
 firebase emulators:start
@@ -53,6 +73,11 @@ firebase emulators:start
 3. Open [http://localhost:3000](http://localhost:3000) with your browser to see the application running with the local emulators.
 
 The application is configured to work stably with the local Firebase emulators, providing a full development environment for testing all features including authentication, database operations, and cloud functions.
+
+## Troubleshooting and Debugging
+Due To Google Vertex Api limitations, some times you can get a "too many requests" error.
+This issue is not related to the application itself, but to the Google Vertex Api.
+The fix is to use the experiemental build on the website. which is deployed on Firebase and has not rate limites and is way faster.
 
 ## Features
 
