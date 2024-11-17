@@ -1,307 +1,99 @@
 'use client';
 
-import { useState, FormEvent, useRef, useEffect, useCallback } from 'react';
+import { FormEvent, useRef, useEffect, useState } from 'react';
 import { Toast } from '../components/Toast';
 import { useRouter } from 'next/navigation';
-import { onAuthStateChanged } from 'firebase/auth';
-import { auth } from '../firebase/config';
 import { apiService } from '../services/api';
-import DeleteConfirmationModal from '../components/DeleteConfirmationModal';
-import GraphView from '../components/GraphView';
 import GraphSidebar from '../components/GraphSidebar';
 import GraphModal from '../components/GraphModal';
 import ChatHistorySidebar from '../components/ChatHistorySidebar';
 import ProfileSidebar from '../components/ProfileSidebar';
 import ChatBox from '../components/ChatBox';
 import AuthModal from '../components/AuthModal';
+import CalendarCard from '../components/CalendarCard';
+
+// New hook imports
+import { useAuthState } from '../hooks/useAuthState';
+import { useChatState } from '../hooks/useChatState';
+import { useGraphState } from '../hooks/useGraphState';
+import { scrollToBottom, createToast } from '../utils/chatUtils';
 
 
 
 
 export default function DiaryPage() {
   const router = useRouter();
-  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
-  const [user, setUser] = useState<any>(null);
-  const [userToken, setUserToken] = useState<string | null>(null);
-  
-  // Check authentication status and session timeout
+
+  // Use new hooks
+  const { 
+    user, 
+    userToken, 
+    isAuthModalOpen, 
+    setIsAuthModalOpen,
+    getCurrentUserToken  // Destructure the new method
+  } = useAuthState();
+
+  // Dynamic token retrieval method
+  const getAuthToken = async () => {
+    return userToken || await getCurrentUserToken() || '';
+  };
+
+  const { 
+    messages, 
+    chats, 
+    currentChatId, 
+    isLoading, 
+    loadChats, 
+    createNewChat, 
+    loadChatMessages, 
+    resetChatState, 
+    setMessages, 
+    setCurrentChatId,
+    setIsLoading 
+  } = useChatState(user, userToken);
+
+  const { 
+    graphData, 
+    isLoading: graphLoading,
+    error: graphError,
+    refreshGraphData 
+  } = useGraphState(user, userToken, currentChatId);
+
+  // Automatically open graph sidebar when meaningful graph data is loaded
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        // Get the ID token and store it in state
-        const token = await user.getIdToken();
-        setUserToken(token);
-      }
-      if (user) {
-        // Get the user's last activity timestamp from localStorage
-        const lastActivity = localStorage.getItem('lastActivityTime');
-        const currentTime = Date.now();
-        const SESSION_TIMEOUT = 24 * 60 * 60 * 1000; // 24 hours in milliseconds
+    if (graphData && graphData.nodes.length > 0 && !graphError) {
+      setIsGraphViewOpen(true);
+    }
+  }, [graphData, graphError]);
 
-        if (lastActivity && (currentTime - parseInt(lastActivity)) > SESSION_TIMEOUT) {
-          // Session has expired
-          await auth.signOut();
-          await resetChatState();  // Reset chat state on sign out
-          setUser(null);
-          setIsAuthModalOpen(true);
-          localStorage.removeItem('lastActivityTime');
-        } else {
-          // Update last activity time
-          localStorage.setItem('lastActivityTime', currentTime.toString());
-          await resetChatState();  // Reset chat state on sign in
-          setUser(user);
-          setIsAuthModalOpen(false);
-        }
-      } else {
-        await resetChatState();  // Reset chat state when no user
-        setUser(null);
-        setIsAuthModalOpen(true);
-      }
-    });
-
-    // Update activity timestamp on user interaction
-    const updateActivity = () => {
-      if (auth.currentUser) {
-        localStorage.setItem('lastActivityTime', Date.now().toString());
-      }
-    };
-
-    // Add event listeners for user activity
-    window.addEventListener('mousemove', updateActivity);
-    window.addEventListener('keypress', updateActivity);
-    window.addEventListener('click', updateActivity);
-
-    return () => {
-      unsubscribe();
-      window.removeEventListener('mousemove', updateActivity);
-      window.removeEventListener('keypress', updateActivity);
-      window.removeEventListener('click', updateActivity);
-    };
-  }, []);
-
-  // State management
-  const [messages, setMessages] = useState<Array<{role: string, content: string, isTyping?: boolean}>>([]);
+  // State for UI components
   const [showSuggestions, setShowSuggestions] = useState(true);
   const [input, setInput] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [isProfileSidebarOpen, setIsProfileSidebarOpen] = useState(false);
   const [isGraphViewOpen, setIsGraphViewOpen] = useState(false);
   const [isGraphModalOpen, setIsGraphModalOpen] = useState(false);
-  const [graphData, setGraphData] = useState<{
-    nodes: Array<{
-      id: string;
-      name: string;
-      val: number;
-      gender?: string;
-      age?: number;
-      summary?: string;
-      details?: {
-        occupation?: string;
-        interests?: string[];
-        personality?: string;
-        background?: string;
-        emotionalState?: string;
-      };
-    }>;
-    links: Array<{
-      source: string;
-      target: string;
-      value: number;
-      label?: string;
-      details?: {
-        relationshipType?: string;
-        duration?: string;
-        status?: string;
-        sentiment?: string;
-        interactions?: Array<{
-          date?: string;
-          type?: string;
-          description?: string;
-          impact?: string;
-        }>;
-      };
-    }>;
-    metadata?: {
-      lastUpdated?: string;
-      version?: string;
-    };
-  }>({
-    nodes: [],
-    links: [],
-    metadata: {}
-  });
-
-  const [currentChatId, setCurrentChatId] = useState('default-chat');
-  
-  // Load initial graph data and handle graph view state
-  useEffect(() => {
-    const fetchGraphData = async () => {
-      try {
-        if (user && userToken) {
-          console.log('Fetching graph data for:', { 
-            userId: user.uid, 
-            chatId: currentChatId 
-          });
-          
-          const data = await apiService.fetchGraphData(user.uid, userToken, currentChatId);
-          
-          console.log('Raw graph data received:', {
-            nodes: data?.nodes?.length || 0,
-            links: data?.links?.length || 0,
-            metadata: data?.metadata
-          });
-
-          // Ensure data has valid structure before setting
-          const validatedData = {
-            nodes: Array.isArray(data?.nodes) ? data.nodes : [],
-            links: Array.isArray(data?.links) ? data.links : [],
-            metadata: data?.metadata || {}
-          };
-
-          setGraphData(validatedData);
-        }
-      } catch (error) {
-        console.error('Error fetching graph data:', error);
-        // Set empty graph data on error
-        setGraphData({
-          nodes: [],
-          links: [],
-          metadata: {}
-        });
-      }
-    };
-    fetchGraphData();
-  }, [user, userToken, currentChatId]);
-  const [deleteConfirmation, setDeleteConfirmation] = useState<string | null>(null);
+  const [isCalendarVisible, setIsCalendarVisible] = useState(true);
   const [toast, setToast] = useState<{
     message: string;
     type?: 'success' | 'error' | 'warning';
   } | null>(null);
 
-  const showToast = useCallback((message: string, type: 'success' | 'error' | 'warning' = 'success') => {
-    setToast({ message, type });
-    setTimeout(() => setToast(null), 3000);
-  }, []);
-  const [chats, setChats] = useState<Array<{
-    id: string;
-    chatId: string;
-    userId: string;
-    title: string;
-    createdAt: string;
-    messages: Array<{role: string, content: string}>;
-  }>>([]);
-  
   // Refs for scrolling
   const messagesContainerRef = useRef<HTMLDivElement>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
-  // Scroll handling
-  const scrollToBottom = () => {
-    if (messagesContainerRef.current) {
-      messagesContainerRef.current.scrollTop = messagesContainerRef.current.scrollHeight;
-    }
+  // Scroll handling using utility function
+  const handleScrollToBottom = () => {
+    scrollToBottom(messagesContainerRef);
   };
 
-  // Load chat history
-  const loadChats = async () => {
-    try {
-      if (user) {
-        const data = await apiService.loadChats(user.uid, await user.getIdToken());
-        // Sort chats by createdAt timestamp in descending order (newest first)
-        const sortedChats = data.map(chat => ({
-          id: chat.id || chat.chatId,  // Fallback to chatId if id is undefined
-          chatId: chat.chatId,
-          userId: chat.userId,
-          title: chat.messageCount > 0 
-            ? chat.messages[0].content.substring(0, 50) + '...' 
-            : 'New Chat',
-          createdAt: chat.createdAt,
-          messages: chat.messages.map(msg => ({
-            role: msg.role,
-            content: msg.content
-          }))
-        })).sort((a, b) => 
-          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-        );
-        setChats(sortedChats);
-      }
-    } catch (error) {
-      console.error('Error loading chats:', error);
-    }
+  // Toast utility
+  const showToast = (message: string, type: 'success' | 'error' | 'warning' = 'success') => {
+    const toastConfig = createToast(message, type);
+    setToast(toastConfig);
+    setTimeout(() => setToast(null), toastConfig.duration);
   };
-
-  // New method to load messages for a specific chat
-  const loadChatMessages = async (chatId: string) => {
-    try {
-      if (user) {
-        const messages = await apiService.loadChatMessages(user.uid, await user.getIdToken(), chatId);
-        setMessages(messages);
-        setCurrentChatId(chatId);
-      }
-    } catch (error) {
-      console.error('Error loading chat messages:', error);
-    }
-  };
-
-  const deleteChat = async (userId: string, token: string, chatId: string) => {
-    try {
-      const result = await apiService.deleteChat(userId, token, chatId);
-      if (currentChatId === chatId) {
-        setCurrentChatId('default-chat');
-        setMessages([]);
-      }
-      await loadChats();
-    } catch (error) {
-      console.error('Error deleting chat:', error);
-    }
-  };
-
-  const resetChatState = async () => {
-    setMessages([]);
-    setCurrentChatId('default-chat');
-    setChats([]);
-    setShowSuggestions(true);
-    setInput('');
-    setIsLoading(false);
-    setGraphData({ nodes: [], links: [] });
-  };
-
-  const createNewChat = async () => {
-    try {
-      const chatId = `chat-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
-      setCurrentChatId(chatId);
-      setMessages([]);
-      loadChats();
-      return chatId;
-    } catch (error) {
-      console.error('Error creating new chat:', error);
-      return 'default-chat';
-    }
-  };
-
-  // Initial load with user dependency
-  useEffect(() => {
-    const initializeChats = async () => {
-      if (user) {
-        console.log('🔄 Triggering initial chat load', { userId: user.uid });
-        try {
-          await resetChatState();  // Reset state first
-          await loadChats();
-        } catch (error) {
-          console.error('Failed to load chats:', error);
-        }
-      }
-    };
-
-    initializeChats();
-    scrollToBottom();
-  }, [user]);
-
-  // Scroll on new messages
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages]);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -313,11 +105,15 @@ export default function DiaryPage() {
     setInput('');
     setIsLoading(true);
 
+    // Reset graph data to trigger refresh after message
+    refreshGraphData();
+
     const sendMessageWithRetry = async (message: string, retries = 3) => {
       try {
+        const authToken = await getAuthToken();
         const result = await apiService.sendMessage(
           message, 
-          user.accessToken, 
+          authToken, 
           currentChatId !== 'default-chat' ? currentChatId : undefined
         );
         
@@ -356,16 +152,19 @@ export default function DiaryPage() {
 
     try {
       const result = await sendMessageWithRetry(input);
-      
+    
       if (result) {
         setMessages(prev => [...prev, { role: 'assistant', content: result.message }]);
         if (currentChatId === 'default-chat') {
           setCurrentChatId(result.chatId);
         }
-        
-        // Dynamically reload chats to update sidebar
+      
+        // Dynamically reload chats and graph data
         if (user) {
-          await loadChats();
+          await Promise.all([
+            loadChats(),
+            refreshGraphData()
+          ]);
         }
       }
     } finally {
@@ -397,6 +196,16 @@ export default function DiaryPage() {
 
   return (
     <main>
+      {isCalendarVisible && <CalendarCard />}
+      {/* Graph Error Toast */}
+      {graphError && (
+        <Toast 
+          message={`Graph Data Error: ${graphError}`} 
+          type="error" 
+          onClose={() => {}} 
+        />
+      )}
+
       {toast && (
         <Toast 
           message={toast.message} 
@@ -477,6 +286,22 @@ export default function DiaryPage() {
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M10.5 6a7.5 7.5 0 107.5 7.5h-7.5V6z" />
                 <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 10.5H21A7.5 7.5 0 0013.5 3v7.5z" />
+              </svg>
+            </button>
+            <button 
+              onClick={() => setIsCalendarVisible(!isCalendarVisible)}
+              className={`p-2 rounded-lg shadow-md transition-all duration-300 ${
+                isCalendarVisible 
+                  ? 'bg-primary text-white hover:bg-primary/90 border-2 border-white' 
+                  : 'bg-white hover:bg-gray-100 border-2 border-transparent'
+              }`}
+              aria-label={isCalendarVisible ? "Hide calendar" : "Show calendar"}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" className="w-6 h-6">
+                <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                <line x1="16" y1="2" x2="16" y2="6" />
+                <line x1="8" y1="2" x2="8" y2="6" />
+                <line x1="3" y1="10" x2="21" y2="10" />
               </svg>
             </button>
           </div>
@@ -568,8 +393,7 @@ export default function DiaryPage() {
                 // Simply populate the input without sending
                 setInput(text);
                 setShowSuggestions(false);
-              }}
-            />
+              } } profiles={[]}            />
           </div>
   
           <GraphSidebar isOpen={isGraphViewOpen} graphData={graphData} />

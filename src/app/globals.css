@@ -403,6 +403,101 @@ body {
   }
 }
 
+/* Calendar Card Styles */
+.calendar-card {
+  @apply flex items-center gap-4 p-4 bg-white rounded-xl shadow-lg cursor-pointer 
+         transition-all duration-300 hover:shadow-xl max-w-[300px] mx-auto;
+  animation: slideDown 0.5s ease-out;
+  position: fixed;
+  left: 50%;
+  top: 20px;
+  transform: translateX(-50%);
+}
+
+.calendar-card:hover {
+  filter: brightness(1.02);
+}
+
+.calendar-icon {
+  @apply text-primary;
+}
+
+.calendar-info {
+  @apply flex-1;
+}
+
+.calendar-info .time {
+  @apply text-2xl font-semibold text-gray-800;
+}
+
+.calendar-info .date {
+  @apply text-sm text-gray-600;
+}
+
+.selected-mood {
+  @apply text-2xl;
+}
+
+/* Mood Modal Styles */
+.mood-modal-overlay {
+  @apply fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.mood-modal {
+  @apply bg-white rounded-2xl p-6 max-w-md w-full mx-4 shadow-2xl;
+  animation: modalPop 0.3s ease-out;
+}
+
+.mood-modal h2 {
+  @apply text-xl font-semibold text-center mb-6 text-gray-800;
+}
+
+.mood-options {
+  @apply flex justify-around gap-4;
+}
+
+.mood-button {
+  @apply flex flex-col items-center gap-2 p-6 rounded-xl transition-all duration-300
+         focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50
+         transform hover:scale-105;
+}
+
+.mood-svg {
+  @apply w-16 h-16 stroke-2 fill-none transition-all duration-300;
+}
+
+.mood-button:hover .mood-svg {
+  transform: scale(1.1);
+}
+
+.mood-svg.happy {
+  @apply stroke-green-500;
+}
+
+.mood-svg.neutral {
+  @apply stroke-yellow-500;
+}
+
+.mood-svg.sad {
+  @apply stroke-red-500;
+}
+
+.mood-button span {
+  @apply text-sm font-medium text-gray-700;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 /* Graph container scrollbar */
 /* Custom scrollbar styles */
 .graph-container,

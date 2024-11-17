@@ -143,7 +143,7 @@ export default function GraphView({ graphData, isModal, isSidebar }: GraphViewPr
     width: dimensions.width,
     height: dimensions.height,
     backgroundColor: "#ffffff",
-    zoom: isSidebar ? 0.8 : 1,
+    zoom: isSidebar ? 0.8 : 12,
     centerAt: isSidebar ? undefined : { x: 0, y: 0 }
   };
 
@@ -186,15 +186,15 @@ export default function GraphView({ graphData, isModal, isSidebar }: GraphViewPr
               // Configure link force with custom distance
               d3.force('link')
                 .distance((link: { value: number; }) => {
-                  // You can customize this based on your link properties
-                  return link.value ? link.value * 200 : 200; // Base distance of 400px
+                  // Significantly increased base distance
+                  return link.value ? link.value * 500 : 800; // Much larger base distance
                 })
-                .strength(0.5); // Adjust strength of the link force (0-1)
+                .strength(0.2); // Further reduced link force strength
 
               // Add repulsive force between nodes
               d3.force('charge')
-                .strength(-2000)
-                .distanceMax(1000);
+                .strength(-1500)  // Increased repulsive strength
+                .distanceMax(2000);  // Increased max distance even further
               return d3;
             },
             d3ForceLink: (link: any) => Math.max(link.value * 3, 300), // Minimum 300px distance
@@ -214,73 +214,42 @@ export default function GraphView({ graphData, isModal, isSidebar }: GraphViewPr
           nodeCanvasObject={(node: any, ctx: CanvasRenderingContext2D, globalScale: number) => {
             const label = node.name || 'Unnamed';
             const fontSize = 16/globalScale;
-            const summaryFontSize = 12/globalScale;
             ctx.font = `${fontSize}px 'IBM Plex Sans', Sans-Serif`;
-            
+          
             // Enhanced color selection with more vibrant and consistent palette
             const nodeColor = 
               node.gender === 'male' ? 'rgba(66, 153, 225, 0.8)' :     // Soft Blue
               node.gender === 'female' ? 'rgba(255, 20, 147, 0.8)' :   // Deep Pink
-              node.gender === 'unknown' ? 'rgba(160, 174, 192, 0.8)' : // Soft Gray
+              node.gender === 'unknown' ? 'rgba(203, 166, 247, 0.7)' : // Soft Lavender
               'rgba(104, 211, 145, 0.8)';                               // Soft Green
+
+            // Larger hit detection area matching visual circle
+            const nodeRadius = 20;  // Hit detection radius matches visual radius
+            const visualRadius = 15;  // Visual node radius
 
             // Draw node with solid color and subtle shadow
             ctx.shadowColor = 'rgba(0, 0, 0, 0.2)';
             ctx.shadowBlur = 6;
             ctx.fillStyle = nodeColor;
             ctx.beginPath();
-            ctx.arc(node.x, node.y, 15, 0, 2 * Math.PI, false);  // Increased node size
+            ctx.arc(node.x, node.y, visualRadius, 0, 2 * Math.PI, false);  // Visual node size
             ctx.fill();
             ctx.shadowBlur = 0;
+
+            // Attach hit detection metadata matching visual circle
+            node.__clickRadius = nodeRadius;
 
             // Add a subtle border
             ctx.strokeStyle = 'rgba(0, 0, 0, 0.1)';
             ctx.lineWidth = 1;
             ctx.stroke();
 
-            // Name Label with enhanced background
+            // Name Label inside node
             ctx.font = `bold ${fontSize}px 'IBM Plex Sans', Sans-Serif`;
-            const textWidth = ctx.measureText(label).width;
-            ctx.fillStyle = 'rgba(255, 255, 255, 0.9)';
-            ctx.beginPath();
-            ctx.roundRect(
-              node.x - textWidth/2 - 6, 
-              node.y + 15, 
-              textWidth + 12, 
-              fontSize + 8, 
-              4  // Border radius
-            );
-            ctx.fill();
-            
-            ctx.fillStyle = '#000';
+            ctx.fillStyle = 'white';  // White text
             ctx.textAlign = 'center';
             ctx.textBaseline = 'middle';
-            ctx.fillText(label, node.x, node.y + 20);
-
-            // Summary with improved readability
-            if (node.summary) {
-              ctx.font = `${summaryFontSize}px 'IBM Plex Sans', Sans-Serif`;
-              const summaryText = node.summary.length > 30 
-                ? node.summary.substring(0, 30) + '...' 
-                : node.summary;
-              
-              ctx.fillStyle = 'rgba(0, 0, 0, 0.7)';
-              const summaryWidth = ctx.measureText(summaryText).width;
-              
-              ctx.beginPath();
-              ctx.roundRect(
-                node.x - summaryWidth/2 - 4, 
-                node.y + 40, 
-                summaryWidth + 8, 
-                summaryFontSize + 6, 
-                3  // Border radius
-              );
-              ctx.fillStyle = 'rgba(255, 255, 255, 0.8)';
-              ctx.fill();
-              
-              ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
-              ctx.fillText(summaryText, node.x, node.y + 45);
-            }
+            ctx.fillText(label, node.x, node.y);
           }}
           linkCanvasObject={(link: any, ctx: CanvasRenderingContext2D, globalScale: number) => {
             const start = link.source;

@@ -6,17 +6,39 @@ import SuggestionCards from './SuggestionCards';
 import ReactMarkdown from 'react-markdown';
 import ProfileSettingsModal from './ProfileSettingsModal';
 import SupportModal from './SupportModal';
+import ProfileTagSuggestions from './ProfileTagSuggestions';
+
+interface Profile {
+  id: string;
+  name: string;
+  gender: string;
+  age: number;
+  summary: string;
+  details?: {
+    occupation: string;
+    interests: string[];
+    personality: string;
+    background: string;
+    emotionalState: string;
+  };
+}
 
 interface ChatBoxProps {
-  messages: Array<{role: string, content: string, isTyping?: boolean}>;
+  messages: Array<{
+    role: string;
+    content: string;
+    isTyping?: boolean;
+    profileData?: Profile;
+  }>;
   input: string;
   isLoading: boolean;
   onInputChange: (value: string) => void;
-  onSubmit: (e: FormEvent) => void;
+  onSubmit: (e: FormEvent, profileData?: Profile) => void;
   isSidebarOpen: boolean;
   isProfileSidebarOpen: boolean;
   isGraphViewOpen: boolean;
   onSuggestionClick: (text: string) => void;
+  profiles: Profile[];
 }
 
 export default function ChatBox({ 
@@ -28,10 +50,13 @@ export default function ChatBox({
   isSidebarOpen,
   isProfileSidebarOpen,
   isGraphViewOpen,
-  onSuggestionClick
+  onSuggestionClick,
+  profiles
 }: ChatBoxProps) {
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [isSupportModalOpen, setIsSupportModalOpen] = useState(false);
+  const [tagSuggestionTerm, setTagSuggestionTerm] = useState('');
+  const [selectedProfile, setSelectedProfile] = useState<Profile | undefined>(undefined);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
   const lastMessageRef = useRef<HTMLDivElement>(null);
   const secondLastMessageRef = useRef<HTMLDivElement>(null);
@@ -42,20 +67,17 @@ export default function ChatBox({
       const lastMessage = messages[messages.length - 1];
       
       if (lastMessage.content.length >= 400 && secondLastMessageRef.current) {
-        // Scroll to second last message for long messages
         secondLastMessageRef.current.scrollIntoView({
           behavior: 'smooth',
           block: 'start'
         });
       } else if (lastMessageRef.current) {
-        // Default scroll to last message
         lastMessageRef.current.scrollIntoView({
           behavior: 'smooth',
           block: 'end'
         });
       }
 
-      // Always ensure loading animation is visible if it exists
       const loadingElement = document.querySelector('.typing-indicator');
       if (loadingElement) {
         loadingElement.scrollIntoView({
@@ -66,6 +88,40 @@ export default function ChatBox({
     }
     prevMessagesLengthRef.current = messages.length;
   }, [messages.length, messages]);
+
+  const handleSubmit = (e: FormEvent) => {
+    e.preventDefault();
+    onSubmit(e, selectedProfile);
+    setSelectedProfile(undefined);  // Clear selected profile after submission
+  };
+
+  const renderProfileCard = (profile: Profile) => (
+    <div className="bg-gray-50 rounded-lg p-3 mb-2 border border-gray-200">
+      <div className="flex items-start gap-3">
+        <div 
+          className={`w-10 h-10 rounded-full flex items-center justify-center text-white text-sm font-semibold ${
+            profile.gender === 'male' ? 'bg-blue-500' : 'bg-pink-500'
+          }`}
+        >
+          {profile.name.charAt(0)}
+        </div>
+        <div className="flex-1">
+          <div className="flex items-baseline gap-2">
+            <span className="font-medium">{profile.name}</span>
+            <span className="text-sm text-gray-500">Age: {profile.age}</span>
+          </div>
+          <p className="text-sm text-gray-600 mt-1">{profile.summary}</p>
+          {profile.details && (
+            <div className="mt-2 text-sm text-gray-500">
+              <p>{profile.details.occupation}</p>
+              <p className="mt-1">Personality: {profile.details.personality}</p>
+              <p className="mt-1">Current state: {profile.details.emotionalState}</p>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  );
 
   return (
     <div className="flex flex-col h-full">
@@ -110,6 +166,7 @@ export default function ChatBox({
                 <div className={`prose prose-sm md:prose-base max-w-none break-words ${
                   message.role === 'user' ? 'prose-invert' : ''
                 }`}>
+                  {message.profileData && renderProfileCard(message.profileData)}
                   <ReactMarkdown>
                     {message.content}
                   </ReactMarkdown>
@@ -131,7 +188,7 @@ export default function ChatBox({
 
       <div className="border-t border-gray-200 p-4 md:p-6 relative z-10">
         <div className="max-w-5xl mx-auto flex items-center gap-3">
-          <form onSubmit={onSubmit} className="flex-1 relative flex items-center gap-3">
+          <form onSubmit={handleSubmit} className="flex-1 relative flex items-center gap-3">
             <div className="flex gap-3">
               <button 
                 type="button"
@@ -154,13 +211,42 @@ export default function ChatBox({
                 </svg>
               </button>
             </div>
-            <input
-              type="text"
-              value={input}
-              onChange={(e) => onInputChange(e.target.value)}
-              placeholder="Examine your relationships..."
-              className="flex-1 p-4 md:p-5 pr-14 rounded-lg border border-gray-200 focus:border-primary focus:ring-2 focus:ring-pink-200 outline-none shadow-sm hover:shadow-md transition-all duration-300 text-base"
-            />
+            <div className="relative w-full">
+              {selectedProfile && (
+                <div className="absolute left-0 bottom-full mb-2">
+                  {renderProfileCard(selectedProfile)}
+                </div>
+              )}
+              <input
+                type="text"
+                value={input}
+                onChange={(e) => {
+                  const value = e.target.value;
+                  onInputChange(value);
+                  
+                  // Check for @ tag
+                  const atIndex = value.lastIndexOf('@');
+                  if (atIndex !== -1) {
+                    setTagSuggestionTerm(value.slice(atIndex));
+                  } else {
+                    setTagSuggestionTerm('');
+                  }
+                }}
+                placeholder="Examine your relationships..."
+                className="flex-1 p-4 md:p-5 pr-14 rounded-lg border border-gray-200 focus:border-primary focus:ring-2 focus:ring-pink-200 outline-none shadow-sm hover:shadow-md transition-all duration-300 text-base w-full"
+              />
+              <ProfileTagSuggestions
+                profiles={profiles}
+                searchTerm={tagSuggestionTerm}
+                onSelect={(profile) => {
+                  setSelectedProfile(profile);
+                  const beforeAt = input.slice(0, input.lastIndexOf('@'));
+                  const newInput = `${beforeAt}@${profile.name} `;
+                  onInputChange(newInput);
+                  setTagSuggestionTerm('');
+                }}
+              />
+            </div>
             <button
               type="submit"
               disabled={isLoading}
