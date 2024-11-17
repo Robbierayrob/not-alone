@@ -1,6 +1,5 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import SearchForm from './components/SearchForm';
 import { Heart, Shield, Users, HandHeart, Award, Sparkles } from 'lucide-react';
 
 export default function Home() {
@@ -31,9 +30,16 @@ export default function Home() {
             </p>
           </div>
 
-          {/* Search Section */}
+          {/* Diary Button */}
           <div className="w-full max-w-[800px] mx-auto">
-            <SearchForm />
+            <Link 
+              href="/diary"
+              className="w-full block text-center px-6 py-4 text-lg rounded-full
+                bg-primary text-white hover:bg-primary/90 transition-all
+                shadow-sm hover:shadow-md font-medium"
+            >
+              Open Diary
+            </Link>
           </div>
 
           {/* Trust Badges */}
