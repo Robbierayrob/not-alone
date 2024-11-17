@@ -1,4 +1,8 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# NotAlone
+
+A supportive platform designed to help people connect and support each other.
+
+This is a [Next.js](https://nextjs.org) project.
 
 ## Getting Started
 

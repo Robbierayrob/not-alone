@@ -57,19 +57,20 @@ const chatSessions = new Map<string, {
 if (admin.apps.length === 0) {
   admin.initializeApp();
   
-  // Connect to local Firestore emulator
-  console.log('Connecting to Firestore Emulator: localhost:8080');
-  admin.firestore().settings({
-    host: 'localhost:8080',
-    ssl: false
-  });
+  if (process.env.FUNCTIONS_EMULATOR) { // Check if running in emulator
+    console.log('Connecting to Firestore Emulator: localhost:8080');
+    admin.firestore().settings({
+      host: 'localhost:8080',
+      ssl: false
+    });
+  }
 }
 
-export { saveChatHistory } from './chatHistory';
-export { getChatHistory } from './getChatHistory';
-export { deleteChatHistory } from './deleteChatHistory';
-export { analyzeProfileFromChat } from './profileAnalysis';
-export { saveProfileHistory } from './profileHistory';
+export { saveChatHistory } from './chat/chatHistory';
+export { getChatHistory } from './chat/getChatHistory';
+export { deleteChatHistory } from './chat/deleteChatHistory';
+export { analyzeProfileFromChat } from './profile/profileAnalysis';
+export { saveProfileHistory } from './profile/profileHistory';
 
 export const processChat = firebaseFunctions.https.onCall(async (request: firebaseFunctions.https.CallableRequest) => {
   console.log('🚀 Incoming request:', {
