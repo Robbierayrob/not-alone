@@ -47,6 +47,8 @@ The application is configured to work stably with the local Firebase emulators, 
 - Interactive relationship visualization
 - Secure data storage with Firestore
 - Cloud Functions for backend processing
+- Graph RelationalShip Data
+- NoSQL database for storing profiles and chat histories
 
 ## Development
 
