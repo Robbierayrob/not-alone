@@ -8,6 +8,13 @@ You can try the experimental version deployed on Firebase at: https://not-alone-
 
 For the stable Version please follow the instructions below.
 
+### Installation
+
+please run this command when git clone
+```bash
+git clone -b hackathon2024 https://github.com/Robbierayrob/not-alone.git
+```
+
 ## Getting Started
 
 ### Prerequisites
